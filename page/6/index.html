@@ -250,6 +250,86 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/07/laravel-log/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/07/07/laravel-log/" class="post-title-link" itemprop="url">Laravel之日志与错误</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-07-07 18:24:12" itemprop="dateCreated datePublished" datetime="2016-07-07T18:24:12+08:00">2016-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:26:13" itemprop="dateModified" datetime="2020-02-22T20:26:13+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/07/07/laravel-log/" class="post-meta-item leancloud_visitors" data-flag-title="Laravel之日志与错误" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>日志一直是每个项目中最重要的部分，当有线上bug的时候，我们只能通过日志帮助我们定位问题，让我们来看看laravel中日志是怎么设计的</p>
+<p>在实现上Laravel的logger是对<strong>monolog</strong>的封装，而<strong>monolog</strong>同时又启发于 Python’s <a href="http://packages.python.org/Logbook/" target="_blank" rel="noopener">Logbook</a>库，所以为了更好的理解，我们是需要看下 <a href="http://packages.python.org/Logbook/" target="_blank" rel="noopener">Logbook</a>库，不过本文重点不是去讨论设计，而是讲下Laravel中是怎么使用的</p>
+<h1 id="日志错误初始化"><a href="#日志错误初始化" class="headerlink" title="日志错误初始化"></a>日志错误初始化</h1><p>Laravel中日志功能主要是放在<code>Illuminate\Foundation\Bootstrap\ConfigureLogging</code>中，Laravel中初始化流程如下：</p>
+<p>依次调用<code>bootstrap</code>函数 ，下面画了下整个Laravel的大致的一个启动过程</p>
+<p><img src="http://i.imgur.com/JrEkJto.jpg?1" alt="Laravel启动过程"></p>
+<p>其中Bootstrap的位置处就是我们日志和错误初始化的过程</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/07/laravel-container/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -369,86 +449,6 @@
 
 <p>今天就先讲到这，有用的地方再去看的。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.insp.top/article/learn-laravel-container" target="_blank" rel="noopener">laravel 学习笔记 —— 神奇的服务容器</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  <div>
-  
-  </div>
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/07/laravel-log/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
-      <meta itemprop="name" content="颛顼">
-      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程序猿的进击之路">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/07/07/laravel-log/" class="post-title-link" itemprop="url">Laravel之日志与错误</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-07-07 18:24:12" itemprop="dateCreated datePublished" datetime="2016-07-07T18:24:12+08:00">2016-07-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:26:13" itemprop="dateModified" datetime="2020-02-22T20:26:13+08:00">2020-02-22</time>
-              </span>
-
-          
-            <span id="/2016/07/07/laravel-log/" class="post-meta-item leancloud_visitors" data-flag-title="Laravel之日志与错误" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>日志一直是每个项目中最重要的部分，当有线上bug的时候，我们只能通过日志帮助我们定位问题，让我们来看看laravel中日志是怎么设计的</p>
-<p>在实现上Laravel的logger是对<strong>monolog</strong>的封装，而<strong>monolog</strong>同时又启发于 Python’s <a href="http://packages.python.org/Logbook/" target="_blank" rel="noopener">Logbook</a>库，所以为了更好的理解，我们是需要看下 <a href="http://packages.python.org/Logbook/" target="_blank" rel="noopener">Logbook</a>库，不过本文重点不是去讨论设计，而是讲下Laravel中是怎么使用的</p>
-<h1 id="日志错误初始化"><a href="#日志错误初始化" class="headerlink" title="日志错误初始化"></a>日志错误初始化</h1><p>Laravel中日志功能主要是放在<code>Illuminate\Foundation\Bootstrap\ConfigureLogging</code>中，Laravel中初始化流程如下：</p>
-<p>依次调用<code>bootstrap</code>函数 ，下面画了下整个Laravel的大致的一个启动过程</p>
-<p><img src="http://i.imgur.com/JrEkJto.jpg?1" alt="Laravel启动过程"></p>
-<p>其中Bootstrap的位置处就是我们日志和错误初始化的过程</p>
 
       
     </div>

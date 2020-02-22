@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="这是cs224d课程的第二课，非专业角度来看nlp。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS224d-lesson2">
+<meta property="og:url" content="http://yoursite.com/2017/06/24/CS224d-lesson2/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="这是cs224d课程的第二课，非专业角度来看nlp。">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/93fe31c390e61d768dc215241cfeb4a0dd53e193">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/4e4c49f56668722a00578b531f1e522a804ae4c1">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/2bb7562c60911c4816f3c9b3430d4b641a8b529e">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/2bb7562c60911c4816f3c9b3430d4b641a8b529e">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/63aeab58ed4dcfba1f2b9ac17dad5ab2e853dabd">
+<meta property="og:image" content="https://liusida.github.io/images/2016-11-14-study-embeddings/catandkitty.png">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/b0c5895d90a16391d269924896e569b1c5f8656c">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/34b71ca72ddad500e27980dfc57f724250c90c28">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/ac53b29acb881f0f12879cde5ba0f7dc9b9e4ff0">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/9c39ddfe04b635700c583de80fe8afec3f9cac22">
+<meta property="article:published_time" content="2017-06-23T16:10:57.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.399Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="CS224d">
+<meta property="article:tag" content="word2vec">
+<meta property="article:tag" content="nlpc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/93fe31c390e61d768dc215241cfeb4a0dd53e193">
+
+<link rel="canonical" href="http://yoursite.com/2017/06/24/CS224d-lesson2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>CS224d-lesson2 | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/CS224d-lesson2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CS224d-lesson2
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-24 00:10:57" itemprop="dateCreated datePublished" datetime="2017-06-24T00:10:57+08:00">2017-06-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2017/06/24/CS224d-lesson2/" class="post-meta-item leancloud_visitors" data-flag-title="CS224d-lesson2" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/93fe31c390e61d768dc215241cfeb4a0dd53e193" alt=""></p>
+<p>这是cs224d课程的第二课，非专业角度来看nlp。</p>
+<a id="more"></a>
+
+<p>首先我想说下为什么会去学习cs224d，原先我一直是做工程的，做了大概3年，产品做了好多，但是大多不幸夭折了，上线没多久就下线，最后实在是经受不住心灵的折磨，转行想做大数据，机器学习的，前不久自己学习完了Udacity的深度学习，课程挺好，但是在实际工作中，发现课程中的数据都是给你准备好的，实践中哪来这么多好的数据，只能自己去通过各种手段搞数据，苦不堪言。在找数据的过程中，发现做多的数据还是文本数据，不懂个nlp怎么处理呢，于是就来学习cs224d这门课程，希望在学习过程中能快速将课程所学应用到工作中，fighting！</p>
+<p>以下文字都是从一个初学者角度来写的，如有不严肃不正确的，请严肃指出。</p>
+<h2 id="语言模型"><a href="#语言模型" class="headerlink" title="语言模型"></a>语言模型</h2><p>刚接触nlp的时候，经常看到有个词叫 language model，于是先回答下什么语言模型？语言模型简单点说就是评价一句话是不是正常人说出来的，然后如果用一个数学公式来描述就是：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/4e4c49f56668722a00578b531f1e522a804ae4c1" alt=""></p>
+<p>举一个具体例子来说明上面公式的含义：</p>
+<p>我喜欢自然语言处理，这句话分词后是：”我/喜欢/自然/语言/处理”，于是上面的公式就变为：</p>
+<p>P(我，喜欢，自然，语言，处理)=p(我)p(喜欢 | 我)p(自然 | 我, 喜欢)p(语言 | 我，喜欢，自然)p(处理 | 我，喜欢，自然，语言)</p>
+<p>上面的p(喜欢 | 我)表示”喜欢“出现在”我“之后的概率，然后将所有概率乘起来就是整句话出现的概率。</p>
+<p>我们对上面的公式做一个更一般化的表示，将wt出现的前面一大堆条件统一记为<code>Context</code>，于是就有了下面的公式：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/2bb7562c60911c4816f3c9b3430d4b641a8b529e" alt=""></p>
+<p>下面我们针对Context的具体形式介绍一种常见的语言模型N-Gram.</p>
+<h3 id="N-Gram"><a href="#N-Gram" class="headerlink" title="N-Gram"></a>N-Gram</h3><p>上面的介绍的公式考虑到词和词之间的依赖关系，但是比较复杂，对于4个词的语料库，我们就需要计算 4!+3!+2!+1! 个情况，稍微大点，在实际生活中几乎没办法使用，于是我们就想了很多办法去近似这个公式，于是就有了下面要介绍的N-Gram模型。</p>
+<p>上面的 context 都是这句话中这个词前面的所有词作为条件的概率，N-gram 就是只管这个词前面的 n-1 个词，加上它自己，总共 n 个词，于是上面的公式就简化为：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/2bb7562c60911c4816f3c9b3430d4b641a8b529e" alt=""></p>
+<p>当n=1时，单词只和自己有关，模型称为一元模型，n=2时就是bigram，n=3，trigram，据统计在英文语料库IBM, Brown中，三四百兆的语料，其测试语料14.7%的trigram和2.2%的bigram在训练语料中竟未出现！因此在实际中我们应该根据实际情况正确的选择n，如果n很大，<strong>参数空间过大，也无法实用</strong>。</p>
+<ul>
+<li>实际中，最多就用到trigram，再多计算量变大，但是效果提升不明显</li>
+<li>更大的n，理论上能提供的信息会更多，具有更多的信息</li>
+<li>更小的n，在语料中出现的次数会更多，具有更多的统计信息</li>
+</ul>
+<h2 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h2><p>前面我们已经有了计算概率公式p(w_i|Context_i)了，对于传统的统计方法，我们可以事先在语料上将所有可能的组合都计算出来，那有没有什么数学方法，能不通过语料统计方法，直接将p(w_i|Context_i)计算出来呢？再说的数学点，通过什么方法能够将其拟合出来，数学上的描述就是：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/63aeab58ed4dcfba1f2b9ac17dad5ab2e853dabd" alt=""></p>
+<p>具体拟合的方法有各种各样，其中一个比较厉害的就是通过神经网络来拟合，也就是本文要介绍的word2vec。</p>
+<p>word2vec的理论部分，网上已经有很好的资料，推荐 <a href="http://blog.csdn.net/itplus/article/details/37969519" target="_blank" rel="noopener">word2vec 中的数学原理详解（一）目录和前言</a>，我主要会以具体的实现为主，有喜欢看视频的同学也可以看<a href="https://classroom.udacity.com/courses/ud730/lessons/6378983156/concepts/63742734590923" target="_blank" rel="noopener">Udacity 课程视频</a>。</p>
+<p>word2vec尝试着将词都映射到一个高维空间，每个词都可以用一个稠密向量来表示，而这个词向量怎么计算出来，采用的方法是一种无监督方法，假设是词的含义由其周围的词来表示：<strong>相似的词，会有相似的上下文</strong>。</p>
+<p><img src="https://liusida.github.io/images/2016-11-14-study-embeddings/catandkitty.png" alt=""></p>
+<p>在具体计算词向量的时候，有两种模型：Skip-Gram 和 CBOW，</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/b0c5895d90a16391d269924896e569b1c5f8656c" alt=""></p>
+<p>我们先介绍skip-gram的原理，其训练过程是：</p>
+<p>把词<code>cat</code>放进 Embeddings 向量空间，然后做一次线性计算，然后取 softmax，得到一个一批 0-1 的数值，然后 cross_entropy，产出预测词<code>purr</code>。跟目标比对，然后调整。这就是训练过程。如下图：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/34b71ca72ddad500e27980dfc57f724250c90c28" alt=""></p>
+<p>可能还是有点抽象，我们接着看代码来详细说明上面的过程，代码地址：<a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/udacity/5_word2vec.ipynb" target="_blank" rel="noopener"><strong>5_word2vec.ipynb</strong></a></p>
+<h3 id="生成Skip-Gram数据"><a href="#生成Skip-Gram数据" class="headerlink" title="生成Skip-Gram数据"></a>生成Skip-Gram数据</h3><p>Skip-Gram思想是通过单词来预测其周围的单词，此时，如果输入数据是：data: [‘anarchism’, ‘originated’, ‘as’, ‘a’, ‘term’, ‘of’, ‘abuse’, ‘first’]，那输出是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">with num_skips &#x3D; 2 and skip_window &#x3D; 1:</span><br><span class="line">    batch: [&#39;originated&#39;, &#39;originated&#39;, &#39;as&#39;, &#39;as&#39;, &#39;a&#39;, &#39;a&#39;, &#39;term&#39;, &#39;term&#39;]</span><br><span class="line">    labels: [&#39;as&#39;, &#39;anarchism&#39;, &#39;a&#39;, &#39;originated&#39;, &#39;term&#39;, &#39;as&#39;, &#39;a&#39;, &#39;of&#39;]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> zipfile</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pylab</span><br><span class="line"><span class="keyword">from</span> six.moves <span class="keyword">import</span> range</span><br><span class="line"><span class="keyword">from</span> six.moves.urllib.request <span class="keyword">import</span> urlretrieve</span><br><span class="line"><span class="keyword">from</span> sklearn.manifold <span class="keyword">import</span> TSNE</span><br><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> sklearn</span><br><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">from</span> pyltp <span class="keyword">import</span> SentenceSplitter</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment"># sents = SentenceSplitter.split('元芳你怎么看？我就趴窗口上看呗！')</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">content = <span class="string">""</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"../input/人民的名义.txt"</span>,<span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">        line = line.strip(<span class="string">"\n"</span>)</span><br><span class="line">        content += line</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">stop_words = []</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"../input/stop-words.txt"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> f:</span><br><span class="line">        stop_words.append(word.strip(<span class="string">"\n"</span>))</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进行分词</span></span><br><span class="line">accepted_chars = re.compile(<span class="string">r"[\u4E00-\u9FD5]+"</span>)</span><br><span class="line"><span class="comment"># 只取纯中文的字符,并且不在冲用词之中的</span></span><br><span class="line">tokens = [ token <span class="keyword">for</span> token <span class="keyword">in</span> jieba.cut(content) <span class="keyword">if</span> accepted_chars.match(token) <span class="keyword">and</span> token <span class="keyword">not</span> <span class="keyword">in</span> stop_words]</span><br><span class="line"><span class="comment"># tokens = [ token for token in jieba.cut(content) if accepted_chars.match(token)]</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">count = collections.Counter(tokens)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">len(count)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>17136</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">vocabulary_size = <span class="number">9000</span> <span class="comment"># 总共18000左右的单词</span></span><br><span class="line"><span class="comment"># 由于语料库太小，所以大多数词只出现了一次，我们应该过滤掉出现次数少的单词</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_dataset</span><span class="params">(words)</span>:</span></span><br><span class="line">    count = [[<span class="string">'UNK'</span>, <span class="number">-1</span>]]</span><br><span class="line">    count.extend(collections.Counter(words).most_common(vocabulary_size - <span class="number">1</span>))</span><br><span class="line">    dictionary = dict()</span><br><span class="line">    <span class="keyword">for</span> word, _ <span class="keyword">in</span> count:</span><br><span class="line">        dictionary[word] = len(dictionary)</span><br><span class="line">    data = list()</span><br><span class="line">    unk_count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> words:</span><br><span class="line">        <span class="keyword">if</span> word <span class="keyword">in</span> dictionary:</span><br><span class="line">            index = dictionary[word]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            index = <span class="number">0</span>  <span class="comment"># dictionary['UNK']</span></span><br><span class="line">            unk_count = unk_count + <span class="number">1</span></span><br><span class="line">        data.append(index)</span><br><span class="line">    count[<span class="number">0</span>][<span class="number">1</span>] = unk_count</span><br><span class="line">    reverse_dictionary = dict(zip(dictionary.values(), dictionary.keys())) </span><br><span class="line">    <span class="keyword">return</span> data, count, dictionary, reverse_dictionary</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">data, count, dictionary, reverse_dictionary = build_dataset(tokens)</span><br><span class="line">print(<span class="string">'Most common words (+UNK)'</span>, count[:<span class="number">5</span>])</span><br><span class="line">print(<span class="string">'Sample data'</span>, data[:<span class="number">10</span>])</span><br></pre></td></tr></table></figure>
+
+<pre><code>Most common words (+UNK) [[&apos;UNK&apos;, 8137], (&apos;说&apos;, 1326), (&apos;侯亮&apos;, 1315), (&apos;平&apos;, 966), (&apos;李达康&apos;, 735)]
+Sample data [7540, 7541, 7542, 885, 7543, 3470, 7544, 4806, 207, 4807]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">data_index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_batch</span><span class="params">(batch_size, num_skips, skip_window)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> data_index</span><br><span class="line">    <span class="keyword">assert</span> batch_size % num_skips == <span class="number">0</span></span><br><span class="line">    <span class="keyword">assert</span> num_skips &lt;= <span class="number">2</span> * skip_window</span><br><span class="line">    batch = np.ndarray(shape=(batch_size), dtype=np.int32)</span><br><span class="line">    labels = np.ndarray(shape=(batch_size, <span class="number">1</span>), dtype=np.int32)</span><br><span class="line">    span = <span class="number">2</span> * skip_window + <span class="number">1</span> <span class="comment"># [ skip_window target skip_window ]</span></span><br><span class="line">    buffer = collections.deque(maxlen=span)</span><br><span class="line">    <span class="comment"># 根据global data_index 产生数据</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(span):</span><br><span class="line">        buffer.append(data[data_index])</span><br><span class="line">        data_index = (data_index + <span class="number">1</span>) % len(data)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(batch_size // num_skips):</span><br><span class="line">        target = skip_window  <span class="comment"># target label at the center of the buffer</span></span><br><span class="line">        targets_to_avoid = [ skip_window ]</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(num_skips):</span><br><span class="line">            <span class="keyword">while</span> target <span class="keyword">in</span> targets_to_avoid:</span><br><span class="line">                target = random.randint(<span class="number">0</span>, span - <span class="number">1</span>)</span><br><span class="line">            targets_to_avoid.append(target)</span><br><span class="line">            batch[i * num_skips + j] = buffer[skip_window]</span><br><span class="line">            labels[i * num_skips + j, <span class="number">0</span>] = buffer[target]</span><br><span class="line">        buffer.append(data[data_index]) <span class="comment"># 此处 buffer 是 deque ，容量是 span ，所以每次新增数据进来，都会挤掉之前的数</span></span><br><span class="line">        data_index = (data_index + <span class="number">1</span>) % len(data)</span><br><span class="line">    <span class="keyword">return</span> batch, labels</span><br><span class="line"></span><br><span class="line">print(<span class="string">'data:'</span>, [reverse_dictionary[di] <span class="keyword">for</span> di <span class="keyword">in</span> data[:<span class="number">8</span>]])</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> num_skips, skip_window <span class="keyword">in</span> [(<span class="number">2</span>, <span class="number">1</span>), (<span class="number">4</span>, <span class="number">2</span>)]:</span><br><span class="line">    data_index = <span class="number">0</span></span><br><span class="line">    batch, labels = generate_batch(batch_size=<span class="number">8</span>, num_skips=num_skips, skip_window=skip_window)</span><br><span class="line">    print(<span class="string">'\nwith num_skips = %d and skip_window = %d:'</span> % (num_skips, skip_window))</span><br><span class="line">    print(<span class="string">'    batch:'</span>, [reverse_dictionary[bi] <span class="keyword">for</span> bi <span class="keyword">in</span> batch])</span><br><span class="line">    print(<span class="string">'    labels:'</span>, [reverse_dictionary[li] <span class="keyword">for</span> li <span class="keyword">in</span> labels.reshape(<span class="number">8</span>)])</span><br></pre></td></tr></table></figure>
+
+<pre><code>data: [&apos;书籍&apos;, &apos;稻草人&apos;, &apos;书屋&apos;, &apos;名义&apos;, &apos;作者&apos;, &apos;周梅森&apos;, &apos;内容简介&apos;, &apos;展现&apos;]
+
+with num_skips = 2 and skip_window = 1:
+    batch: [&apos;稻草人&apos;, &apos;稻草人&apos;, &apos;书屋&apos;, &apos;书屋&apos;, &apos;名义&apos;, &apos;名义&apos;, &apos;作者&apos;, &apos;作者&apos;]
+    labels: [&apos;书籍&apos;, &apos;书屋&apos;, &apos;稻草人&apos;, &apos;名义&apos;, &apos;书屋&apos;, &apos;作者&apos;, &apos;周梅森&apos;, &apos;名义&apos;]
+
+with num_skips = 4 and skip_window = 2:
+    batch: [&apos;书屋&apos;, &apos;书屋&apos;, &apos;书屋&apos;, &apos;书屋&apos;, &apos;名义&apos;, &apos;名义&apos;, &apos;名义&apos;, &apos;名义&apos;]
+    labels: [&apos;稻草人&apos;, &apos;名义&apos;, &apos;书籍&apos;, &apos;作者&apos;, &apos;周梅森&apos;, &apos;稻草人&apos;, &apos;书屋&apos;, &apos;作者&apos;]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">batch_size = <span class="number">128</span></span><br><span class="line">embedding_size = <span class="number">50</span> <span class="comment"># Dimension of the embedding vector.</span></span><br><span class="line">skip_window = <span class="number">1</span> <span class="comment"># How many words to consider left and right.</span></span><br><span class="line">num_skips = <span class="number">2</span> <span class="comment"># How many times to reuse an input to generate a label.</span></span><br><span class="line"><span class="comment"># We pick a random validation set to sample nearest neighbors. here we limit the</span></span><br><span class="line"><span class="comment"># validation samples to the words that have a low numeric ID, which by</span></span><br><span class="line"><span class="comment"># construction are also the most frequent. </span></span><br><span class="line">valid_size = <span class="number">8</span> <span class="comment"># Random set of words to evaluate similarity on.</span></span><br><span class="line">valid_window = <span class="number">100</span> <span class="comment"># Only pick dev samples in the head of the distribution.</span></span><br><span class="line">valid_examples = np.array(random.sample(range(valid_window), valid_size))</span><br><span class="line">num_sampled = <span class="number">64</span> <span class="comment"># Number of negative examples to sample.</span></span><br><span class="line"></span><br><span class="line">graph = tf.Graph()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> graph.as_default(), tf.device(<span class="string">'/cpu:0'</span>):</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Input data.</span></span><br><span class="line">    train_dataset = tf.placeholder(tf.int32, shape=[batch_size])</span><br><span class="line">    train_labels = tf.placeholder(tf.int32, shape=[batch_size, <span class="number">1</span>])</span><br><span class="line">    valid_dataset = tf.constant(valid_examples, dtype=tf.int32)</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># Variables.</span></span><br><span class="line">    embeddings = tf.Variable(</span><br><span class="line">        tf.random_uniform([vocabulary_size, embedding_size], <span class="number">-1.0</span>, <span class="number">1.0</span>))</span><br><span class="line">    softmax_weights = tf.Variable(</span><br><span class="line">        tf.truncated_normal([vocabulary_size, embedding_size],</span><br><span class="line">                         stddev=<span class="number">1.0</span> / math.sqrt(embedding_size)))</span><br><span class="line">    softmax_biases = tf.Variable(tf.zeros([vocabulary_size]))</span><br><span class="line">  </span><br><span class="line">    <span class="comment"># Model.</span></span><br><span class="line">    <span class="comment"># Look up embeddings for inputs.</span></span><br><span class="line">    embed = tf.nn.embedding_lookup(embeddings, train_dataset)</span><br><span class="line">    <span class="comment"># Compute the softmax loss, using a sample of the negative labels each time.</span></span><br><span class="line">    loss = tf.reduce_mean(</span><br><span class="line">        tf.nn.sampled_softmax_loss(weights=softmax_weights, biases=softmax_biases, inputs=embed,</span><br><span class="line">                               labels=train_labels, num_sampled=num_sampled, num_classes=vocabulary_size))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Optimizer.</span></span><br><span class="line">    <span class="comment"># Note: The optimizer will optimize the softmax_weights AND the embeddings.</span></span><br><span class="line">    <span class="comment"># This is because the embeddings are defined as a variable quantity and the</span></span><br><span class="line">    <span class="comment"># optimizer's `minimize` method will by default modify all variable quantities </span></span><br><span class="line">    <span class="comment"># that contribute to the tensor it is passed.</span></span><br><span class="line">    <span class="comment"># See docs on `tf.train.Optimizer.minimize()` for more details.</span></span><br><span class="line">    optimizer = tf.train.AdagradOptimizer(<span class="number">1.0</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Compute the similarity between minibatch examples and all embeddings.</span></span><br><span class="line">    <span class="comment"># We use the cosine distance:</span></span><br><span class="line">    norm = tf.sqrt(tf.reduce_sum(tf.square(embeddings), <span class="number">1</span>, keep_dims=<span class="literal">True</span>))</span><br><span class="line">    normalized_embeddings = embeddings / norm</span><br><span class="line">    valid_embeddings = tf.nn.embedding_lookup(</span><br><span class="line">        normalized_embeddings, valid_dataset)</span><br><span class="line">    similarity = tf.matmul(valid_embeddings, tf.transpose(normalized_embeddings))</span><br></pre></td></tr></table></figure>
+
+<p>上面定义了模型，下面是具体的优化步骤</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">num_steps = <span class="number">100001</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session(graph=graph) <span class="keyword">as</span> session:</span><br><span class="line">    tf.global_variables_initializer().run()</span><br><span class="line">    print(<span class="string">'Initialized'</span>)</span><br><span class="line">    average_loss = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> range(num_steps):</span><br><span class="line">        batch_data, batch_labels = generate_batch(</span><br><span class="line">            batch_size, num_skips, skip_window)</span><br><span class="line">        feed_dict = &#123;train_dataset : batch_data, train_labels : batch_labels&#125;</span><br><span class="line">        _, l = session.run([optimizer, loss], feed_dict=feed_dict)</span><br><span class="line">        average_loss += l</span><br><span class="line">        <span class="keyword">if</span> step % <span class="number">2000</span> == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> step &gt; <span class="number">0</span>:</span><br><span class="line">                average_loss = average_loss / <span class="number">2000</span></span><br><span class="line">            <span class="comment"># The average loss is an estimate of the loss over the last 2000 batches.</span></span><br><span class="line">            print(<span class="string">'Average loss at step %d: %f'</span> % (step, average_loss))</span><br><span class="line">            average_loss = <span class="number">0</span></span><br><span class="line">        <span class="comment"># note that this is expensive (~20% slowdown if computed every 500 steps)</span></span><br><span class="line">        <span class="keyword">if</span> step % <span class="number">10000</span> == <span class="number">0</span>:</span><br><span class="line">            sim = similarity.eval()</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(valid_size):</span><br><span class="line">                valid_word = reverse_dictionary[valid_examples[i]]</span><br><span class="line">                top_k = <span class="number">8</span> <span class="comment"># number of nearest neighbors</span></span><br><span class="line">                nearest = (-sim[i, :]).argsort()[<span class="number">1</span>:top_k+<span class="number">1</span>]</span><br><span class="line">                log = <span class="string">'Nearest to %s:'</span> % valid_word</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> range(top_k):</span><br><span class="line">                    close_word = reverse_dictionary[nearest[k]]</span><br><span class="line">                    log = <span class="string">'%s %s,'</span> % (log, close_word)</span><br><span class="line">                print(log)</span><br><span class="line">    final_embeddings = normalized_embeddings.eval()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Initialized
+Average loss at step 0: 4.637629
+Nearest to 书记: 一整瓶, 倒好, 一把, 袅袅, 不到, 三姐, 不低, 坦承,
+Nearest to 局长: 递到, 报纸, 国旗, 网上, 对此, 吼, 既有, 幸亏,
+Nearest to 问: 几遍, 就业, 商贩, 口水, 亲近, 周, 手枪, 庄严,
+Nearest to 季: 屈来, 天花板, 韩剧, 栽倒, 判人, 审视, 有意, 内容简介,
+Nearest to 工作: 阻力, 亲密, 大人物, 外柔内刚, 准, 万元, 讽刺, 草根,
+Nearest to 陈清泉: 菏泽, 梁山, 铁板一块, 前脚, 运来, 酒量, 四十万, 黑色,
+Nearest to 省委: 市委书记, 酒量, 交代问题, 外号, 漏洞, 虚报, 那轮, 走到,
+Nearest to 太: 早已, 纹, 推开, 党, 命运, 始终, 情景, 处处长,
+Average loss at step 2000: 3.955496
+Average loss at step 4000: 3.414563
+Average loss at step 6000: 3.149207
+Average loss at step 8000: 2.955826
+Average loss at step 10000: 2.786807
+Nearest to 书记: 市长, 老道, 建设, 大鬼, 咬住, 坦承, 调过来, 特立独行,
+Nearest to 局长: 座位, 跳脚, 杀人, 第二天, 顶天立地, 报纸, 眼眶, 背书,
+Nearest to 问: 凄凉, 料到, 点头称是, 空降, 弥漫, 装, 猜, 几遍,
+Nearest to 季: 韩剧, 愉快, 天花板, 民不聊生, 提供, 亲, 那双, 金矿,
+Nearest to 工作: 代价, 外柔内刚, 珍藏, 提醒, 大人物, 不小, 讽刺, 激化矛盾,
+Nearest to 陈清泉: 没能, 鹰, 威风凛凛, 鸡蛋, 冤枉, 四十万, 大鬼, 木板,
+Nearest to 省委: 代表, 三级, 影像, 敏锐, 铸下, 研究, 板, 暗星,
+Nearest to 太: 印记, 推开, 抖动, 托盘, 不放过, 虚假, 刻下, 稻草人,
+Average loss at step 12000: 2.638048
+Average loss at step 14000: 2.519046
+Average loss at step 16000: 2.441717
+Average loss at step 18000: 2.324694
+Average loss at step 20000: 2.235700
+Nearest to 书记: 老道, 建设, 咬住, 特立独行, 握住, 市长, 提议, 顺利,
+Nearest to 局长: 座位, 杀人, 跳脚, 放风, 一段, 第二天, 眼眶, 号子,
+Nearest to 问: 喜出望外, 询问, 料到, 凄凉, 咱老, 反复无常, 你别, 打造,
+Nearest to 季: 韩剧, 天花板, 愉快, 那双, 躬, 提供, 我敢, 检察院,
+Nearest to 工作: 代价, 珍藏, 外柔内刚, 女婿, 激化矛盾, 讽刺, 打死, 送往,
+Nearest to 陈清泉: 没能, 鹰, 威风凛凛, 别弄, 笑呵呵, 木板, 夺走, 作品,
+Nearest to 省委: 三级, 敏锐, 代表, 一票, 谢谢您, 放鞭炮, 妇联, 研究,
+Nearest to 太: 印记, 刻下, 原件, 抖动, 不放过, 推开, 事替, 托盘,
+Average loss at step 22000: 2.161899
+Average loss at step 24000: 2.134306
+Average loss at step 26000: 2.040577
+Average loss at step 28000: 1.986363
+Average loss at step 30000: 1.935009
+Nearest to 书记: 清, 选择, 建设, 大鬼, 跺脚, 打仗, 咬住, 满是,
+Nearest to 局长: 跳脚, 放风, 一段, 杀人, 座位, 情感, 口中, 顶天立地,
+Nearest to 问: 喜出望外, 询问, 料到, 半真半假, 干什么, 咱老, 海子, 反复无常,
+Nearest to 季: 天花板, 韩剧, 那双, 检察院, 对视, 我敢, 赵东, 滚落,
+Nearest to 工作: 代价, 珍藏, 外柔内刚, 女婿, 送往, 打死, 领导, 讽刺,
+Nearest to 陈清泉: 鹰, 没能, 应承, 笑呵呵, 别弄, 持股会, 威风凛凛, 服从,
+Nearest to 省委: 三级, 敏锐, 代表, 妇联, 举重若轻, 一票, 澳门, 行管,
+Nearest to 太: 刻下, 抖动, 师生, 温和, 原件, 进屋, 海底, 印记,
+Average loss at step 32000: 1.944882
+Average loss at step 34000: 1.865572
+Average loss at step 36000: 1.827617
+Average loss at step 38000: 1.789619
+Average loss at step 40000: 1.817634
+Nearest to 书记: 清, 跺脚, 选择, 包庇, 顺利, 目光如炬, 握住, 老同事,
+Nearest to 局长: 放风, 一段, 跳脚, 座位, 杀人, 顶天立地, 湿润, 情感,
+Nearest to 问: 掏出, 喜出望外, 半真半假, 干什么, 海子, 撕, 度假村, 道,
+Nearest to 季: 对视, 天花板, 那双, 韩剧, 检察院, 吃惊, 我敢, 室内,
+Nearest to 工作: 代价, 领导, 外柔内刚, 打死, 珍藏, 记起, 田野, 女婿,
+Nearest to 陈清泉: 笑呵呵, 没能, 应承, 鹰, 作品, 撞倒, 眯, 服从,
+Nearest to 省委: 三级, 举重若轻, 敏锐, 人事, 代表, 行管, 谢谢您, 一票,
+Nearest to 太: 刻下, 抖动, 温和, 原件, 问得, 进屋, 海底, 师生,
+Average loss at step 42000: 1.743098
+Average loss at step 44000: 1.720936
+Average loss at step 46000: 1.694092
+Average loss at step 48000: 1.734099
+Average loss at step 50000: 1.663270
+Nearest to 书记: 清, 选择, 打仗, 跺脚, 老同事, 老道, 顺利, 建设,
+Nearest to 局长: 放风, 一段, 跳脚, 座位, 泡, 近乎, 滚圆, 排除,
+Nearest to 问: 半真半假, 帮帮, 度假村, 聊生, 干什么, 顺势, 大为, 喜出望外,
+Nearest to 季: 天花板, 对视, 检察院, 韩剧, 那双, 吃惊, 室内, 挽回,
+Nearest to 工作: 领导, 打死, 新台阶, 外柔内刚, 张图, 陷阱, 田野, 规划图,
+Nearest to 陈清泉: 没能, 应承, 作品, 鹰, 风云, 撞倒, 别弄, 请问,
+Nearest to 省委: 举重若轻, 人事, 三级, 代表, 滑头, 谢谢您, 澳门, 敏锐,
+Nearest to 太: 刻下, 抖动, 师生, 齐腰, 温和, 清白, 喊道, 问得,
+Average loss at step 52000: 1.645000
+Average loss at step 54000: 1.627952
+Average loss at step 56000: 1.672146
+Average loss at step 58000: 1.605531
+Average loss at step 60000: 1.595123
+Nearest to 书记: 清, 跺脚, 老同事, 握住, 没数, 目光如炬, 打仗, 选择,
+Nearest to 局长: 放风, 跳脚, 一段, 排除, 座位, 泡, 干掉, 情感,
+Nearest to 问: 半真半假, 度假村, 帮帮, 大为, 聊生, 干什么, 喜出望外, 顺势,
+Nearest to 季: 对视, 检察院, 天花板, 那双, 吃惊, 韩剧, 室内, 同伟,
+Nearest to 工作: 领导, 陷阱, 张图, 汇报会, 新台阶, 打死, 田野, 著名作家,
+Nearest to 陈清泉: 应承, 没能, 撞倒, 作品, 服从, 请问, 鹰, 风云,
+Nearest to 省委: 举重若轻, 人事, 通气, 灰烬, 滑头, 妇联, 敏锐, 三级,
+Nearest to 太: 师生, 刻下, 喊道, 遗憾, 温和, 抖动, 清白, 齐腰,
+Average loss at step 62000: 1.579666
+Average loss at step 64000: 1.627861
+Average loss at step 66000: 1.564315
+Average loss at step 68000: 1.556485
+Average loss at step 70000: 1.545672
+Nearest to 书记: 清, 跺脚, 打仗, 没数, 握住, 老同事, 包庇, 选择,
+Nearest to 局长: 放风, 一段, 跳脚, 泡, 排除, 近乎, 座位, 情感,
+Nearest to 问: 半真半假, 度假村, 大为, 帮帮, 顺势, 追问, 聊生, 海子,
+Nearest to 季: 对视, 检察院, 天花板, 同伟, 韩剧, 那双, 吃惊, 室内,
+Nearest to 工作: 汇报会, 领导, 陷阱, 新台阶, 著名作家, 规划图, 张图, 送往,
+Nearest to 陈清泉: 没能, 撞倒, 风云, 应承, 鹰, 赶巧, 人员, 看不到,
+Nearest to 省委: 举重若轻, 人事, 灰烬, 妇联, 三级, 谢谢您, 通气, 讲讲,
+Nearest to 太: 抖动, 海底, 遗憾, 喊道, 师生, 问得, 温和, 清白,
+Average loss at step 72000: 1.596544
+Average loss at step 74000: 1.530987
+Average loss at step 76000: 1.524676
+Average loss at step 78000: 1.514958
+Average loss at step 80000: 1.569173
+Nearest to 书记: 清, 没数, 跺脚, 目光如炬, 握住, 选择, 打仗, 包庇,
+Nearest to 局长: 放风, 跳脚, 一段, 泡, 排除, 领教, 干掉, 情感,
+Nearest to 问: 度假村, 半真半假, 聊生, 大为, 海子, 顺势, 道, 帮帮,
+Nearest to 季: 对视, 检察院, 同伟, 那双, 吃惊, 韩剧, 天花板, 室内,
+Nearest to 工作: 领导, 汇报会, 陷阱, 张图, 新台阶, 著名作家, 女婿, 规划图,
+Nearest to 陈清泉: 没能, 风云, 撞倒, 应承, 人员, 鹰, 请问, 眯,
+Nearest to 省委: 人事, 举重若轻, 通气, 灰烬, 内容, 冷不丁, 打电话, 谢谢您,
+Nearest to 太: 问得, 遗憾, 喊道, 清白, 抖动, 海底, 自学, 温和,
+Average loss at step 82000: 1.505065
+Average loss at step 84000: 1.498249
+Average loss at step 86000: 1.494963
+Average loss at step 88000: 1.545789
+Average loss at step 90000: 1.484452
+Nearest to 书记: 没数, 跺脚, 清, 打仗, 满是, 老道, 若有所思, 超前,
+Nearest to 局长: 放风, 跳脚, 一段, 泡, 排除, 滚圆, 近乎, 拦住,
+Nearest to 问: 半真半假, 帮帮, 大为, 顺势, 度假村, 聊生, 嘱咐, 干什么,
+Nearest to 季: 对视, 检察院, 同伟, 吃惊, 天花板, 韩剧, 那双, 公安厅,
+Nearest to 工作: 领导, 陷阱, 汇报会, 起码, 规划图, 著名作家, 新台阶, 张图,
+Nearest to 陈清泉: 没能, 风云, 撞倒, 应承, 眯, 请问, 鹰, 几任,
+Nearest to 省委: 举重若轻, 人事, 灰烬, 谢谢您, 通气, 老肖, 打电话, 讲讲,
+Nearest to 太: 抖动, 问得, 遗憾, 海底, 师生, 清白, 喊道, 刻下,
+Average loss at step 92000: 1.480309
+Average loss at step 94000: 1.481867
+Average loss at step 96000: 1.527709
+Average loss at step 98000: 1.466527
+Average loss at step 100000: 1.464015
+Nearest to 书记: 没数, 目光如炬, 握住, 清, 跺脚, 若有所思, 老同事, 打仗,
+Nearest to 局长: 跳脚, 放风, 一段, 泡, 排除, 常理, 近乎, 干掉,
+Nearest to 问: 半真半假, 帮帮, 顺势, 大为, 聊生, 度假村, 后悔, 谢谢,
+Nearest to 季: 对视, 检察院, 同伟, 那双, 吃惊, 公安厅, 韩剧, 天花板,
+Nearest to 工作: 领导, 汇报会, 陷阱, 张图, 著名作家, 起码, 规划图, 送往,
+Nearest to 陈清泉: 没能, 应承, 请问, 鹰, 撞倒, 风云, 人员, 别弄,
+Nearest to 省委: 人事, 举重若轻, 灰烬, 国富, 谢谢您, 打电话, 内容, 讲讲,
+Nearest to 太: 遗憾, 海底, 问得, 师生, 喊道, 刻下, 抖动, 齐腰,</code></pre><h2 id="阶段性结论"><a href="#阶段性结论" class="headerlink" title="阶段性结论"></a>阶段性结论</h2><p>通过上面的数据，我们很尴尬的发现效果不佳，样本数据实在是太少了，我们需要更多的中文语料。本文只是为了解释原理，不做过多的训练。</p>
+<p>下面我们用 gensim 库来再走一遍我们训练过程</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gensim.models.word2vec <span class="keyword">as</span> w2v</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Dimensionality of the resulting word vectors.</span></span><br><span class="line"><span class="comment">#more dimensions, more computationally expensive to train</span></span><br><span class="line"><span class="comment">#but also more accurate</span></span><br><span class="line"><span class="comment">#more dimensions = more generalized</span></span><br><span class="line">num_features = <span class="number">300</span></span><br><span class="line"><span class="comment"># Minimum word count threshold.</span></span><br><span class="line">min_word_count = <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Number of threads to run in parallel.</span></span><br><span class="line"><span class="comment">#more workers, faster we train</span></span><br><span class="line">num_workers = multiprocessing.cpu_count()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Context window length.</span></span><br><span class="line">context_size = <span class="number">7</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Downsample setting for frequent words.</span></span><br><span class="line"><span class="comment">#0 - 1e-5 is good for this</span></span><br><span class="line">downsampling = <span class="number">1e-3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Seed for the RNG, to make the results reproducible.</span></span><br><span class="line"><span class="comment">#random number generator</span></span><br><span class="line"><span class="comment">#deterministic, good for debugging</span></span><br><span class="line">seed = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># By default (`sg=0`), CBOW is used.</span></span><br><span class="line"><span class="comment"># Otherwise (`sg=1`), skip-gram is employed.</span></span><br><span class="line"><span class="comment"># `sample` = threshold for configuring which higher-frequency words are randomly downsampled;</span></span><br><span class="line"><span class="comment">#     default is 1e-3, useful range is (0, 1e-5).</span></span><br><span class="line"></span><br><span class="line">rmmy2vec = w2v.Word2Vec(</span><br><span class="line">    sg=<span class="number">1</span>, <span class="comment"># 使用 skip-gram 算法</span></span><br><span class="line">    seed=seed, <span class="comment"># 为了让每次结果一致，给予一个固定值</span></span><br><span class="line">    workers=num_workers,</span><br><span class="line">    size=num_features,</span><br><span class="line">    min_count=min_word_count,</span><br><span class="line">    window=context_size,</span><br><span class="line">    sample=downsampling</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>此处采用的作用，即参数 downsampling的作用，可以参看:<a href="https://www.quora.com/How-does-sub-sampling-of-frequent-words-work-in-the-context-of-Word2Vec" target="_blank" rel="noopener">How does sub-sampling of frequent words work in the context of Word2Vec?</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sentence_to_wordlist</span><span class="params">(raw)</span>:</span></span><br><span class="line">    clean = re.sub(<span class="string">"[^\u4E00-\u9FD5]"</span>,<span class="string">" "</span>, raw)</span><br><span class="line">    words = jieba.cut(clean)</span><br><span class="line">    <span class="keyword">return</span> list(words)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sentences = []</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"../input/人民的名义.txt"</span>,<span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">        line = line.strip(<span class="string">"\n"</span>)</span><br><span class="line">        sents = list(SentenceSplitter.split(line))</span><br><span class="line">        <span class="keyword">for</span> sent <span class="keyword">in</span> sents:</span><br><span class="line">            wordlist = sentence_to_wordlist(sent)</span><br><span class="line">            wordlist = [c <span class="keyword">for</span> c <span class="keyword">in</span> wordlist <span class="keyword">if</span> c !=<span class="string">' '</span>]</span><br><span class="line">            <span class="keyword">if</span> wordlist:</span><br><span class="line">                sentences.append(wordlist)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">token_count = sum([len(sentence) <span class="keyword">for</span> sentence <span class="keyword">in</span> sentences])</span><br><span class="line">print(<span class="string">"The book corpus contains &#123;0:,&#125; tokens"</span>.format(token_count))</span><br></pre></td></tr></table></figure>
+
+<pre><code>The book corpus contains 135,583 tokens</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmmy2vec.build_vocab(sentences)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">"Word2Vec vocabulary length:"</span>, len(rmmy2vec.vocab))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Word2Vec vocabulary length: 5539</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmmy2vec.train(sentences)</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>488248</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">"trained"</span>):</span><br><span class="line">    os.makedirs(<span class="string">"trained"</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmmy2vec.save(os.path.join(<span class="string">"trained"</span>, <span class="string">"rmmy2vec.w2v"</span>))</span><br></pre></td></tr></table></figure>
+
+<h2 id="探索下训练出来的模型"><a href="#探索下训练出来的模型" class="headerlink" title="探索下训练出来的模型"></a>探索下训练出来的模型</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmmy2vec = w2v.Word2Vec.load(os.path.join(<span class="string">"trained"</span>, <span class="string">"rmmy2vec.w2v"</span>))</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rmmy2vec.most_similar(<span class="string">'书记'</span>)</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>[(&apos;李&apos;, 0.9455972909927368),
+ (&apos;省委&apos;, 0.9354562163352966),
+ (&apos;政法委&apos;, 0.9347406625747681),
+ (&apos;田&apos;, 0.919845461845398),
+ (&apos;国富&apos;, 0.9158734679222107),
+ (&apos;育良&apos;, 0.896552562713623),
+ (&apos;易&apos;, 0.8955333232879639),
+ (&apos;省委书记&apos;, 0.8948370218276978),
+ (&apos;秘书&apos;, 0.8864266872406006),
+ (&apos;汇报&apos;, 0.8858834505081177)]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#my video - how to visualize a dataset easily</span></span><br><span class="line">tsne = sklearn.manifold.TSNE(n_components=<span class="number">2</span>, random_state=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">all_word_vectors_matrix = rmmy2vec.syn0</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">all_word_vectors_matrix_2d = tsne.fit_transform(all_word_vectors_matrix)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">points = pd.DataFrame(</span><br><span class="line">    [</span><br><span class="line">        (word, coords[<span class="number">0</span>], coords[<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">for</span> word, coords <span class="keyword">in</span> [</span><br><span class="line">            (word, all_word_vectors_matrix_2d[rmmy2vec.vocab[word].index])</span><br><span class="line">            <span class="keyword">for</span> word <span class="keyword">in</span> rmmy2vec.vocab</span><br><span class="line">        ]</span><br><span class="line">    ],</span><br><span class="line">    columns=[<span class="string">"word"</span>, <span class="string">"x"</span>, <span class="string">"y"</span>]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.set_context(<span class="string">"poster"</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">points.plot.scatter(<span class="string">"x"</span>, <span class="string">"y"</span>, s=<span class="number">10</span>, figsize=(<span class="number">20</span>, <span class="number">12</span>))</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1161e5e48&gt;</code></pre><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/ac53b29acb881f0f12879cde5ba0f7dc9b9e4ff0" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 解决中文乱码问题</span></span><br><span class="line"><span class="keyword">import</span> matplotlib </span><br><span class="line"></span><br><span class="line">matplotlib.rcParams[<span class="string">'font.family'</span>] = <span class="string">'STFangsong'</span><span class="comment">#用来正常显示中文标签</span></span><br><span class="line"><span class="comment"># mpl.rcParams['font.sans-serif'] = [u'STKaiti']</span></span><br><span class="line">matplotlib.rcParams[<span class="string">'axes.unicode_minus'</span>] = <span class="literal">False</span> <span class="comment">#用来正常显示负号</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_region</span><span class="params">(x_bounds, y_bounds)</span>:</span></span><br><span class="line">    slice = points[</span><br><span class="line">        (x_bounds[<span class="number">0</span>] &lt;= points.x) &amp;</span><br><span class="line">        (points.x &lt;= x_bounds[<span class="number">1</span>]) &amp; </span><br><span class="line">        (y_bounds[<span class="number">0</span>] &lt;= points.y) &amp;</span><br><span class="line">        (points.y &lt;= y_bounds[<span class="number">1</span>])</span><br><span class="line">    ]</span><br><span class="line">    </span><br><span class="line">    ax = slice.plot.scatter(<span class="string">"x"</span>, <span class="string">"y"</span>, s=<span class="number">35</span>, figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">    <span class="keyword">for</span> i, point <span class="keyword">in</span> slice.iterrows():</span><br><span class="line">        ax.text(point.x + <span class="number">0.005</span>, point.y + <span class="number">0.005</span>, point.word, fontsize=<span class="number">11</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot_region(x_bounds=(<span class="number">-6</span>, <span class="number">-5</span>), y_bounds=(<span class="number">10</span>, <span class="number">11</span>))</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/9c39ddfe04b635700c583de80fe8afec3f9cac22" alt="png"></p>
+<h3 id="展示线性关系"><a href="#展示线性关系" class="headerlink" title="展示线性关系"></a>展示线性关系</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nearest_similarity_cosmul</span><span class="params">(start1, end1, end2)</span>:</span></span><br><span class="line">    similarities = rmmy2vec.most_similar_cosmul(</span><br><span class="line">        positive=[end2, start1],</span><br><span class="line">        negative=[end1]</span><br><span class="line">    )</span><br><span class="line">    start2 = similarities[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line">    print(<span class="string">"&#123;start1&#125; is related to &#123;end1&#125;, as &#123;start2&#125; is related to &#123;end2&#125;"</span>.format(**locals()))</span><br><span class="line">    <span class="keyword">return</span> start2</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nearest_similarity_cosmul(<span class="string">"书记"</span>, <span class="string">"官员"</span>, <span class="string">"省委"</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>书记 is related to 官员, as 国富 is related to 省委
+
+&apos;国富&apos;</code></pre><p>以上例子只为说明，真正训练的时候我看大多数用的都是wiki的中文语料，有两篇文档讲了这个过程，可以看：</p>
+<p><a href="http://www.52nlp.cn/%E4%B8%AD%E8%8B%B1%E6%96%87%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%E8%AF%AD%E6%96%99%E4%B8%8A%E7%9A%84word2vec%E5%AE%9E%E9%AA%8C" target="_blank" rel="noopener">中英文维基百科语料上的 Word2Vec 实验</a></p>
+<p><a href="http://www.cnblogs.com/robert-dlut/p/6586621.html" target="_blank" rel="noopener">使用维基百科训练简体中文词向量</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://blog.csdn.net/mytestmy/article/details/26961315" target="_blank" rel="noopener">深度学习 word2vec 笔记之基础篇</a></p>
+<p><a href="https://liusida.github.io/2016/11/14/study-embeddings/" target="_blank" rel="noopener">学习 Tensorflow 的 Embeddings 例子</a></p>
+<p><a href="https://github.com/llSourcell/word_vectors_game_of_thrones-LIVE/blob/master/Thrones2Vec.ipynb" target="_blank" rel="noopener"><strong>word_vectors_game_of_thrones-LIVE</strong></a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CS224d/" rel="tag"># CS224d</a>
+              <a href="/tags/word2vec/" rel="tag"># word2vec</a>
+              <a href="/tags/nlpc/" rel="tag"># nlpc</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/01/30/How-to-Make-a-Neural-Network/" rel="prev" title="How to Make a Neural Network">
+      <i class="fa fa-chevron-left"></i> How to Make a Neural Network
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/22/hello-my-30/" rel="next" title="hello my 30">
+      hello my 30 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语言模型"><span class="nav-number">1.</span> <span class="nav-text">语言模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#N-Gram"><span class="nav-number">1.1.</span> <span class="nav-text">N-Gram</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#word2vec"><span class="nav-number">2.</span> <span class="nav-text">word2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成Skip-Gram数据"><span class="nav-number">2.1.</span> <span class="nav-text">生成Skip-Gram数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阶段性结论"><span class="nav-number">3.</span> <span class="nav-text">阶段性结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#探索下训练出来的模型"><span class="nav-number">4.</span> <span class="nav-text">探索下训练出来的模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#展示线性关系"><span class="nav-number">4.1.</span> <span class="nav-text">展示线性关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

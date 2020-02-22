@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="why go? great support for concurrency (channels, goroutines)  对并发的支持：channel和goroutine Challenges of GoConcurrency：灵活的channel（lock-free） Scheduling：efficient use of HW, despite OS barriers? Polymorphi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Russ Cox lecturer on Go">
+<meta property="og:url" content="http://yoursite.com/2016/10/26/Russ-Cox-lecturer-on-Go/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="why go? great support for concurrency (channels, goroutines)  对并发的支持：channel和goroutine Challenges of GoConcurrency：灵活的channel（lock-free） Scheduling：efficient use of HW, despite OS barriers? Polymorphi">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/3f80868ca957243058db24404d50206ac6b15732">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/ce392ea1c1dca4981e27b2d5e9e5aa19aa058529">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/8fbc42db71f97fa824be875e31550ad16e99f535">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/6183235100b97e39cf71d9313607c8791e5cb034">
+<meta property="article:published_time" content="2016-10-26T10:53:45.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.367Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="golang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/3f80868ca957243058db24404d50206ac6b15732">
+
+<link rel="canonical" href="http://yoursite.com/2016/10/26/Russ-Cox-lecturer-on-Go/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Russ Cox lecturer on Go | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/26/Russ-Cox-lecturer-on-Go/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Russ Cox lecturer on Go
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-26 18:53:45" itemprop="dateCreated datePublished" datetime="2016-10-26T18:53:45+08:00">2016-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/10/26/Russ-Cox-lecturer-on-Go/" class="post-meta-item leancloud_visitors" data-flag-title="Russ Cox lecturer on Go" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="why-go"><a href="#why-go" class="headerlink" title="why go?"></a>why go?</h2><blockquote>
+<p>great support for concurrency (channels, goroutines)</p>
+</blockquote>
+<p>对并发的支持：channel和goroutine</p>
+<h2 id="Challenges-of-Go"><a href="#Challenges-of-Go" class="headerlink" title="Challenges of Go"></a>Challenges of Go</h2><p>Concurrency：灵活的channel（lock-free）</p>
+<p>Scheduling：efficient use of HW, despite OS barriers?</p>
+<p>Polymorphism(多态)：efficient interfaces; generics?</p>
+<p>Garbage collection：bound pause times, concurrent, per-goroutine?</p>
+<p>Program translation：translate other programs to Go?</p>
+<p>Race detection： scale to 1000s of goroutines?</p>
+<p>这些对 go的memory model提出了什么要求？</p>
+<h2 id="A-Fairy-Tale（童话中）"><a href="#A-Fairy-Tale（童话中）" class="headerlink" title="A Fairy Tale（童话中）"></a>A Fairy Tale（童话中）</h2><p>从前，你要怎么让一个程序跑的更快呢？等一年，买更新的硬件</p>
+<p>那硬件或者编译器的优化有效吗？</p>
+<p>有效，如果不改变程序行为的话</p>
+<h2 id="An-Evil-Twist（邪恶的转折）"><a href="#An-Evil-Twist（邪恶的转折）" class="headerlink" title="An Evil Twist（邪恶的转折）"></a>An Evil Twist（邪恶的转折）</h2><p>硬件工程师的魔咒失效了，新的魔咒出现：消灭越来越多的核</p>
+<p>Compiler and operating system工程师给了我们多线程编程</p>
+<p>hardware, compiler optimizations改变了程序行为</p>
+<p>这些优化都无效了</p>
+<h2 id="Can’t-we-all-get-along"><a href="#Can’t-we-all-get-along" class="headerlink" title="Can’t we all get along?"></a>Can’t we all get along?</h2><blockquote>
+<p>“Valid optimizations do not change the behavior of valid programs.”</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1                 &#x2F;&#x2F; Thread 2</span><br><span class="line">	x &#x3D; 1; 					while (done &#x3D;&#x3D; 0)&#123; &#x2F;* spin *&#x2F; &#125;</span><br><span class="line">   done &#x3D; 1;        		print(x);</span><br></pre></td></tr></table></figure>
+
+<p>这会打印出  x=0嘛？</p>
+<blockquote>
+<p>“It depends.”</p>
+<p>In x86 assembly, no. In ARM/POWER assembly, yes. </p>
+<p>In most C compilers (even on x86), yes (or maybe it won’t even finish).</p>
+</blockquote>
+<h2 id="“It-depends”-is-not-a-happy-ending"><a href="#“It-depends”-is-not-a-happy-ending" class="headerlink" title="“It depends” is not a happy ending"></a>“It depends” is not a happy ending</h2><p>Memory (consistency) model 定义了：</p>
+<ul>
+<li>which programs are valid</li>
+<li>what those valid programs can do</li>
+<li>therefore what programmers can expect</li>
+<li>therefore what compiler writers must ensure / can do</li>
+</ul>
+<h2 id="This-Talk"><a href="#This-Talk" class="headerlink" title="This Talk"></a>This Talk</h2><ul>
+<li>为什么需要内存模型？</li>
+<li>硬件<ul>
+<li>顺序一致性</li>
+<li>x86</li>
+<li>ARM/POWER</li>
+<li>“Weak ordering” and “data race free”</li>
+</ul>
+</li>
+<li>Languages / Compilers<ul>
+<li>Java (1996, 2005)</li>
+<li>C++ (2011, 2014)</li>
+<li>Go (2009, …)</li>
+</ul>
+</li>
+</ul>
+<h2 id="Hardware-Memory-Models"><a href="#Hardware-Memory-Models" class="headerlink" title="Hardware Memory Models"></a>Hardware Memory Models</h2><p>我们开始写汇编语言</p>
+<p>硬件会干扰我们到什么程度</p>
+<h2 id="Sequential-Consistency（顺序一致性）"><a href="#Sequential-Consistency（顺序一致性）" class="headerlink" title="Sequential Consistency（顺序一致性）"></a>Sequential Consistency（顺序一致性）</h2><p>设计和证明多核算法的正确性是通过基于下面的一个假设：</p>
+<ul>
+<li>如果所有处理器执行的操作以某个顺序执行，那么任何操作执行结果都是一样的</li>
+<li>每个独立的处理器的操作执行顺序按照程序制定的顺序执行</li>
+</ul>
+<p>出自：— Lamport, “How to Make a Multiprocessor Computer That Correctly Executes Multiprocess Programs” (1979)</p>
+<h2 id="Can-this-program-print-0"><a href="#Can-this-program-print-0" class="headerlink" title="Can this program print 0?"></a>Can this program print 0?</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1                 &#x2F;&#x2F; Thread 2</span><br><span class="line">	x &#x3D; 1; 					while (done &#x3D;&#x3D; 0)&#123; &#x2F;* spin *&#x2F; &#125;</span><br><span class="line">   done &#x3D; 1;        		print(x);</span><br></pre></td></tr></table></figure>
+
+<p>这会打印出  x=0嘛？</p>
+<h2 id="Litmus-Test-Message-Passing"><a href="#Litmus-Test-Message-Passing" class="headerlink" title="Litmus Test: Message Passing"></a>Litmus Test: Message Passing</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1							&#x2F;&#x2F; Thread 2</span><br><span class="line"></span><br><span class="line">x&#x3D;1 								r1 &#x3D; y </span><br><span class="line">y&#x3D;1									r2 &#x3D; x</span><br></pre></td></tr></table></figure>
+
+<p>会看到r1 = 1, r2 = 0？</p>
+<h2 id="Message-Passing-w-Sequential-Consistency"><a href="#Message-Passing-w-Sequential-Consistency" class="headerlink" title="Message Passing w/ Sequential Consistency"></a>Message Passing w/ Sequential Consistency</h2><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/3f80868ca957243058db24404d50206ac6b15732" alt="可能的执行顺序"></p>
+<p>在顺序一致性的硬件上是看不到r1 = 1, r2 = 0</p>
+<h2 id="Sequentially-Consistent-Hardware"><a href="#Sequentially-Consistent-Hardware" class="headerlink" title="Sequentially Consistent Hardware"></a>Sequentially Consistent Hardware</h2><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/ce392ea1c1dca4981e27b2d5e9e5aa19aa058529" alt="Sequentially Consistent Hardware"></p>
+<p>Maranget et al., “<a href="https://www.cl.cam.ac.uk/~pes20/ppc-supplemental/test7.pdf" target="_blank" rel="noopener">A Tutorial Introduction to the ARM and POWER Relaxed Memory Models</a>”</p>
+<h2 id="x86-Hardware-Total-Store-Order"><a href="#x86-Hardware-Total-Store-Order" class="headerlink" title="x86 Hardware (Total Store Order)"></a>x86 Hardware (Total Store Order)</h2><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/8fbc42db71f97fa824be875e31550ad16e99f535" alt="Total Store Order"></p>
+<p>多了写缓存，需要进行同步</p>
+<h2 id="Litmus-Test-Message-Passing-1"><a href="#Litmus-Test-Message-Passing-1" class="headerlink" title="Litmus Test: Message Passing"></a>Litmus Test: Message Passing</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1							&#x2F;&#x2F; Thread 2</span><br><span class="line"></span><br><span class="line">x&#x3D;1 								r1 &#x3D; y </span><br><span class="line">y&#x3D;1									r2 &#x3D; x</span><br></pre></td></tr></table></figure>
+
+<p>会看到r1 = 1, r2 = 0？在TSO下是 no!</p>
+<p>线程1的写顺序在其他线程看来还是按照原来的顺序</p>
+<h2 id="Litmus-Test-Store-Buffering"><a href="#Litmus-Test-Store-Buffering" class="headerlink" title="Litmus Test: Store Buffering"></a>Litmus Test: Store Buffering</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1							&#x2F;&#x2F; Thread 2</span><br><span class="line"></span><br><span class="line">x&#x3D;1 								y &#x3D; 1 </span><br><span class="line"></span><br><span class="line">r1&#x3D;y								r2 &#x3D; x</span><br></pre></td></tr></table></figure>
+
+<p>可以看到r1 = 0, r2 = 0？</p>
+<p>在顺序模型下（sequentially consistent）不会</p>
+<p>在TSO下是 <strong>会</strong></p>
+<p>线程1的本地写不会马上被其他线程看到</p>
+<h2 id="Memory-Fences"><a href="#Memory-Fences" class="headerlink" title="Memory Fences"></a>Memory Fences</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1							&#x2F;&#x2F; Thread 2</span><br><span class="line"></span><br><span class="line">x&#x3D;1 								y &#x3D; 1 </span><br><span class="line">fence								fence</span><br><span class="line">r1&#x3D;y								r2 &#x3D; x</span><br></pre></td></tr></table></figure>
+
+<p>可以看到r1 = 0, r2 = 0？NO！</p>
+<p>内存fence保证了线程1的写在读之前可以被其他线程看到</p>
+<h2 id="Litmus-Test-Independent-Reads-of-Indep-Writes"><a href="#Litmus-Test-Independent-Reads-of-Indep-Writes" class="headerlink" title="Litmus Test: Independent Reads of Indep. Writes"></a>Litmus Test: Independent Reads of Indep. Writes</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1		&#x2F;&#x2F; Thread 2		&#x2F;&#x2F; Thread 3		&#x2F;&#x2F; Thread 4</span><br><span class="line">x&#x3D;1				y&#x3D;1				r1 &#x3D; x 			r3 &#x3D; y </span><br><span class="line"></span><br><span class="line">								r2 &#x3D; y			r4 &#x3D; x</span><br></pre></td></tr></table></figure>
+
+<p>可以看到r1 = 1, r2 = 0, r3 = 1, r4 = 0？</p>
+<p>线程3可以先观察到x的改变，而线程4则是先观察到y的改变</p>
+<p>在顺序模型下（sequentially consistent）不会</p>
+<p>在TSO下是 <strong>不会</strong></p>
+<p>因为在所有线程之间有一个总的顺序</p>
+<h2 id="ARM-POWER-Hardware"><a href="#ARM-POWER-Hardware" class="headerlink" title="ARM/POWER Hardware"></a>ARM/POWER Hardware</h2><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/6183235100b97e39cf71d9313607c8791e5cb034" alt="图片"></p>
+<h2 id="Litmus-Test-Message-Passing-2"><a href="#Litmus-Test-Message-Passing-2" class="headerlink" title="Litmus Test: Message Passing"></a>Litmus Test: Message Passing</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1							&#x2F;&#x2F; Thread 2</span><br><span class="line"></span><br><span class="line">x&#x3D;1 								r1 &#x3D; y </span><br><span class="line"></span><br><span class="line">y&#x3D;1									r2 &#x3D; x</span><br></pre></td></tr></table></figure>
+
+<p>能看到r1 = 1, r2 = 0?</p>
+<p>在TSO是no！</p>
+<p>在ARM/POWER是Yes！</p>
+<p>线程1的写在其他线程来看不一定会按照原来的顺序</p>
+<h2 id="Litmus-Test-Store-Buffering-1"><a href="#Litmus-Test-Store-Buffering-1" class="headerlink" title="Litmus Test: Store Buffering"></a>Litmus Test: Store Buffering</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1							&#x2F;&#x2F; Thread 2</span><br><span class="line"></span><br><span class="line">x&#x3D;1 								y &#x3D; 1 </span><br><span class="line"></span><br><span class="line">r1&#x3D;y								r2 &#x3D; x</span><br></pre></td></tr></table></figure>
+
+<p>r1 = 0, r2 = 0?</p>
+<p>在顺序模型下（sequentially consistent）不会</p>
+<p>在TSO下是 <strong>会</strong></p>
+<p>在ARM/POWER是Yes！</p>
+<h2 id="Litmus-Test-Independent-Reads-of-Indep-Writes-1"><a href="#Litmus-Test-Independent-Reads-of-Indep-Writes-1" class="headerlink" title="Litmus Test: Independent Reads of Indep. Writes"></a>Litmus Test: Independent Reads of Indep. Writes</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1		&#x2F;&#x2F; Thread 2		&#x2F;&#x2F; Thread 3		&#x2F;&#x2F; Thread 4</span><br><span class="line">x&#x3D;1				y&#x3D;1				r1 &#x3D; x 			r3 &#x3D; y </span><br><span class="line"></span><br><span class="line">								r2 &#x3D; y			r4 &#x3D; x</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在顺序模型下（sequentially consistent）不会</p>
+<p>在TSO下是 <strong>不会</strong></p>
+<p>在ARM/POWER是Yes！</p>
+<p>不同的线程会以不同的顺序看到写</p>
+<h2 id="Litmus-Test-Coherence"><a href="#Litmus-Test-Coherence" class="headerlink" title="Litmus Test: Coherence"></a>Litmus Test: Coherence</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Thread 1		&#x2F;&#x2F; Thread 2		&#x2F;&#x2F; Thread 3		&#x2F;&#x2F; Thread 4</span><br><span class="line">x&#x3D;1				x&#x3D;2				r1 &#x3D; x 			r3 &#x3D; x </span><br><span class="line"></span><br><span class="line">								r2 &#x3D; x			r4 &#x3D; x</span><br></pre></td></tr></table></figure>
+
+<p>r1 = 1, r2 = 2, r3 = 2, r4 = 1?</p>
+<p>线程3看到x先写1后写2，而线程4则相反</p>
+<p>在顺序模型下（sequentially consistent）不会</p>
+<p>在TSO下是 <strong>不会</strong></p>
+<p>在ARM/POWER是不会！</p>
+<p>线程间需要看到的写覆盖是一致的</p>
+<h2 id="Weak-Ordering"><a href="#Weak-Ordering" class="headerlink" title="Weak Ordering"></a>Weak Ordering</h2><blockquote>
+<p>“Let a synchronization model be a set of constraints on memory accesses that specify how and when synchronization needs to be done.</p>
+<p>让一个同步模型成为在内存读取上的约束的集合：规定了怎么做和什么时候同步是需要做的</p>
+<p>Hardware is weakly ordered with respect to a synchronization model if and only if it appears sequentially consistent to all software that obey the synchronization model.”</p>
+<p>如果一个同步模型，当且仅当它对于所有遵循该同步的模型是顺序一致的，此时硬件才是weakly ordered</p>
+<p>— Adve and Hill, “Weak Ordering - A New Definition” (1990)</p>
+</blockquote>
+<h2 id="Data-Race-Free-DRF"><a href="#Data-Race-Free-DRF" class="headerlink" title="Data-Race-Free (DRF)"></a>Data-Race-Free (DRF)</h2><p>Synchronization operations are (to hardware) recognizably different from ordinary operations.</p>
+<p>A program is data-race-free if for all idealized SC executions, any two ordinary memory accesses to the same location from different threads are either:</p>
+<ul>
+<li>both reads</li>
+<li>or separated by synchronization operations: one happens before the other</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/golang/" rel="tag"># golang</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/10/24/6-824-Lab-3-Fault-tolerant-Key-Value-Service/" rel="prev" title="6.824 Lab 3: Fault-tolerant Key/Value Service Part-A">
+      <i class="fa fa-chevron-left"></i> 6.824 Lab 3: Fault-tolerant Key/Value Service Part-A
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/10/27/Using-Generators/" rel="next" title="Understanding PHP Generators(译)">
+      Understanding PHP Generators(译) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#why-go"><span class="nav-number">1.</span> <span class="nav-text">why go?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Challenges-of-Go"><span class="nav-number">2.</span> <span class="nav-text">Challenges of Go</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Fairy-Tale（童话中）"><span class="nav-number">3.</span> <span class="nav-text">A Fairy Tale（童话中）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#An-Evil-Twist（邪恶的转折）"><span class="nav-number">4.</span> <span class="nav-text">An Evil Twist（邪恶的转折）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Can’t-we-all-get-along"><span class="nav-number">5.</span> <span class="nav-text">Can’t we all get along?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#“It-depends”-is-not-a-happy-ending"><span class="nav-number">6.</span> <span class="nav-text">“It depends” is not a happy ending</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#This-Talk"><span class="nav-number">7.</span> <span class="nav-text">This Talk</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hardware-Memory-Models"><span class="nav-number">8.</span> <span class="nav-text">Hardware Memory Models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequential-Consistency（顺序一致性）"><span class="nav-number">9.</span> <span class="nav-text">Sequential Consistency（顺序一致性）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Can-this-program-print-0"><span class="nav-number">10.</span> <span class="nav-text">Can this program print 0?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Litmus-Test-Message-Passing"><span class="nav-number">11.</span> <span class="nav-text">Litmus Test: Message Passing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Message-Passing-w-Sequential-Consistency"><span class="nav-number">12.</span> <span class="nav-text">Message Passing w&#x2F; Sequential Consistency</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequentially-Consistent-Hardware"><span class="nav-number">13.</span> <span class="nav-text">Sequentially Consistent Hardware</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#x86-Hardware-Total-Store-Order"><span class="nav-number">14.</span> <span class="nav-text">x86 Hardware (Total Store Order)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Litmus-Test-Message-Passing-1"><span class="nav-number">15.</span> <span class="nav-text">Litmus Test: Message Passing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Litmus-Test-Store-Buffering"><span class="nav-number">16.</span> <span class="nav-text">Litmus Test: Store Buffering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Memory-Fences"><span class="nav-number">17.</span> <span class="nav-text">Memory Fences</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Litmus-Test-Independent-Reads-of-Indep-Writes"><span class="nav-number">18.</span> <span class="nav-text">Litmus Test: Independent Reads of Indep. Writes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARM-POWER-Hardware"><span class="nav-number">19.</span> <span class="nav-text">ARM&#x2F;POWER Hardware</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Litmus-Test-Message-Passing-2"><span class="nav-number">20.</span> <span class="nav-text">Litmus Test: Message Passing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Litmus-Test-Store-Buffering-1"><span class="nav-number">21.</span> <span class="nav-text">Litmus Test: Store Buffering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Litmus-Test-Independent-Reads-of-Indep-Writes-1"><span class="nav-number">22.</span> <span class="nav-text">Litmus Test: Independent Reads of Indep. Writes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Litmus-Test-Coherence"><span class="nav-number">23.</span> <span class="nav-text">Litmus Test: Coherence</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Weak-Ordering"><span class="nav-number">24.</span> <span class="nav-text">Weak Ordering</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-Race-Free-DRF"><span class="nav-number">25.</span> <span class="nav-text">Data-Race-Free (DRF)</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本系列是读php data persistence with doctrine2 orm的笔记，本文是第一篇：自己造轮子。 最开始描述下需要构建的系统 一个User可以发表Post，一个Post只有一个作者，User和Post之间彼此引用 一个User可以有多个Roles，User有Roles的引用，但是不能通过Role找到Users 一个User有一个UserInfo，UserInfo中包含了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="doctrine缘来 之 造轮子">
+<meta property="og:url" content="http://yoursite.com/2016/12/19/doctrine1/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="本系列是读php data persistence with doctrine2 orm的笔记，本文是第一篇：自己造轮子。 最开始描述下需要构建的系统 一个User可以发表Post，一个Post只有一个作者，User和Post之间彼此引用 一个User可以有多个Roles，User有Roles的引用，但是不能通过Role找到Users 一个User有一个UserInfo，UserInfo中包含了">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/fa3266866e3cb4c02ea0481a49e044df9a557240">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/76a586df395fb31c491a06201bf6805e10e706c5">
+<meta property="article:published_time" content="2016-12-19T01:55:43.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.390Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="orm">
+<meta property="article:tag" content="doctrine">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/fa3266866e3cb4c02ea0481a49e044df9a557240">
+
+<link rel="canonical" href="http://yoursite.com/2016/12/19/doctrine1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>doctrine缘来 之 造轮子 | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/19/doctrine1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          doctrine缘来 之 造轮子
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-12-19 09:55:43" itemprop="dateCreated datePublished" datetime="2016-12-19T09:55:43+08:00">2016-12-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/12/19/doctrine1/" class="post-meta-item leancloud_visitors" data-flag-title="doctrine缘来 之 造轮子" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/fa3266866e3cb4c02ea0481a49e044df9a557240" alt=""></p>
+<p>本系列是读<strong><em>php data persistence with doctrine2 orm</em></strong>的笔记，本文是第一篇：自己造轮子。</p>
+<p>最开始描述下需要构建的系统</p>
+<p>一个User可以发表Post，一个Post只有一个作者，User和Post之间彼此引用</p>
+<p>一个User可以有多个Roles，User有Roles的引用，但是不能通过Role找到Users</p>
+<p>一个User有一个UserInfo，UserInfo中包含了用户的注册信息等，User和UserInfo彼此引用</p>
+<p>一个User有一个ContactData，包含email、电话等信息，User单向引用ContactData</p>
+<p>一个User可能会有一个life partner，彼此之间互相引用</p>
+<p>一个User会有多个friends，关系是单向的</p>
+<p>一个Post会有多个标签Tag，Post到Tag是双向关系</p>
+<p>一个Post有一个Category，Post到Category时单向关系</p>
+<p>一个Category会有subcategories，并且会有parent Category</p>
+<p>一个User会有多个Categories，User到Categories是单向关系</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/76a586df395fb31c491a06201bf6805e10e706c5" alt="Demo application “Talking” - Domain Model"></p>
+<p>在起初这个阶段我们不会直接就是用Doctrine，而是会自己来打造一个ORM，让我们更清楚的了解一个好的ORM需要怎么做。</p>
+<h2 id="读数据"><a href="#读数据" class="headerlink" title="读数据"></a>读数据</h2><p>先来看Model：User，部分代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> GENDER_MALE                 = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> GENDER_FEMALE               = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> GENDER_MALE_DISPLAY_VALUE   = <span class="string">"Mr."</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> GENDER_FEMALE_DISPLAY_VALUE = <span class="string">"Mrs."</span>;</span><br><span class="line">	 <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> string</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">assembleDisplayName</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $displayName = <span class="string">''</span>;</span><br><span class="line">        <span class="keyword">if</span> ( <span class="keyword">$this</span>-&gt;gender == <span class="keyword">self</span>::GENDER_MALE ) &#123;</span><br><span class="line">            $displayName .= <span class="keyword">self</span>::GENDER_MALE_DISPLAY_VALUE;</span><br><span class="line">        &#125; <span class="keyword">elseif</span> ( <span class="keyword">$this</span>-&gt;gender == <span class="keyword">self</span>::GENDER_FEMALE ) &#123;</span><br><span class="line">            $displayName .= <span class="keyword">self</span>::GENDER_FEMALE_DISPLAY_VALUE;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ( <span class="keyword">$this</span>-&gt;namePrefix ) &#123;</span><br><span class="line">            $displayName .= <span class="string">' '</span> . <span class="keyword">$this</span>-&gt;namePrefix;</span><br><span class="line">        &#125;</span><br><span class="line">        $displayName .= <span class="string">' '</span> . <span class="keyword">$this</span>-&gt;firstName . <span class="string">' '</span> . <span class="keyword">$this</span>-&gt;lastName;</span><br><span class="line">        <span class="keyword">return</span> $displayName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserTest</span> <span class="keyword">extends</span> <span class="title">PHPUnit_Framework_TestCase</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testAssembleDisplayName</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $user = <span class="keyword">new</span> User();</span><br><span class="line">        $user-&gt;setFirstName( <span class="string">'Max'</span> );</span><br><span class="line">        $user-&gt;setLastName( <span class="string">'Mustermann'</span> );</span><br><span class="line">        $user-&gt;setGender( <span class="number">0</span> );</span><br><span class="line">        $user-&gt;setNamePrefix( <span class="string">'Prof. Dr'</span> );</span><br><span class="line">        <span class="keyword">$this</span>-&gt;assertEquals(<span class="string">"Mr. Prof. Dr Max Mustermann"</span>,$user-&gt;assembleDisplayName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面测试了User的一个功能，一般来说User都是从数据库中获取的，我们来写一段代码，测试下从数据库中读取的方式</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testLoadFromDataBase</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $db       = <span class="keyword">new</span> \PDO( <span class="string">'mysql:host=127.0.0.1;dbname=app;port=33060'</span>, <span class="string">'root'</span>, <span class="string">'root'</span> );</span><br><span class="line">        $userData = $db-&gt;query( <span class="string">'SELECT * FROM users WHERE id = 1'</span> )-&gt;fetch();</span><br><span class="line">        $user = <span class="keyword">new</span> Entity\User();</span><br><span class="line">        $user-&gt;setId( $userData[<span class="string">'id'</span>] );</span><br><span class="line">        $user-&gt;setFirstName( $userData[<span class="string">'first_name'</span>] );</span><br><span class="line">        $user-&gt;setLastName( $userData[<span class="string">'last_name'</span>] );</span><br><span class="line">        $user-&gt;setGender( $userData[<span class="string">'gender'</span>] );</span><br><span class="line">        $user-&gt;setNamePrefix( $userData[<span class="string">'name_prefix'</span>] );</span><br><span class="line">        <span class="keyword">$this</span>-&gt;assertEquals( <span class="string">"Mr. Prof. Dr. Max Mustermann"</span>, $user-&gt;assembleDisplayName() );</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码就是一个简易的ORM，从数据库中加载数据，然后将其转换为Object，让我们更进一步，将这些“data mapping”功能单独抽取出来，叫做Mapper：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Mapper</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> $mapping = [</span><br><span class="line">        <span class="string">'id'</span>         =&gt; <span class="string">'id'</span>,</span><br><span class="line">        <span class="string">'firstName'</span>  =&gt; <span class="string">'first_name'</span>,</span><br><span class="line">        <span class="string">'lastName'</span>   =&gt; <span class="string">'last_name'</span>,</span><br><span class="line">        <span class="string">'gender'</span>     =&gt; <span class="string">'gender'</span>,</span><br><span class="line">        <span class="string">'namePrefix'</span> =&gt; <span class="string">'name_prefix'</span>,</span><br><span class="line">    ];</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">populate</span><span class="params">( $data, $user )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $mappingsFlipped = array_flip( <span class="keyword">$this</span>-&gt;mapping );</span><br><span class="line">        <span class="keyword">foreach</span> ( $data <span class="keyword">as</span> $key =&gt; $value ) &#123;</span><br><span class="line">            <span class="keyword">if</span> ( <span class="keyword">isset</span>( $mappingsFlipped[ $key ] ) ) &#123;</span><br><span class="line">                call_user_func_array(</span><br><span class="line">                    [ $user, <span class="string">'set'</span> . ucfirst( $mappingsFlipped[ $key ] ) ],</span><br><span class="line">                    [ $value ]</span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> $user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此处我们再来看测试代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testPopulate</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        $db       = <span class="keyword">new</span> \PDO( <span class="string">'mysql:host=127.0.0.1;dbname=app;port=33060'</span>, <span class="string">'root'</span>, <span class="string">'root'</span> );</span><br><span class="line">        $userData = $db-&gt;query( <span class="string">'SELECT * FROM users WHERE id = 1'</span> )-&gt;fetch();</span><br><span class="line">        $user       = <span class="keyword">new</span> Entity\User();</span><br><span class="line">        $userMapper = <span class="keyword">new</span> Mapper\User();</span><br><span class="line">        $user       = $userMapper-&gt;populate( $userData, $user );</span><br><span class="line">        <span class="keyword">$this</span>-&gt;assertEquals( <span class="string">"Mr. Prof. Dr. Max Mustermann"</span>, $user-&gt;assembleDisplayName() );</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码已经将数据映射的功能进行了封装，下一步，我们将sql语句抽离出来，封装到Repository中：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">namespace</span> <span class="title">Repository</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Mapper</span>\<span class="title">User</span> <span class="title">as</span> <span class="title">UserMapper</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Entity</span>\<span class="title">User</span> <span class="title">as</span> <span class="title">UserEntity</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** <span class="doctag">@var</span>  \EntityManager */</span></span><br><span class="line">    <span class="keyword">private</span> $em;</span><br><span class="line">    <span class="keyword">private</span> $mapper;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">( $em )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;mapper = <span class="keyword">new</span> UserMapper;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;em     = $em;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">findOneById</span><span class="params">( $id )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $userData = <span class="keyword">$this</span>-&gt;em</span><br><span class="line">            -&gt;query( <span class="string">'SELECT * FROM users WHERE id = '</span> . $id )</span><br><span class="line">            -&gt;fetch();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;mapper-&gt;populate( $userData, <span class="keyword">new</span> UserEntity() );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此处有个类叫<strong><em>EntityManager</em></strong>，其职责是作为数据库操作的Entry Point，负责所有的具体的数据库操作：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">use</span> <span class="title">Repository</span>\<span class="title">User</span> <span class="title">as</span> <span class="title">UserRepository</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Repository</span>\<span class="title">Post</span> <span class="title">as</span> <span class="title">PostRepository</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Mapper</span>\<span class="title">User</span> <span class="title">as</span> <span class="title">UserMapper</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EntityManager</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> $host;</span><br><span class="line">    <span class="keyword">private</span> $db;</span><br><span class="line">    <span class="keyword">private</span> $user;</span><br><span class="line">    <span class="keyword">private</span> $pwd;</span><br><span class="line">    <span class="keyword">private</span> $port;</span><br><span class="line">    <span class="keyword">private</span> $connection;</span><br><span class="line">    <span class="keyword">private</span> $userRepository;</span><br><span class="line">    <span class="keyword">private</span> $postRepository;</span><br><span class="line">    <span class="keyword">private</span> $identityMap;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">( $host, $db, $port, $user, $pwd )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;host           = $host;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;user           = $user;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;pwd            = $pwd;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;connection     = <span class="keyword">new</span> \PDO( <span class="string">"mysql:host=$host;port=$port;dbname=$db"</span>, $user, $pwd );</span><br><span class="line">        <span class="keyword">$this</span>-&gt;userRepository = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;postRepository = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;db             = $db;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;identityMap    = [ <span class="string">'users'</span> =&gt; [] ];</span><br><span class="line">        <span class="keyword">$this</span>-&gt;port = $port;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">query</span><span class="params">( $stmt )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;connection-&gt;query( $stmt );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getUserRepository</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ( !is_null( <span class="keyword">$this</span>-&gt;userRepository ) ) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;userRepository;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;userRepository = <span class="keyword">new</span> UserRepository( <span class="keyword">$this</span> );</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;userRepository;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时我们的测试代码变为了：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserRepositoryTest</span> <span class="keyword">extends</span> \<span class="title">PHPUnit_Framework_TestCase</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">testPopulate</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $em = <span class="keyword">new</span> \EntityManager(<span class="string">'127.0.0.1'</span>,<span class="string">'app'</span>,<span class="number">33060</span>,<span class="string">'root'</span>,<span class="string">'root'</span>);</span><br><span class="line">        $repository = <span class="keyword">new</span> Repository\User($em);</span><br><span class="line">        $user = $repository-&gt;findOneById(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;assertEquals( <span class="string">"Mr. Prof. Dr. Max Mustermann"</span>, $user-&gt;assembleDisplayName() );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到目前为止我们做的事情就是将数据从数据库中读取出来，然后根据数据构造出对象，下面我们再进一步，看怎么对对象进行持久化。</p>
+<h2 id="保存数据"><a href="#保存数据" class="headerlink" title="保存数据"></a>保存数据</h2><p>保存操作有两种：insert、update，先来看准备动作，将数据从对象Entity中取出来：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// class Mapper\User	</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">extract</span><span class="params">( $user )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $data = [];</span><br><span class="line">        <span class="keyword">foreach</span> ( <span class="keyword">$this</span>-&gt;mapping <span class="keyword">as</span> $keyObject =&gt; $keyColumn ) &#123;</span><br><span class="line">            <span class="keyword">if</span> ( $keyColumn != <span class="keyword">$this</span>-&gt;getIdColumn() ) &#123;</span><br><span class="line">                $data[ $keyColumn ] = call_user_func(</span><br><span class="line">                    [ $user, <span class="string">'get'</span> . ucfirst( $keyObject ) ]</span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> $data;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在EntityManager中新增saveUser方法：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">saveUser</span><span class="params">( $user )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $userMapper = <span class="keyword">new</span> UserMapper();</span><br><span class="line">    $data       = $userMapper-&gt;extract( $user );</span><br><span class="line">    $userId     = call_user_func(</span><br><span class="line">        [ $user, <span class="string">'get'</span> . ucfirst( $userMapper-&gt;getIdColumn() ) ]</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">if</span> ( array_key_exists( $userId, <span class="keyword">$this</span>-&gt;identityMap[<span class="string">'users'</span>] ) ) &#123;</span><br><span class="line">        $setString = <span class="string">''</span>;</span><br><span class="line">        <span class="keyword">foreach</span> ( $data <span class="keyword">as</span> $key =&gt; $value ) &#123;</span><br><span class="line">            $setString .= $key . <span class="string">"='$value',"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;query(</span><br><span class="line">            <span class="string">"UPDATE users SET "</span> . substr( $setString, <span class="number">0</span>, <span class="number">-1</span> ) .</span><br><span class="line">            <span class="string">" WHERE "</span> . $userMapper-&gt;getIdColumn() . <span class="string">"="</span> . $userId</span><br><span class="line">        );</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $columnsString = implode( <span class="string">", "</span>, array_keys( $data ) );</span><br><span class="line">        $valuesString  = implode( <span class="string">"', '"</span>, $data );</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;query(</span><br><span class="line">            <span class="string">"INSERT INTO users ($columnsString) VALUES('$valuesString')"</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时新增一个User的方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">class EntityManagerTest extends PHPUnit_Framework_TestCase &#123;</span><br><span class="line"></span><br><span class="line">    public function testSaveUser()</span><br><span class="line">    &#123;</span><br><span class="line">        $em      &#x3D; new \EntityManager( &#39;127.0.0.1&#39;, &#39;app&#39;, 33060, &#39;root&#39;, &#39;root&#39; );</span><br><span class="line">        $newUser &#x3D; new Entity\User();</span><br><span class="line">        $newUser-&gt;setFirstName( &#39;Ute&#39; );</span><br><span class="line">        $newUser-&gt;setLastName( &#39;Musermann&#39; );</span><br><span class="line">        $newUser-&gt;setGender( 1 );</span><br><span class="line">        $em-&gt;saveUser( $newUser );</span><br><span class="line">        $this-&gt;assertEquals(&quot;Mrs. Ute Musermann&quot;,$newUser-&gt;assembleDisplayName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此处在saveUser中使用了identity map模式，通过记录已经load的entity，减少从数据库中重新加载数据。</p>
+<h2 id="关系"><a href="#关系" class="headerlink" title="关系"></a>关系</h2><p>用户有多个Posts，通过User的getPosts方法可以获取posts，因此有下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; class Entity\User</span><br><span class="line">public function getPosts()</span><br><span class="line">&#123;</span><br><span class="line">    if ( is_null( $this-&gt;posts ) ) &#123;</span><br><span class="line">        $this-&gt;posts &#x3D; $this-&gt;postRepository-&gt;findByUser( $this );</span><br><span class="line">    &#125;</span><br><span class="line">    return $this-&gt;posts;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时为了能够获取posts，需要初始化postRepository，最好的初始化地方就是Repository\User中的findOneById，看代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public function findOneById( $id )</span><br><span class="line">&#123;</span><br><span class="line">    $userData &#x3D; $this-&gt;em-&gt;query(&#39;SELECT * FROM users WHERE id &#x3D; &#39; . $id)-&gt;fetch();</span><br><span class="line">    $newUser &#x3D; new UserEntity();</span><br><span class="line">    $newUser-&gt;setPostRepository($this-&gt;em-&gt;getPostRepository());</span><br><span class="line">    return $this-&gt;em-&gt;registerUserEntity(</span><br><span class="line">        $id,</span><br><span class="line">        $this-&gt;mapper-&gt;populate($userData, $newUser)</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后要配套的Post的Entity，Mapper，Repository，然后是findByUser方法的实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; class Repository\Post</span><br><span class="line">public function findByUser( UserEntity $user )</span><br><span class="line">&#123;</span><br><span class="line">    $postsData &#x3D; $this-&gt;em</span><br><span class="line">        -&gt;query( &#39;SELECT * FROM posts WHERE user_id &#x3D; &#39; . $user-&gt;getId() )-&gt;fetchAll();</span><br><span class="line">    $posts     &#x3D; [];</span><br><span class="line">    foreach ( $postsData as $postData ) &#123;</span><br><span class="line">        $newPost &#x3D; new PostEntity();</span><br><span class="line">        $posts[] &#x3D; $this-&gt;mapper-&gt;populate( $postData, $newPost );</span><br><span class="line">    &#125;</span><br><span class="line">    return $posts;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时让我们回过头来看下项目结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">src</span><br><span class="line">├── Entity</span><br><span class="line">│   ├── Post.php</span><br><span class="line">│   └── User.php</span><br><span class="line">├── EntityManager.php</span><br><span class="line">├── Mapper</span><br><span class="line">│   ├── Post.php</span><br><span class="line">│   └── User.php</span><br><span class="line">└── Repository</span><br><span class="line">    ├── Post.php</span><br><span class="line">    └── User.php</span><br></pre></td></tr></table></figure>
+
+<p>此时我们已经具备了基本的orm框架了，再往下就会越来越复杂了，下一篇让我们来看下doctrine的实现的。</p>
+<p>本文完整的代码可以查看<a href="https://github.com/zhuanxuhit/doctrine-learn" target="_blank" rel="noopener">https://github.com/zhuanxuhit/doctrine-learn</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/orm/" rel="tag"># orm</a>
+              <a href="/tags/doctrine/" rel="tag"># doctrine</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/12/16/Wormhole/" rel="prev" title="Wormhole:可靠的发布-订阅系统">
+      <i class="fa fa-chevron-left"></i> Wormhole:可靠的发布-订阅系统
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/12/19/doctrine2/" rel="next" title="doctrine 缘来 之 初次使用">
+      doctrine 缘来 之 初次使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#读数据"><span class="nav-number">1.</span> <span class="nav-text">读数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保存数据"><span class="nav-number">2.</span> <span class="nav-text">保存数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关系"><span class="nav-number">3.</span> <span class="nav-text">关系</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

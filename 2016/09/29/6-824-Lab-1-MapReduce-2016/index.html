@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="MapReduce出现的原因MapReduce 的优势在于对大规模数据进行切分（split），并在分布式集群上分别运行 map&#x2F;reduce 并行加工，而用户只需要针对数据处理逻辑编写简单的 map&#x2F;reduce 函数，MapReduce 则负责保证分布式运行和容错机制。主要就是解决了分布式系统中任务的运行和容错机制，用户不必关心并行计算、容错、 数据分布、负载均衡。 MapReduce的原理先看">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.824 Lab 1: MapReduce(2016)">
+<meta property="og:url" content="http://yoursite.com/2016/09/29/6-824-Lab-1-MapReduce-2016/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="MapReduce出现的原因MapReduce 的优势在于对大规模数据进行切分（split），并在分布式集群上分别运行 map&#x2F;reduce 并行加工，而用户只需要针对数据处理逻辑编写简单的 map&#x2F;reduce 函数，MapReduce 则负责保证分布式运行和容错机制。主要就是解决了分布式系统中任务的运行和容错机制，用户不必关心并行计算、容错、 数据分布、负载均衡。 MapReduce的原理先看">
+<meta property="og:image" content="http://yoursite.com/images/mapreduce-arch.png">
+<meta property="og:image" content="http://yoursite.com/images/mapreduce-cooker.png">
+<meta property="article:published_time" content="2016-09-29T05:51:13.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.360Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="分布式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/mapreduce-arch.png">
+
+<link rel="canonical" href="http://yoursite.com/2016/09/29/6-824-Lab-1-MapReduce-2016/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>6.824 Lab 1: MapReduce(2016) | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/29/6-824-Lab-1-MapReduce-2016/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          6.824 Lab 1: MapReduce(2016)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-09-29 13:51:13" itemprop="dateCreated datePublished" datetime="2016-09-29T13:51:13+08:00">2016-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/09/29/6-824-Lab-1-MapReduce-2016/" class="post-meta-item leancloud_visitors" data-flag-title="6.824 Lab 1: MapReduce(2016)" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="MapReduce出现的原因"><a href="#MapReduce出现的原因" class="headerlink" title="MapReduce出现的原因"></a>MapReduce出现的原因</h1><p>MapReduce 的优势在于对大规模数据进行切分（split），并在分布式集群上分别运行 map/reduce 并行加工，而用户只需要针对数据处理逻辑编写简单的 map/reduce 函数，MapReduce 则负责保证分布式运行和容错机制。主要就是解决了分布式系统中任务的运行和容错机制，用户不必关心并行计算、容错、 数据分布、负载均衡。</p>
+<h1 id="MapReduce的原理"><a href="#MapReduce的原理" class="headerlink" title="MapReduce的原理"></a>MapReduce的原理</h1><p>先看下MapReduce的架构图：</p>
+<p><img src="/images/mapreduce-arch.png" alt=""></p>
+<p>从图中可以看出，工作流程是：第一步将数据进行切分，然后每个work去取自己的数据，然后work处理完后写入到local write中，然后reduce 的worker从local 读取后，最后写入到final output中。此处final output的个数和reduce worker的个数相同。</p>
+<p>以生活中的例子说明：</p>
+<h2 id="用一个生活中的例子来举例说明：炒菜"><a href="#用一个生活中的例子来举例说明：炒菜" class="headerlink" title="用一个生活中的例子来举例说明：炒菜"></a>用一个生活中的例子来举例说明：炒菜</h2><p><img src="/images/mapreduce-cooker.png" alt=""></p>
+<p>假如你是一个酒店的行政总厨(Master)，你不负责做菜，只负责指挥下面的厨师Worker。每天都进行着如下的步骤：</p>
+<h3 id="Register"><a href="#Register" class="headerlink" title="Register"></a>Register</h3><p>每天都会有人去采购很多食材回来，有牛肉，猪肉，藕，土豆……..买回来这些食物后，需要将他们注册在一个本子上，这就是今天要处理的任务(task)了！</p>
+<h3 id="Partition-and-Map"><a href="#Partition-and-Map" class="headerlink" title="Partition and Ｍap"></a>Partition and Ｍap</h3><p>做菜的第一个过程，当然是切菜，你是主厨(Master)，你不负责做菜，只负责通知。”喂，过来把这个藕切成丁“，于是就有一个空闲的厨师过来切藕，你就把藕这个任务分发给了厨师(Worker)。切东西的过程，就是partition。之后可能还需要对食物做一些预先处理，比如抹上盐和料酒，这个过程就是mapfunc。</p>
+<p>厨师切好藕后，根据一个规则”噢，藕是要炒肉的，放到第一个盆子里面去“，规则对于每一个厨师都是一样的，这样保证了，同一个input，处理(map)完后肯定都在一起。比如藕片肯定就都放在第一个盆里。一般来说如果有R个输出对象(盆子)，一个简单的分配规则就是hash后MOD R。</p>
+<h3 id="Reduce"><a href="#Reduce" class="headerlink" title="Reduce"></a>Reduce</h3><p>在介绍这个环节之前有一点要注意：和做菜一样，炒菜之前务必要保证菜已经切好了，这样才能不至于要炒回锅肉，发现只有肉片没有蒜苗。当确认前一个环节(map)确实结束后，开始炒菜(Reduce)。在这个环节里，你还是负责通知空闲的厨师，”喂你去炒一份回锅肉“。就有一个厨师接收到这个任务，开始准备炒肉。</p>
+<p>”我需要煮熟的五花肉“说完从第一个盆子里拿了肉，”我还需要辣椒”，说完从第二个盆子里拿了辣椒。。。。“最后来一点蒜”从第R个盆子里拿了蒜。原料准备好了，就开始炒菜，这个过程就是reduce function，炒完了过后，统一输出到一个盘子里。这个环节一共要炒M盘菜(M个任务)，那么就有了M盘菜了。</p>
+<h3 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a>Merge</h3><p>这个环节最好理解，在所有菜都做好了之后，统一端出去，给客人(输入)。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>下面开始试验，<a href="https://github.com/zhuanxuhit/distributed-system" target="_blank" rel="noopener">github地址</a>，在正式开始实验室之前，先熟悉下代码的结构</p>
+<ol>
+<li>程序启动需要如下几个参数：任务名称，输入文件，map和reduce函数以及reduce任务的个数</li>
+<li>程序分为master和worker，其中master负责分发map和reduce任务给worker，worker则执行具体的任务</li>
+<li>map任务的个数由输入文件的个数决定，一个输入文件对应一个map任务，map任务会读取输入文件，然后调用map函数，接着根据<code>key</code>，将结果写入到对应的中间文件，具体写入到哪个中间文件，原则是相同的key写入到相同的中间文件中，中间文件的个数是reduce任务的个数，因此在执行完所有的map任务后，会有<code>inputFiles * reduce</code>个中间文件</li>
+<li>所有的中间文件生成完后，开始reduce任务，每个reduce任务需要去读取<code>inputFiles</code>个数的中间文件，然后做聚合，相同的<code>key</code>的<code>value</code>值放到一起，接着调用<code>reduce</code>函数，最后生成<code>reduce</code>任务个数的reduce文件</li>
+<li>master调用<code>mr.merge()</code> [master_splitmerge.go]，将前面产生的nReduce个文件合并为一个</li>
+<li>master发送一个<code>Shutdown</code>给各个workers，然后自己也结束</li>
+</ol>
+<p>具体的实验有5个部分，下面分别记录主要的难点：</p>
+<h2 id="Part-I-Map-Reduce-input-and-output"><a href="#Part-I-Map-Reduce-input-and-output" class="headerlink" title="Part I: Map/Reduce input and output"></a>Part I: Map/Reduce input and output</h2><p>doMap() function in common_map.go：doMap完成了一个map worker的工作，从输入文件inFile中读取内容，然后调用用户的mapF函数，最后将输出分为nReduce个中间文件 ，此处具体哪个key到哪个文件，采用的hash方法，这样做的目的是：可以让reduce任务处理的key都是唯一的。</p>
+<p>doReduce() function in common_reduce.go：doReduce完成reduce worker的工作，从map任务个数个中间文件读取内容，对key做聚合，再生成一个最终文件</p>
+<h2 id="Part-II-Single-worker-word-count"><a href="#Part-II-Single-worker-word-count" class="headerlink" title="Part II: Single-worker word count"></a>Part II: Single-worker word count</h2><p>没什么可讲，mapReduce界的hello world程序</p>
+<h2 id="Part-III-Distributing-MapReduce-tasks"><a href="#Part-III-Distributing-MapReduce-tasks" class="headerlink" title="Part III: Distributing MapReduce tasks"></a>Part III: Distributing MapReduce tasks</h2><p>修改schedule.go文件中的schedule()函数，将map和reduce任务分配给workers</p>
+<p>此处worker地址是通过<code>registerChannel</code>获取的，在<code>schedule()</code>中会启动n个goroutine，每个都从<code>registerChannel</code>中获取worker地址，然后进行rpc调用，成功后，再放回到<code>registerChannel</code>中，具体的代码如下：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; ntasks; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">			wg.Add(<span class="number">1</span>)</span><br><span class="line">			<span class="keyword">defer</span> wg.Done()</span><br><span class="line">			<span class="keyword">for</span> &#123;</span><br><span class="line">				<span class="comment">// 每次循环都新取出一个worker</span></span><br><span class="line">				worker := &lt;- mr.registerChannel</span><br><span class="line">				debug(<span class="string">"Master: schdule worker %s\n"</span>, worker)</span><br><span class="line">				arg := &amp;DoTaskArgs&#123;</span><br><span class="line">					JobName:mr.jobName,</span><br><span class="line">					File:mr.files[i],</span><br><span class="line">					Phase:phase,</span><br><span class="line">					TaskNumber:i,</span><br><span class="line">					NumOtherPhase:nios,</span><br><span class="line">				&#125;</span><br><span class="line">				ok := call(worker, <span class="string">"Worker.DoTask"</span>, arg, <span class="built_in">new</span>(<span class="keyword">struct</span>&#123;&#125;))</span><br><span class="line">				<span class="comment">// 如果失败，表示worker失效，不在放回</span></span><br><span class="line">				<span class="keyword">if</span> ok &#123;</span><br><span class="line">					<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						<span class="comment">//表示空闲了，必须单独放入goroutine中</span></span><br><span class="line">						mr.registerChannel &lt;- worker</span><br><span class="line">					&#125;()</span><br><span class="line">					<span class="keyword">break</span></span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					fmt.Printf(<span class="string">"Worker: RPC %s DoTask error\n"</span>, worker)</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(i)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br></pre></td></tr></table></figure>
+
+<h2 id="Part-IV-Handling-worker-failures"><a href="#Part-IV-Handling-worker-failures" class="headerlink" title="Part IV: Handling worker failures"></a>Part IV: Handling worker failures</h2><p>处理worker失败的情况</p>
+<p>Master来处理失败的<code>workers</code>, 当某worker上的Map/Reduce任务失败后, 需要将这个任务转移给其他worker来执行，worker的失败，我们并不需要特别关注，因为每个worker的输出都是一致的，只需要重新执行即可，可能出现两个worker分配了同样的任务，那会不会出现<strong>两个worker同时向一个文件写入内容</strong>，这样子不就导致文件错误了？</p>
+<p>在代码的实现上，一旦某一个worker失败，则不再放入<code>registerChannel</code>，不会再分配任务了。</p>
+<p>至于master的容错，这个问题比较难，因为master存储着状态信息，留在后面解决。</p>
+<h2 id="Part-V-Inverted-index-generation-optional"><a href="#Part-V-Inverted-index-generation-optional" class="headerlink" title="Part V: Inverted index generation (optional)"></a>Part V: Inverted index generation (optional)</h2><p>倒排索引的产生，因为一个word在一个文档会出现多次，因此在map阶段，注意key的去重</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://blog.csdn.net/poundssss/article/details/52666292" target="_blank" rel="noopener">MIT6.824 分布式系统 lab1</a></p>
+<p><a href="http://andrewliu.in/2016/04/16/6-824-Lab-1-MapReduce-2016/" target="_blank" rel="noopener">6.824 Lab 1: MapReduce(2016)</a></p>
+<p><a href="https://www.bittiger.io/videos/nFt6rHJiJedmuzpem/qtFZHdaf6JJQxyMCB" target="_blank" rel="noopener">硅谷之路11 深入浅出MapReduce</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/golang/" rel="tag"># golang</a>
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag"># 分布式</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/09/29/bittiger-72/" rel="prev" title="理解数据结构和算法">
+      <i class="fa fa-chevron-left"></i> 理解数据结构和算法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/09/29/mapreduce-detail/" rel="next" title="mapreduce-detail">
+      mapreduce-detail <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MapReduce出现的原因"><span class="nav-number">1.</span> <span class="nav-text">MapReduce出现的原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MapReduce的原理"><span class="nav-number">2.</span> <span class="nav-text">MapReduce的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#用一个生活中的例子来举例说明：炒菜"><span class="nav-number">2.1.</span> <span class="nav-text">用一个生活中的例子来举例说明：炒菜</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Register"><span class="nav-number">2.1.1.</span> <span class="nav-text">Register</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Partition-and-Map"><span class="nav-number">2.1.2.</span> <span class="nav-text">Partition and Ｍap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reduce"><span class="nav-number">2.1.3.</span> <span class="nav-text">Reduce</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Merge"><span class="nav-number">2.1.4.</span> <span class="nav-text">Merge</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">3.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-I-Map-Reduce-input-and-output"><span class="nav-number">3.1.</span> <span class="nav-text">Part I: Map&#x2F;Reduce input and output</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-II-Single-worker-word-count"><span class="nav-number">3.2.</span> <span class="nav-text">Part II: Single-worker word count</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-III-Distributing-MapReduce-tasks"><span class="nav-number">3.3.</span> <span class="nav-text">Part III: Distributing MapReduce tasks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-IV-Handling-worker-failures"><span class="nav-number">3.4.</span> <span class="nav-text">Part IV: Handling worker failures</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-V-Inverted-index-generation-optional"><span class="nav-number">3.5.</span> <span class="nav-text">Part V: Inverted index generation (optional)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

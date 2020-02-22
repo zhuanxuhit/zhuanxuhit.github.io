@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Dynamo是一个分布式键值系统，最初用于支持购物车系统，强调的是提供一个“永远在线“的用户体验。 根据CAP理论不可能同时达到一致性、可用性和分区容忍，于是Dynamo选择了AP，放弃了一致性。 Dynamo在设计时遇到的问题及解决方案（来源大规模分布式存储系统第5章）| 问题        | 采取的技术                                    || ——— |">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dynamo：Amazon的高可用性的键-值存储系统">
+<meta property="og:url" content="http://yoursite.com/2016/12/16/dynamo/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="Dynamo是一个分布式键值系统，最初用于支持购物车系统，强调的是提供一个“永远在线“的用户体验。 根据CAP理论不可能同时达到一致性、可用性和分区容忍，于是Dynamo选择了AP，放弃了一致性。 Dynamo在设计时遇到的问题及解决方案（来源大规模分布式存储系统第5章）| 问题        | 采取的技术                                    || ——— |">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/fdbf9914e778a4ccb07ee21b79966be52a899d7a">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/0084b9853a1d585430c3a3bc332a2ea671fff500">
+<meta property="og:image" content="https://qph.ec.quoracdn.net/main-qimg-58adb5bde4a054436bd0298c2eef49d5?convert_to_webp=true">
+<meta property="og:image" content="https://leanote.com/api/file/getImage?fileId=5778766aab6441481a000d71">
+<meta property="article:published_time" content="2016-12-16T02:25:19.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.389Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="mit 6.824">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/fdbf9914e778a4ccb07ee21b79966be52a899d7a">
+
+<link rel="canonical" href="http://yoursite.com/2016/12/16/dynamo/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Dynamo：Amazon的高可用性的键-值存储系统 | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/16/dynamo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Dynamo：Amazon的高可用性的键-值存储系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-12-16 10:25:19" itemprop="dateCreated datePublished" datetime="2016-12-16T10:25:19+08:00">2016-12-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/12/16/dynamo/" class="post-meta-item leancloud_visitors" data-flag-title="Dynamo：Amazon的高可用性的键-值存储系统" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/fdbf9914e778a4ccb07ee21b79966be52a899d7a" alt=""></p>
+<p>Dynamo是一个分布式键值系统，最初用于支持购物车系统，强调的是提供一个<strong>“永远在线“</strong>的用户体验。</p>
+<p>根据CAP理论不可能同时达到一致性、可用性和分区容忍，于是Dynamo选择了AP，放弃了一致性。</p>
+<p>Dynamo在设计时遇到的问题及解决方案（来源大规模分布式存储系统第5章）<br>| 问题        | 采取的技术                                    |<br>| ——— | —————————————- |<br>| 数据分布      | 改进的一致性哈希（虚拟节点）                           |<br>| 复制协议      | 复制写协议（Replicated-write protocol,NRW参数可调） |<br>| 数据冲突处理    | 向量时钟                                     |<br>| 临时故障处理    | 数据回传机制                                   |<br>| 永久故障恢复    | Merkle哈希树                                |<br>| 成员资格及错误检测 | 基于Gossip的成员资格和错误检测协议                     |</p>
+<h2 id="数据分布"><a href="#数据分布" class="headerlink" title="数据分布"></a>数据分布</h2><p>Dynamo是是一个P2P（peer-to-peer）系统，需要解决怎么快速定位key的位置，答案是DHT（distributed hash table），并且Dynamo为了保证快速响应，就需要保证最快的定位key，于是每个node都保存了整个集群的信息，客户端也缓存了集群信息，保证能将请求直接转发到目标node，达到<strong>zero-hop</strong>。</p>
+<p>Dynamo采用一致性哈希的方法来定位key到node，采用一致性哈希的优点是：<br>节点加入和退出时，只影响哈希环中相邻的节点。<br>接着考虑到每个节点的异构性，其处理能力不同，于是加入了虚拟节点的概念，尽可能做到每个虚拟节点处理能力一样。</p>
+<p>对于一致性哈希算法，用php实现个简单版本：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ring</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> $hashMap = [];</span><br><span class="line">    <span class="keyword">protected</span> $keys    = [];</span><br><span class="line">    <span class="keyword">protected</span> $hashFunc;</span><br><span class="line">    <span class="keyword">protected</span> $replicas;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Ring constructor.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> $hashFunc</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> $replicas</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">( $hashFunc = null, $replicas = <span class="number">3</span> )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;hashFunc = $hashFunc;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;replicas = $replicas;</span><br><span class="line">        <span class="keyword">if</span> ( !is_callable( <span class="keyword">$this</span>-&gt;hashFunc ) ) &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;hashFunc = <span class="string">'crc32'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">( $keys )</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ( !is_array( $keys ) ) &#123;</span><br><span class="line">            $keys = func_get_args();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">foreach</span> ( $keys <span class="keyword">as</span> $key ) &#123;</span><br><span class="line">            <span class="keyword">for</span> ( $i = <span class="number">0</span>; $i &lt; <span class="keyword">$this</span>-&gt;replicas; $i++ ) &#123;</span><br><span class="line">                $hash = call_user_func( <span class="keyword">$this</span>-&gt;hashFunc, $i . $key );</span><br><span class="line">                array_unshift( <span class="keyword">$this</span>-&gt;keys, $hash );</span><br><span class="line">                <span class="keyword">$this</span>-&gt;hashMap[ $hash ] = $key;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sort( <span class="keyword">$this</span>-&gt;keys );</span><br><span class="line"><span class="comment">//        $this-&gt;keys = array_reverse( $this-&gt;keys );</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">( $key )</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ( <span class="keyword">empty</span>( <span class="keyword">$this</span>-&gt;keys ) ) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">''</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        $hash = call_user_func( <span class="keyword">$this</span>-&gt;hashFunc, $key );</span><br><span class="line"></span><br><span class="line">        $idx = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;keys <span class="keyword">as</span> $i =&gt; $value)&#123;</span><br><span class="line">            <span class="keyword">if</span> ($value &gt;= $hash)&#123;</span><br><span class="line">                $idx = $i;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;hashMap[ <span class="keyword">$this</span>-&gt;keys[ $idx ] ];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$hash = <span class="function"><span class="keyword">function</span> <span class="params">( $key )</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (int)$key;</span><br><span class="line">&#125;;</span><br><span class="line">$ring = <span class="keyword">new</span> Ring( $hash, <span class="number">3</span> );</span><br><span class="line">$ring-&gt;add( <span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span> );</span><br><span class="line">$testCases = [</span><br><span class="line">    <span class="string">"2"</span>  =&gt; <span class="string">"2"</span>,</span><br><span class="line">    <span class="string">"11"</span> =&gt; <span class="string">"2"</span>,</span><br><span class="line">    <span class="string">"23"</span> =&gt; <span class="string">"4"</span>,</span><br><span class="line">    <span class="string">"27"</span> =&gt; <span class="string">"2"</span>,</span><br><span class="line">];</span><br><span class="line"><span class="comment">//var_export($ring);</span></span><br><span class="line"><span class="keyword">foreach</span> ($testCases <span class="keyword">as</span> $key =&gt; $expected)&#123;</span><br><span class="line">    assert($ring-&gt;get($key) == $expected);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>原理很简单，看上面代码就能看懂，不多说了，更多的原理可以看<a href="http://blog.csdn.net/cywosp/article/details/23397179" target="_blank" rel="noopener">每天进步一点点——五分钟理解一致性哈希算法</a></p>
+<p>起初一致性哈希是为了解决新加入节点和退出节点对数据的影响最小，但是由于数据分布的不均匀，热点数据，节点能力的异构都会造成分布不均匀，于是加入了virtual nodes，但是为了同一份数据的replicas分布式在不同的物理机器上，配置virtual也会造成一定的困难。</p>
+<h2 id="一致性和复制"><a href="#一致性和复制" class="headerlink" title="一致性和复制"></a>一致性和复制</h2><p>为了应对数据丢失的风险，Dynamo也会对数据进行replicate，进行数据复制的node称为<em>coordinator</em>，而负责存储key的node被称为<em>preference list</em>。</p>
+<p>此处当<em>coordinator</em>进行数据复制的时候，是异步进行的，为的就是尽可能快的给用户返回，因此Dynamo是一个弱一致的系统。</p>
+<p>Dynamo的一个亮点是NRW，应用根据自己的需求，合理的调整R和W，但是需要满足：</p>
+<blockquote>
+<p>R + W &gt; N</p>
+</blockquote>
+<p>写操作参数W(W&lt;=N)，该值的含义是，一个写操作只有成功更新了W个副本，才会被认为操作成功。同样，读操作也有R(R&lt;=N)，这是一个读操作需要读取的副本数量。</p>
+<p>R + W &gt; N能够保证读操作和写操作有节点交集。也就是，至少有一个节点会被读操作和写操作同时操作到。</p>
+<p>通过调整R和W能实现available和consistency之间的转换。</p>
+<p>给W配置一个小值R配置一个大值则”writes never fail”（high availablility）；给R配置一个小值W配置一个大值则”block for all replicas to be readable”（strong consistency）</p>
+<p>下一个考虑的是数据冲突问题，看一个例子：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/0084b9853a1d585430c3a3bc332a2ea671fff500" alt="conflict"><br>每个node都记录自己的操作记录，通过向量时钟能记录记录同一对象不同版本间的因果关系。当节点接收到更新，逐项对比本地向量钟和待更新数据的向量时钟。如果待更新数据的向量钟的每一项都不小于本地向量钟，那么数据无冲突，新的值可以被接受。Dynamo并不会贸然假定数据的冲突合并准则，而是保留全部的冲突数据，等待客户端处理。</p>
+<h2 id="容错"><a href="#容错" class="headerlink" title="容错"></a>容错</h2><p>Dynamo将异常分为两种：</p>
+<ul>
+<li>临时性问题</li>
+<li>永久性问题</li>
+</ul>
+<p>针对临时性故障，其处理策略是仲裁（quorum），但是如果严格执行仲裁策略，会影响Dynamo的可用性，因为需要等到N个都执行了，才能返回，此时如果其中一个临时故障了，会影响可用性。</p>
+<p>于是Dynamo采用了<em>sloppy quorum*策略，只需要N个 *healthy node</em> 即可，具体是指：如果某台机器故障了，则顺延将数据写入到后面的健康机器，并标注数据为hinted handoff,当机器恢复后，将数据进行回传。</p>
+<p>针对永久性故障，我们解决方案是Merkle哈希树。Merkle的原理是：每个非叶子节点对应多个文件，值是其所有子节点值组合以后的哈希值，叶子节点对应单个数据文件，值是文件内容的哈希。通过比对Merkle树，就能找出不同的文件了。</p>
+<h2 id="成员资格及错误检测"><a href="#成员资格及错误检测" class="headerlink" title="成员资格及错误检测"></a>成员资格及错误检测</h2><p>最开始介绍过一致性哈希，为了保证能够直接找到key对应的node，因此所有的node中都保存了集群中所有node的路由信息，这就导致有新节点加入或者节点推出的时候，需要将这信息传递给集群内的所有人，于是就有了Gossip</p>
+<p><img src="https://qph.ec.quoracdn.net/main-qimg-58adb5bde4a054436bd0298c2eef49d5?convert_to_webp=true" alt=""><br>从上图中能看到Gossip就是在AP系统中特有的，<br>在看下下面这张图，说明了Gossip算法<br><img src="https://leanote.com/api/file/getImage?fileId=5778766aab6441481a000d71" alt=""><br>1传3，3传9，9传27，快速扩散，然后整个集群就都知道了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文只是对Dynamo简单阅读，好多问题还没有阐述清楚，以后有了深入阅读后再来继续补充的，就目前来说，先对Dynamo做个总结，Dynamo总体特点是：</p>
+<ul>
+<li>最终一致性</li>
+<li>即使故障的时候也要保证可写</li>
+<li>允许写冲突，让应用自己解决</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.jianshu.com/p/2f1778231868" target="_blank" rel="noopener">百万节点数据库扩展之道(2): NoSQL理论与Amazon Dynamo</a><br><a href="http://systemdesigns.blogspot.tw/2016/01/dynamodb.html" target="_blank" rel="noopener">DynamoDB（理论篇）</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag"># 分布式</a>
+              <a href="/tags/mit-6-824/" rel="tag"># mit 6.824</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/12/06/eloquent-6/" rel="prev" title="repository实作">
+      <i class="fa fa-chevron-left"></i> repository实作
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/12/16/Wormhole/" rel="next" title="Wormhole:可靠的发布-订阅系统">
+      Wormhole:可靠的发布-订阅系统 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据分布"><span class="nav-number">1.</span> <span class="nav-text">数据分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一致性和复制"><span class="nav-number">2.</span> <span class="nav-text">一致性和复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容错"><span class="nav-number">3.</span> <span class="nav-text">容错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成员资格及错误检测"><span class="nav-number">4.</span> <span class="nav-text">成员资格及错误检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

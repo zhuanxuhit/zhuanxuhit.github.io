@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="上篇最重要的是介绍了耦合的概念，而我们接下去所讲的所有内容，都是围绕着去耦合这个主题去展开的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Clean Architecture in PHP 读书笔记(二)">
+<meta property="og:url" content="http://yoursite.com/2016/10/31/The-Clean-Architecture-in-PHP-%E4%BA%8C/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="上篇最重要的是介绍了耦合的概念，而我们接下去所讲的所有内容，都是围绕着去耦合这个主题去展开的。">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/13f9bf05b336d8bfd79ceff4226acc26e0deb5ad">
+<meta property="article:published_time" content="2016-10-31T01:31:46.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.370Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="php">
+<meta property="article:tag" content="Clean Architecture">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/13f9bf05b336d8bfd79ceff4226acc26e0deb5ad">
+
+<link rel="canonical" href="http://yoursite.com/2016/10/31/The-Clean-Architecture-in-PHP-%E4%BA%8C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>The Clean Architecture in PHP 读书笔记(二) | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/31/The-Clean-Architecture-in-PHP-%E4%BA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          The Clean Architecture in PHP 读书笔记(二)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-31 09:31:46" itemprop="dateCreated datePublished" datetime="2016-10-31T09:31:46+08:00">2016-10-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/10/31/The-Clean-Architecture-in-PHP-%E4%BA%8C/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(二)" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/13f9bf05b336d8bfd79ceff4226acc26e0deb5ad" alt="图片"></p>
+<p>上篇最重要的是介绍了耦合的概念，而我们接下去所讲的所有内容，都是围绕着去耦合这个主题去展开的。</p>
+<a id="more"></a>
+
+
+
+<p>本文为系列文章的第二篇，第一篇地址是</p>
+<p><a href="http://blog.zhuanxuhit.top/2016-10-30-The-Clean-Architecture-in-PHP-%E4%B8%80.html" target="_blank" rel="noopener">The Clean Architecture in PHP 读书笔记(一)</a></p>
+<h2 id="你的解耦工具"><a href="#你的解耦工具" class="headerlink" title="你的解耦工具"></a>你的解耦工具</h2><p> 在下面的文章中，主要会围绕去耦给出5大工具，让你轻松去耦。</p>
+<ul>
+<li>Design Patterns，A Primer</li>
+<li>SOLID Design Principles</li>
+<li>Depedency Injection</li>
+<li>Defining a Contract with Interfaces</li>
+<li>Abstracting with Adapters</li>
+</ul>
+<p>先介绍第一个工具：设计模式。</p>
+<h3 id="Design-Patterns，A-Primer"><a href="#Design-Patterns，A-Primer" class="headerlink" title="Design Patterns，A Primer"></a>Design Patterns，A Primer</h3><p>设计模式是对软件中通用问题的总结，有了设计模式，方便我们进行交流，譬如一说MVC，我们就知道是怎么回事了，不然我们必须巴拉巴拉一大堆话去描述，不易于传播、交流，一个好的设计模式必然有一个简单易懂的名字，因为只有简单的东西，才能被大家广泛传播。</p>
+<p>如今，一谈到设计模式，被大家广泛传播的就是1994年四人帮提出的23种模式，分为了3大类别：</p>
+<ol>
+<li>Creational</li>
+<li>Structural</li>
+<li>Behavioral</li>
+</ol>
+<p>本书不会去按个介绍23个模式，这样去介绍的书籍太多了，而且本书也没有那么多篇幅去按个讲，但是这些都是再进行展开的基础，因此我们会介绍一些最近本的概念：</p>
+<ol>
+<li>Factory：负责生产对象，类似于语言本省提供的new关键字，在C++中与new的不同就在于，new不能通过string直接实例化对象，但是factory可以</li>
+<li>Repository：不是GoF中提出的设计模式，其类似于一个仓库，负责数据的存储和获取</li>
+<li>Adapter：适配器，故名思议就是将接口实现转换</li>
+<li>Strategy：目的是灵活性，将一个或一组行为封装起来，方便的进行替换</li>
+</ol>
+<p>对上面的概念具体展开</p>
+<h4 id="The-Factory-Patterns"><a href="#The-Factory-Patterns" class="headerlink" title="The Factory Patterns"></a>The Factory Patterns</h4><p>简单代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$customer = <span class="keyword">new</span> Customer();</span><br></pre></td></tr></table></figure>
+
+<p>如果customer足够简单，上面的创建没有问题，但是如果customer创建的时候，必须进行一堆初始化，那我们就疯了，一个简单的想法，当然是将这些创建逻辑抽离出来，变为一个函数，进行复用，因此就有下面的版本，</p>
+<p>复杂代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomerFactory</span> </span>&#123;</span><br><span class="line">	<span class="keyword">protected</span> $accountManagerRepo;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(AccountManagerRepository $repo)</span> </span>&#123; </span><br><span class="line">		<span class="keyword">$this</span>-&gt;accountManagerRepo = $repo;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createCustomer</span><span class="params">($name)</span> </span>&#123; </span><br><span class="line">		$customer = <span class="keyword">new</span> Customer(); </span><br><span class="line">		$customer-&gt;setName($name); </span><br><span class="line">		$customer-&gt;setCreditLimit(<span class="number">0</span>); </span><br><span class="line">		$customer-&gt;setStatus(<span class="string">'pending'</span>); </span><br><span class="line">		$customer-&gt;setAccountManager(</span><br><span class="line">	      <span class="keyword">$this</span>-&gt;accountManagerRepo-&gt;getRandom()</span><br><span class="line">	    );</span><br><span class="line">		<span class="keyword">return</span> $customer; </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>总结下出现上面代码的原因：<strong>软件复杂度的提升</strong>，可以这么说，软件中各种问题的出现，都是因为软件的复杂度，不同的复杂度有不同的应对方法，总的目标都是为了<strong>降低复杂度</strong></p>
+<p>那上面出现的<code>CustomerFactory</code>带来的好处是：</p>
+<ol>
+<li>Reusable code.创建的地方都可以调用这段代码，降低了代码的复杂度。</li>
+<li>Testable code.由于关注点分离了，方便测试，可以单独进行创建逻辑的测试</li>
+<li>Easy to change.创建逻辑只在一处，方便修改</li>
+</ol>
+<h5 id="Static-Factories"><a href="#Static-Factories" class="headerlink" title="Static Factories"></a>Static Factories</h5><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomerFactory</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">createCustomer</span><span class="params">($name)</span> </span>&#123;</span><br><span class="line">		$customer = <span class="keyword">new</span> Customer(); </span><br><span class="line">		$customer-&gt;setName($name); </span><br><span class="line">		$customer-&gt;setCreditLimit(<span class="number">0</span>); </span><br><span class="line">		$customer-&gt;setStatus(<span class="string">'pending'</span>);</span><br><span class="line">		<span class="keyword">return</span> $customer; </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">$customer = CustomerFactory::createCustomer(<span class="string">'ACME Corp'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>静态工厂，通过一个static方法访问，那怎么评判是静态工厂好，还是上面一个工厂好呢？答案是：</p>
+<blockquote>
+<p>It depends    </p>
+</blockquote>
+<p>没有最好的，只有更合适的，如果静态方法能满足需求，那就是用静态工厂，如果你是数据源会经常变化，那就使用实例化工厂，并且将需要的依赖注入进来。</p>
+<h5 id="Types-of-Factories"><a href="#Types-of-Factories" class="headerlink" title="Types of Factories"></a>Types of Factories</h5><ol>
+<li>The Factory Method pattern：定义了创建对象的方法，但是具体创建哪个对象，由子类决定</li>
+<li>The Abstract Factory pattern：抽象工厂模式的粒度更粗一点，不仅管一个对象的创建，而是管着一组相关对象的创建</li>
+</ol>
+<blockquote>
+<p>talk is cheap,show me the code</p>
+</blockquote>
+<p>让我们上代码的。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Document</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createPage</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> Page();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们又好几种page，怎么办？</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Document</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createPage</span><span class="params">($type)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">switch</span> $type &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"ResumeDocument"</span>:</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> ResumePage();</span><br><span class="line">        <span class="keyword">case</span> <span class="string">"PortfolioDocument"</span>:</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> PortfolioPage();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码的问题是：我们每次新曾一个类型的page，必须要修改<code>createPage</code>方法，不满足开放封闭原则(OCP)，那PHP有个好处是，直接传递给new字符串就能创建对象，看代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Document</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createPage</span><span class="params">($type)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> $type;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>问题：我们无法验证传入<code>$type</code>的有效性，而且对<code>createPage</code>返回的类型，我们也无法检查，那怎么办呢？</p>
+<p>思路是：将创建逻辑按照关注点分离的逻辑，每个类型的document创建自己的page，这就解决了<code>$type</code>的有效性问题，那对于返回值，我们定义一个公共接口，只有实现这个接口的才是符合预期的。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractDocument</span> </span>&#123;</span><br><span class="line">	<span class="keyword">abstract</span> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createPage</span><span class="params">()</span>:<span class="title">PageInterface</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ResumeDocument</span> <span class="keyword">extends</span> <span class="title">AbstractDocument</span> </span>&#123; 		</span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createPage</span><span class="params">()</span>:<span class="title">PageInterface</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> ResumePage(); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PortfolioDocument</span> <span class="keyword">extends</span> <span class="title">AbstractDocument</span> </span>&#123; 		</span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createPage</span><span class="params">()</span>:<span class="title">PageInterface</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> PortfolioPage(); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">PageInterface</span> </span>&#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ResumePage</span> <span class="keyword">implements</span> <span class="title">PageInterface</span> </span>&#123;&#125; </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PortfolioPage</span> <span class="keyword">implements</span> <span class="title">PageInterface</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>介绍第一个概念<strong>The Abstract Factory pattern</strong></p>
+<p>抽象工厂就是对于工厂方法的1+1=2的叠加。</p>
+<p>如果我们的Document不止创建一个page，还要创建cover，那就会有两个create方法，此时每个子类就多实现一个方法的。</p>
+<h4 id="Repository-Pattern"><a href="#Repository-Pattern" class="headerlink" title="Repository Pattern"></a>Repository Pattern</h4><p>仓储模式：该模式在Eric Evan的神书：Domain-Driven Design: Tackling Complexity in the Heart of Software中详细的进行了描述</p>
+<blockquote>
+<p>A REPOSITORY represents all objects of a certain type as a conceptual set (usuallyemulated). It acts like a collection, except with more elaborate querying capability.</p>
+<p>Domain-Driven Design, Eric Evans, p. 151</p>
+</blockquote>
+<p>仓储类似于一个数据集合，相比较集合有更多精细设计的query，当我们谈论Repository的时候，我们关注的不再是“querying the database”，而是更纯粹的目的：存取数据</p>
+<p>常用的读取数据的方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyRepository</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getById</span><span class="params">($id)</span></span>; </span><br><span class="line">  	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">findById</span><span class="params">($id)</span></span>; </span><br><span class="line">  	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">find</span><span class="params">($id)</span></span>; </span><br><span class="line">  	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">retrieve</span><span class="params">($id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>常用的写方法：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyRepository</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">persist</span><span class="params">($object)</span></span>; </span><br><span class="line">  	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">save</span><span class="params">($object)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 每个Repository对应一个类的存取，有多个类，就会有多个Repository。</p>
+<h5 id="一个Repository怎么工作？"><a href="#一个Repository怎么工作？" class="headerlink" title="一个Repository怎么工作？"></a>一个Repository怎么工作？</h5><blockquote>
+<p>Objects of the appropriate type are added and removed, and the machinery behindthe REPOSITORY inserts them or deletes them from the database.</p>
+<p>Domain-Driven Design, Eric Evans, p. 151</p>
+</blockquote>
+<p>主要给出一些资源：</p>
+<p><a href="http://www.doctrine-project.org/projects/orm.html" target="_blank" rel="noopener">Dotrine ORM</a>：实现了Date Mapper</p>
+<p><a href="http://laravel.com/docs/eloquent" target="_blank" rel="noopener">Eloquent ORM</a>,<a href="http://propelorm.org/" target="_blank" rel="noopener">Propel</a>：实现了Active Record</p>
+<p><a href="http://framework.zend.com/" target="_blank" rel="noopener">Zend Framework 2</a>：提供了Table Data Gateway模式</p>
+<p>如果你想要自己实现一个Repository，强烈推荐<a href="http://martinfowler.com/books/eaa.html" target="_blank" rel="noopener">Patterns of Enterprise Application Architecture</a></p>
+<p>关于数据库的各种模式，推荐一个<a href="https://github.com/willdurand-edu/php-slides/blob/master/src/common/09_databases.md" target="_blank" rel="noopener">ppt</a></p>
+<h4 id="Adapter-Pattern"><a href="#Adapter-Pattern" class="headerlink" title="Adapter Pattern"></a>Adapter Pattern</h4><p>直接看代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GoogleMapsApi</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getWalkingDirections</span><span class="params">($from, $to)</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">DistanceInterface</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getDistance</span><span class="params">($from, $to)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WalkingDistance</span> <span class="keyword">implements</span> <span class="title">DistanceInterface</span> </span>&#123; 	</span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getDistance</span><span class="params">($from, $to)</span> </span>&#123;</span><br><span class="line">		$api = <span class="keyword">new</span> GoogleMapsApi();</span><br><span class="line">		$directions = $api-&gt;getWalkingDirections($from, $to);</span><br><span class="line">		<span class="keyword">return</span> $directions-&gt;getTotalDistance(); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>适配器，非常明确的表名了意图，通过<code>WalkingDistance</code>将GoogleMapsApi适配为了DistanceInterface</p>
+<h4 id="Strategy-Pattern"><a href="#Strategy-Pattern" class="headerlink" title="Strategy Pattern"></a>Strategy Pattern</h4><p>也是看代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">invoiceCustomers</span><span class="params">(array $customers)</span> </span>&#123; </span><br><span class="line">	<span class="keyword">foreach</span> ($customers <span class="keyword">as</span> $customer) &#123;</span><br><span class="line">	    $invoice = <span class="keyword">$this</span>-&gt;invoiceFactory-&gt;create(</span><br><span class="line">	      $customer,</span><br><span class="line">	      <span class="keyword">$this</span>-&gt;orderRepository-&gt;getByCustomer($customer)</span><br><span class="line">		);</span><br><span class="line">	    <span class="comment">// send invoice...</span></span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 此处我们根据用仓库里获取到的用户账单，通知用户</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">InvoiceDeliveryInterface</span> </span>&#123; </span><br><span class="line">  <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">send</span><span class="params">(Invoice $invoice)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EmailDeliveryStrategy</span> <span class="keyword">implements</span> <span class="title">InvoiceDeliveryInterface</span> </span>&#123; </span><br><span class="line">  	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">send</span><span class="params">(Invoice $invoice)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Use an email library to send it</span></span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PrintDeliveryStrategy</span> <span class="keyword">implements</span> <span class="title">InvoiceDeliveryInterface</span> </span>&#123; </span><br><span class="line">  	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">send</span><span class="params">(Invoice $invoice)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Send it to the printer</span></span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 账单有两种通知方式，一种是发邮件，一种是print</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">invoiceCustomers</span><span class="params">(array $customers)</span> </span>&#123; </span><br><span class="line">	<span class="keyword">foreach</span> ($customers <span class="keyword">as</span> $customer) &#123;</span><br><span class="line">    	$invoice = <span class="keyword">$this</span>-&gt;invoiceFactory-&gt;create(</span><br><span class="line">      	$customer,</span><br><span class="line">      	<span class="keyword">$this</span>-&gt;orderRepository-&gt;getByCustomer($customer));</span><br><span class="line">	<span class="keyword">switch</span> ($customer-&gt;getDeliveryMethod()) &#123; </span><br><span class="line">	<span class="keyword">case</span> <span class="string">'email'</span>:</span><br><span class="line">		$strategy = <span class="keyword">new</span> EmailDeliveryStrategy();</span><br><span class="line">		<span class="keyword">break</span>; </span><br><span class="line">	<span class="keyword">case</span> <span class="string">'print'</span>: </span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		$strategy = <span class="keyword">new</span> PrintDeliveryStrategy();</span><br><span class="line">		<span class="keyword">break</span>; </span><br><span class="line">	&#125;</span><br><span class="line">    $strategy-&gt;send($invoice);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 通过策略模式：我们可以在runtime，根据不同的账单，选择而不同的发送策略</span></span><br><span class="line"><span class="comment">// 问题：发送策略的选择不应该在外部直接暴露，改选择什么通知策略，应该是用户自己知道的，因此就有了下面的代码：</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">InvoiceDeliveryStrategyFactory</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">create</span><span class="params">(Customer $customer)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">switch</span> ($customer-&gt;getDeliveryMethod()) &#123; </span><br><span class="line">		<span class="keyword">case</span> <span class="string">'email'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> EmailDeliveryStrategy();</span><br><span class="line">			<span class="keyword">break</span>; </span><br><span class="line">		<span class="keyword">case</span> <span class="string">'print'</span>: </span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> PrintDeliveryStrategy();</span><br><span class="line">			<span class="keyword">break</span>; </span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 此时的客户端，根据最少职责原则，此时invoiceCustomers值负责创建账单，并且发送，并不负责选择什么方式寄送</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">invoiceCustomers</span><span class="params">(array $customers)</span> </span>&#123; 	</span><br><span class="line">  <span class="keyword">foreach</span> ($customers <span class="keyword">as</span> $customer) &#123;</span><br><span class="line">    $invoice = <span class="keyword">$this</span>-&gt;invoiceFactory-&gt;create(</span><br><span class="line">      $customer,</span><br><span class="line">      <span class="keyword">$this</span>-&gt;orderRepository-&gt;getByCustomer($customer));</span><br><span class="line">    $strategy = <span class="keyword">$this</span>-&gt;deliveryMethodFactory-&gt;create(</span><br><span class="line">      $customer);</span><br><span class="line">    $strategy-&gt;send($invoice);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更多的设计模式：</p>
+<ol>
+<li><a href="http://item.jd.com/10057319.html" target="_blank" rel="noopener">设计模式:可复用面向对象软件的基础</a></li>
+<li><a href="http://item.jd.com/19176933.html" target="_blank" rel="noopener">Head First Design Patterns </a></li>
+</ol>
+<p>请期待下一篇SOLID Design Principles</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/php/" rel="tag"># php</a>
+              <a href="/tags/Clean-Architecture/" rel="tag"># Clean Architecture</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/10/30/The-Clean-Architecture-in-PHP-%E4%B8%80/" rel="prev" title="The Clean Architecture in PHP 读书笔记(一)">
+      <i class="fa fa-chevron-left"></i> The Clean Architecture in PHP 读书笔记(一)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/01/The-Clean-Architecture-in-PHP-%E4%B8%89/" rel="next" title="The Clean Architecture in PHP 读书笔记（三）">
+      The Clean Architecture in PHP 读书笔记（三） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#你的解耦工具"><span class="nav-number">1.</span> <span class="nav-text">你的解耦工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-Patterns，A-Primer"><span class="nav-number">1.1.</span> <span class="nav-text">Design Patterns，A Primer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#The-Factory-Patterns"><span class="nav-number">1.1.1.</span> <span class="nav-text">The Factory Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Static-Factories"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Static Factories</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Types-of-Factories"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">Types of Factories</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Repository-Pattern"><span class="nav-number">1.1.2.</span> <span class="nav-text">Repository Pattern</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#一个Repository怎么工作？"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">一个Repository怎么工作？</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Adapter-Pattern"><span class="nav-number">1.1.3.</span> <span class="nav-text">Adapter Pattern</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Strategy-Pattern"><span class="nav-number">1.1.4.</span> <span class="nav-text">Strategy Pattern</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

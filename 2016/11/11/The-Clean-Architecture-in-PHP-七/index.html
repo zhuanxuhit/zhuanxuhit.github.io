@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="MVC的关键是给我们提出了一个原则：怎么对项目进行合理的关注点分离。Model负责业务领域，controller负责对model进行工作安排，而view则负责门面，怎么让外面的人看的满意。 但是MVC只提供了3层，对于再复杂的应用没有提供足够的组织和关注点分离的原则了，这个时候我们来看下Clean Architecture。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Clean Architecture in PHP 读书笔记(七)">
+<meta property="og:url" content="http://yoursite.com/2016/11/11/The-Clean-Architecture-in-PHP-%E4%B8%83/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="MVC的关键是给我们提出了一个原则：怎么对项目进行合理的关注点分离。Model负责业务领域，controller负责对model进行工作安排，而view则负责门面，怎么让外面的人看的满意。 但是MVC只提供了3层，对于再复杂的应用没有提供足够的组织和关注点分离的原则了，这个时候我们来看下Clean Architecture。">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/d2d64adf3f659c152fb46dcb8333511afe43ceee">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/ee07139ec6a2353e47dcf333955251b79a534907">
+<meta property="article:published_time" content="2016-11-11T02:37:45.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.375Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="php">
+<meta property="article:tag" content="Clean Architecture">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/d2d64adf3f659c152fb46dcb8333511afe43ceee">
+
+<link rel="canonical" href="http://yoursite.com/2016/11/11/The-Clean-Architecture-in-PHP-%E4%B8%83/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>The Clean Architecture in PHP 读书笔记(七) | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/11/The-Clean-Architecture-in-PHP-%E4%B8%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          The Clean Architecture in PHP 读书笔记(七)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-11-11 10:37:45" itemprop="dateCreated datePublished" datetime="2016-11-11T10:37:45+08:00">2016-11-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/11/11/The-Clean-Architecture-in-PHP-%E4%B8%83/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(七)" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/d2d64adf3f659c152fb46dcb8333511afe43ceee" alt="Clean Architecture"></p>
+<p>MVC的关键是给我们提出了一个原则：怎么对项目进行合理的关注点分离。Model负责业务领域，controller负责对model进行工作安排，而view则负责门面，怎么让外面的人看的满意。</p>
+<p>但是MVC只提供了3层，对于再复杂的应用没有提供足够的组织和关注点分离的原则了，这个时候我们来看下Clean Architecture。</p>
+<a id="more"></a>
+
+<p>本文为系列文章的第七篇，完成的目录请查看<a href="http://blog.zhuanxuhit.top/tags/Clean-Architecture/" target="_blank" rel="noopener">Clean Architecture</a></p>
+<h2 id="The-Clean-Architecture"><a href="#The-Clean-Architecture" class="headerlink" title="The Clean Architecture"></a>The Clean Architecture</h2><p><a href="https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html" target="_blank" rel="noopener">Clean Architecture</a>是Uncle Bob Martin在2012年写的，文章中收集了一系列类似的架构，它们的共同点如下：</p>
+<ol>
+<li><p>框架无关（Independent of Frameworks）</p>
+<p>这些架构没有依赖于一些已经存在的库或软件，带来的好处是：你无需要去硬满足框架给你制定的条条框框，框架本身只是你的一个工具。</p>
+</li>
+<li><p>可测性（Testable）</p>
+<p>业务逻辑可以在没有UI，Database，Web Server 或任何外部元素的情况下测试</p>
+</li>
+<li><p>UI无关（Independent of UI）</p>
+<p>UI可以在不改变业务逻辑的情况下快速改变，譬如可以将Web UI替换为Console UI</p>
+</li>
+<li><p>数据库无关（Independent of Database）</p>
+<p>我们可以替换后端的存储，从mysql到nosql，不影响我们的业务逻辑</p>
+</li>
+<li><p>无外部依赖（Independent of any external agency）</p>
+<p>我们核心的业务逻辑对任何的外部依赖都是无感的，或者说我们的业务逻辑只关心领域逻辑。</p>
+</li>
+</ol>
+<h3 id="框架无关（Independent-of-Frameworks）"><a href="#框架无关（Independent-of-Frameworks）" class="headerlink" title="框架无关（Independent of Frameworks）"></a>框架无关（Independent of Frameworks）</h3><p>PHP社区现在异常的活跃，各种框架层出不穷，Laravel，Silex等，没准昨天还流行的框架，今天就又出了一个更好的，因此如果你将自己的核心逻辑绑定到某个框架上，那么sorry，框架的升级或者替换，你都需要重写你代码了。</p>
+<h3 id="可测性（Testable）"><a href="#可测性（Testable）" class="headerlink" title="可测性（Testable）"></a>可测性（Testable）</h3><p>测试的编写跟项目大小无关，不能因为项目大而没有时间去写测试用例，也不能因为项目小太简单不去写测试。测试的编写随着项目的不断重构，它的意义会越来越大，因为我们无法保证代码的编写都是一个人，每次的修改都不会改变原来的功能，这个时候测试用例的作用就凸显出来了，每次修改后，都运行case，保证功能的正确性。</p>
+<h3 id="数据库无关（Independent-of-Database）"><a href="#数据库无关（Independent-of-Database）" class="headerlink" title="数据库无关（Independent of Database）"></a>数据库无关（Independent of Database）</h3><p>数据库无关这点在实际工作中可能不是那么重要，因为每个公司都有自己的存储服务，像我们公司后端持久化存储一直是mysql，或者说存储一直是兼容mysql的sql的，关注存储的适配有专门的团队来做，应用这边看到的一直就是mysql。</p>
+<p>但是对于开源软件就不是了，我们需要考虑后端存储的变化，需要能满足各个存储。</p>
+<h3 id="无外部依赖（Independent-of-any-external-agency）"><a href="#无外部依赖（Independent-of-any-external-agency）" class="headerlink" title="无外部依赖（Independent of any external agency）"></a>无外部依赖（Independent of any external agency）</h3><p>通过composer我们能很快利用社区的开源库，加速我们应用的开发。但是社区活跃带来的问题是，库的出现快，消失的也快。因此我们在开发中，必须要考虑尽量减少对外部库的依赖，一个方法就是之前介绍的适配器模式。</p>
+<h2 id="The-Onion-Architecture"><a href="#The-Onion-Architecture" class="headerlink" title="The Onion Architecture"></a>The Onion Architecture</h2><p><a href="http://jeffreypalermo.com/blog/the-onion-architecture-part-1/" target="_blank" rel="noopener">The Onion Architecture</a>最初是由Jeffrey Palermo提出的，是clean architecture的一个变种。</p>
+<p>Palermo将软件的分层比喻成洋葱一样的一层一层：从里面往外一层一层的看，每一层都依赖着内层，但是内层却不依赖于外层，通过一个图来认识下：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/ee07139ec6a2353e47dcf333955251b79a534907" alt="Onion Architecture"></p>
+<p>传统的应用开发中，应用是以数据库为中心设计的，先确定数据库中每个表的结构，然后应用在基于数据进行设计，如果将其剥离出来，整个系统变的支零破碎。</p>
+<p>在Onion Architecture中，应用核心是领域模型，完全和数据库解耦，在整个应用中，数据库只是应用需要的一个组件，我们可以完全替换存储，而不影响整个应用逻辑。</p>
+<h3 id="领域模型和领域服务"><a href="#领域模型和领域服务" class="headerlink" title="领域模型和领域服务"></a>领域模型和领域服务</h3><p>在Onion Architecture中最核心是领域模型层，该层只包含了领域模型，彼此之间进行交互，不涉及领域之外的逻辑，在领域模型之外是领域服务层，包括了工厂（factories）、仓库（repositories）和其他的一些使用领域模型的服务。</p>
+<p>领域模型和领域服务合起来构成了整个应用的核心。应用其他所有层都依赖于核心的领域模型和领域服务。</p>
+<h3 id="应用服务层"><a href="#应用服务层" class="headerlink" title="应用服务层"></a>应用服务层</h3><p>应用层包含了具体的应用的实现，以MVC为例子：应用层就是controller。应用层应该只负责启动我们的应用，不会再被其他层依赖了。应用层只是用来调用我们内存的个领域服务和领域模型，我们能很方便的替换应用层。</p>
+<p>我们可能感慨是使用的Symfony，但是后来要转换为Laravel，如果我们核心设计的好，应该是很方便就能切换过去的。</p>
+<h3 id="用户接口"><a href="#用户接口" class="headerlink" title="用户接口"></a>用户接口</h3><p>通过用户接口UI，我们将我们应用的核心领域对象展现给用户，由于没有其他层依赖于UI了，因此我们无压力的替换模型语言，使用新的js框架什么的，so ^_^</p>
+<h3 id="基础设施"><a href="#基础设施" class="headerlink" title="基础设施"></a>基础设施</h3><p>该层也是在最外层，主要是给领域层提供数据的存取，通过他来获取数据，数据可能是数据库里，也可能是网络，或者其他地方，该层使我们整个应用的数据提供方。</p>
+<p>基础层依赖于领域服务和领域层，因为领域层和领域模型给出了基础层必须实现的契约（contract），基础层来实现这些接口给领域层提供数据。</p>
+<p>本节只是对clean architecture做了一个概述，下面会对clean architecture的5个特点展开具体的讨论。</p>
+<p>这是The Clean Architecture in PHP的第七篇，你的鼓励是我继续写下去的动力，期待我们共同进步。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html" target="_blank" rel="noopener">Clean Architecture（英）</a></p>
+<p><a href="http://blog.csdn.net/elinavampire/article/details/44745923" target="_blank" rel="noopener">Clean Architecture（译）</a></p>
+<p><a href="http://jeffreypalermo.com/blog/the-onion-architecture-part-1/" target="_blank" rel="noopener">Onion Architecture</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/php/" rel="tag"># php</a>
+              <a href="/tags/Clean-Architecture/" rel="tag"># Clean Architecture</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/10/php-booboo/" rel="prev" title="php异常处理 之 BooBoo库介绍">
+      <i class="fa fa-chevron-left"></i> php异常处理 之 BooBoo库介绍
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/12/The-Clean-Architecture-in-PHP-%E5%85%AB/" rel="next" title="The Clean Architecture in PHP 读书笔记(八)">
+      The Clean Architecture in PHP 读书笔记(八) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Clean-Architecture"><span class="nav-number">1.</span> <span class="nav-text">The Clean Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#框架无关（Independent-of-Frameworks）"><span class="nav-number">1.1.</span> <span class="nav-text">框架无关（Independent of Frameworks）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可测性（Testable）"><span class="nav-number">1.2.</span> <span class="nav-text">可测性（Testable）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库无关（Independent-of-Database）"><span class="nav-number">1.3.</span> <span class="nav-text">数据库无关（Independent of Database）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无外部依赖（Independent-of-any-external-agency）"><span class="nav-number">1.4.</span> <span class="nav-text">无外部依赖（Independent of any external agency）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Onion-Architecture"><span class="nav-number">2.</span> <span class="nav-text">The Onion Architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#领域模型和领域服务"><span class="nav-number">2.1.</span> <span class="nav-text">领域模型和领域服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用服务层"><span class="nav-number">2.2.</span> <span class="nav-text">应用服务层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户接口"><span class="nav-number">2.3.</span> <span class="nav-text">用户接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基础设施"><span class="nav-number">2.4.</span> <span class="nav-text">基础设施</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">3.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

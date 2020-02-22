@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="首先，其实raft如果你不去看理论正确性的证明，光实现的话，只要按照raft里面给出的原则写代码就ok！如果代码写出来不正确，只能是你自己实现的问题。囧 最小规则12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455package raft&#x2F;&#x2F; 所有s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="raft 系列解读(3) 之 代码实现">
+<meta property="og:url" content="http://yoursite.com/2016/10/14/raft3-code-and-rule/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="首先，其实raft如果你不去看理论正确性的证明，光实现的话，只要按照raft里面给出的原则写代码就ok！如果代码写出来不正确，只能是你自己实现的问题。囧 最小规则12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455package raft&#x2F;&#x2F; 所有s">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/9fd1591b117cedfaa1f97f9f6d0bd84231ad2fc1">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/57e091147f0a560b0fc7ad8914674a966d85ad51">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/354c01e4edf78425a333a5ed3733ed294d4855bd">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/08b43293b3d71a530c4b6e55c4ab3218d9d9b1f4">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/29e8a791cb858ef94625394d2248a5b3324b6130">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/62d8da9e7f93e9a1d563314f394dce15ba0b64d8">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/4013b78bd55533501904a1747e24e26d24446417">
+<meta property="article:published_time" content="2016-10-14T11:23:25.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.364Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="raft">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/9fd1591b117cedfaa1f97f9f6d0bd84231ad2fc1">
+
+<link rel="canonical" href="http://yoursite.com/2016/10/14/raft3-code-and-rule/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>raft 系列解读(3) 之 代码实现 | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/14/raft3-code-and-rule/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          raft 系列解读(3) 之 代码实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-14 19:23:25" itemprop="dateCreated datePublished" datetime="2016-10-14T19:23:25+08:00">2016-10-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/10/14/raft3-code-and-rule/" class="post-meta-item leancloud_visitors" data-flag-title="raft 系列解读(3) 之 代码实现" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>首先，其实raft如果你不去看理论正确性的证明，光实现的话，只要按照raft里面给出的原则写代码就ok！如果代码写出来不正确，只能是你自己实现的问题。囧</p>
+<h1 id="最小规则"><a href="#最小规则" class="headerlink" title="最小规则"></a>最小规则</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> raft</span><br><span class="line"></span><br><span class="line"><span class="comment">// 所有server的原则 Rules for Servers</span></span><br><span class="line"><span class="comment">// 1. 如果commitIndex &gt; lastApplied:则递增lastApplied,应用 log[lastApplied] 到状态机之中</span></span><br><span class="line"><span class="comment">// 2. 如果Rpc请求或回复包括纪元T &gt; currentTerm: 设置currentTerm = T,转换成 follower, 并且设置 votedFor=-1，表示未投票</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// rules for Followers</span></span><br><span class="line"><span class="comment">// 回复 candidates与leaders的RPC请求</span></span><br><span class="line"><span class="comment">// 如果选举超时时间达到,并且没有收到来自当前leader或者要求投票的候选者的 AppendEnties RPC调 :转换角色为candidate</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// rules for Candidates</span></span><br><span class="line"><span class="comment">// 转换成candidate时,开始一个选举:</span></span><br><span class="line"><span class="comment">// 1. 递增currentTerm;投票给自己;</span></span><br><span class="line"><span class="comment">// 2. 重置election timer;</span></span><br><span class="line"><span class="comment">// 3. 向所有的服务器发送 RequestVote RPC请求</span></span><br><span class="line"><span class="comment">// 如果获取服务器中多数投票:转换成Leader</span></span><br><span class="line"><span class="comment">// 如果收到从新Leader发送的AppendEnties RPC请求:转换成follower</span></span><br><span class="line"><span class="comment">// 如果选举超时时间达到:开始一次新的选举</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// rules for Leaders</span></span><br><span class="line"><span class="comment">// 给每个服务器发送初始空的AppendEntires RPCs(heartbeat);指定空闲时间之 后重复该操作以防 election timeouts</span></span><br><span class="line"><span class="comment">// 如果收到来自客户端的命令:将条目插入到本地日志,在条目应用到状态机后回复给客户端</span></span><br><span class="line"><span class="comment">// 如果last log index &gt;= nextIndex for a follower:发送包含开始于nextIndex的日志条目的AppendEnties RPC</span></span><br><span class="line"><span class="comment">// 如果成功:为follower更新nextIndex与matchIndex</span></span><br><span class="line"><span class="comment">// 如果失败是由于日志不一致:递减nextIndex然后重试</span></span><br><span class="line"><span class="comment">// 如果存在以个N满足 N&gt;commitIndex,多数的matchIndex[i] &gt;= N,并且 log[N].term == currentTerm:设置commitIndex = N</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AppendEntries RPC的实现：在回复给RPCs之前需要更新到持久化存储之上</span></span><br><span class="line"><span class="comment">// 有3类用途</span></span><br><span class="line"><span class="comment">// 1. candidate赢得选举的后，宣誓主权</span></span><br><span class="line"><span class="comment">// 2. 保持心跳</span></span><br><span class="line"><span class="comment">// 3. 让follower的日志和自己保持一致</span></span><br><span class="line"><span class="comment">// 接收者的处理逻辑：</span></span><br><span class="line"><span class="comment">// 1. 如果term &lt; currentTerm 则返回false</span></span><br><span class="line"><span class="comment">// 2. 如果日志不包含一个在preLogIndex位置纪元为prevLogTerm的条目,则返回 false</span></span><br><span class="line"><span class="comment">//		该规则是需要保证follower已经包含了leader在PrevLogIndex之前所有的日志了</span></span><br><span class="line"><span class="comment">// 3. 如果一个已存在的条目与新条目冲突(同样的索引但是不同的纪元),则删除现存的该条目与其后的所有条</span></span><br><span class="line"><span class="comment">// 4. 将不在log中的新条目添加到日志之中</span></span><br><span class="line"><span class="comment">// 5. 如果leaderCommit &gt; commitIndex,那么设置 commitIndex = min(leaderCommit,index of last new entry)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// RequestVote RPC 的实现: 由候选者发起用于收集选票</span></span><br><span class="line"><span class="comment">// 1. 如果term &lt; currentTerm 则返回false</span></span><br><span class="line"><span class="comment">// 2. 如果本地的voteFor为空或者为candidateId,</span></span><br><span class="line"><span class="comment">// 		并且候选者的日志至少与接受者的日志一样新,则投给其选票</span></span><br><span class="line"><span class="comment">// 怎么定义日志新</span></span><br><span class="line"><span class="comment">// 比较两份日志中最后一条日志条目的索引值和任期号定义谁的日志比较新</span></span><br><span class="line"><span class="comment">// 如果两份日志最后的条目的任期号不同，那么任期号大的日志更加新</span></span><br><span class="line"><span class="comment">// 如果两份日志最后的条目任期号相同，那么日志比较长的那个就更加新。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 以上所有的规则保证的下面的几个点：</span></span><br><span class="line"><span class="comment">// 1. Election Safety 在一个特定的纪元中最多只有一个Leader会被选举出来</span></span><br><span class="line"><span class="comment">// 2. Leader Append-Only Leader不会在他的日志中覆盖或删除条 ,他只执行添加新的条</span></span><br><span class="line"><span class="comment">// 3. Log Matching:如果两个日志包含了同样index和term的条 ,那么在该index之前的所有条目都是相同的</span></span><br><span class="line"><span class="comment">// 4. Leader Completeness:如果在一个特定的term上提交了一个日志条目,那么该条目将显示在编号较大的纪元的Leader的日志里</span></span><br><span class="line"><span class="comment">// 5. State Machine Safety:如果一个服务器在一个给定的index下应用一个日志条目到他的状态机上,没有其他服务器会在相同index上应用不同的日志条目</span></span><br></pre></td></tr></table></figure>
+<p>以上就是全部，我们接下去挨个来看看这些规则在代码中是怎么体现的</p>
+<h1 id="follower"><a href="#follower" class="headerlink" title="follower"></a>follower</h1><p>规则有两条</p>
+<ol>
+<li>回复 candidates与leaders的RPC请求</li>
+<li>如果选举超时时间达到,并且没有收到来自当前leader或者要求投票的候选者的 AppendEnties RPC调 :转换角色为candidate</li>
+</ol>
+<p>对于第一条follower处理来自candidate的<code>RequestVote RPC</code>和来自leader的<code>AppendEntries RPC</code>两种请求<br>对于第二条则是说follower在规定的选举时间内没有收到来自leader的心跳，则认为leader已经不存在了，自己开始竞选leader，因此此处选举的超时时间要大于心跳时间<br>看下代码实现<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/9fd1591b117cedfaa1f97f9f6d0bd84231ad2fc1" alt="follower逻辑"></p>
+<h1 id="candidate"><a href="#candidate" class="headerlink" title="candidate"></a>candidate</h1><p>候选者的规则有</p>
+<ul>
+<li>转换成candidate时,开始一个选举<ul>
+<li>递增currentTerm;投票给自己;</li>
+<li>重置election timer;</li>
+<li>向所有的服务器发送 RequestVote RPC请求</li>
+</ul>
+</li>
+<li>如果获取服务器中多数投票:转换成Leader</li>
+<li>如果收到从新Leader发送的AppendEnties RPC请求:转换成follower</li>
+<li>如果选举超时时间达到:开始一次新的选举</li>
+</ul>
+<p>根据这些规则，代码即：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/57e091147f0a560b0fc7ad8914674a966d85ad51" alt="candidate规则"><br>其中广播后的结果是通过<code>voteResultChan</code>来传递的，而心跳则是通过<code>heartbeatChan</code>来传递，在这基础上，需要有个注意的地方，candidate在具体开始这些任务的时候，需要去读<code>voteResultChan</code>和<code>heartbeatChan</code>，因为可能里面已经有通知了，对于<code>voteResultChan</code>的需要忽略它，而对于<code>heartbeatChan</code>则说明已经有leader产生了<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/354c01e4edf78425a333a5ed3733ed294d4855bd" alt="candidate前置"></p>
+<h1 id="leader规则"><a href="#leader规则" class="headerlink" title="leader规则"></a>leader规则</h1><ol>
+<li>给每个服务器发送初始空的AppendEntires RPCs(heartbeat);指定空闲时间之后重复该操作以防 election timeouts</li>
+<li>如果收到来自客户端的命令:将条目插入到本地日志,在条目应用到状态机后回复给客户端</li>
+<li>如果last log index &gt;= nextIndex for a follower:发送包含开始于nextIndex的日志条目的AppendEnties RPC</li>
+<li>如果成功:为follower更新nextIndex与matchIndex</li>
+<li>如果失败是由于日志不一致:递减nextIndex然后重试</li>
+<li>如果存在以个N满足 N&gt;commitIndex,多数的matchIndex[i] &gt;= N,并且 log[N].term == currentTerm:设置commitIndex = N</li>
+</ol>
+<p>其中最重要的一点是6，这个第六点主要是解决如下问题：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/08b43293b3d71a530c4b6e55c4ab3218d9d9b1f4" alt="提交日志覆盖"></p>
+<ul>
+<li>(a) S1 是领导者，部分的复制了索引位置 2 的日志条目</li>
+<li>(b) S1 崩溃了，然后 S5 在任期 3 里通过 S3、S4 和自己的选票赢得选举，然后从客户端接收了一条不一样的日志条目放在了索引2 处</li>
+<li>(c) S5 又崩溃了；S1 重新启动，选举成功，开始复制日志。在这时，来自任期 2 的那条日志已经被复制到了集群中的大多数机器上，但是还没有被提交</li>
+<li>(d)  S1 又崩溃了，S5 可以重新被选举成功（通过来自 S2，S3 和 S4 的选票），然后覆盖了他们在索引 2 处的日志。但是，在崩溃之前，如果 S1 在自己的任期里复制了日志条目到大多数机器上</li>
+<li>(e) 然后这个条目就会被提交（S5 就不可能选举成功）。 在这个时候，之前的所有日志就会被正常提交处理</li>
+</ul>
+<p>该问题是因为：当一个新Leader当选时，由于所有成员的日志进度不同，很可能需要继续复制前面纪元的日志条目，因为即使为前面纪元的日志复制到多数服务器并且提交,如步骤C，但是在D中还是可能被覆盖，这就产生了不一致。解决的方法就是通过规则6：如果存在以个N满足 N&gt;commitIndex,多数的matchIndex[i] &gt;= N,并且 log[N].term == currentTerm:设置commitIndex = N，具体就是在c阶段，S1成为Leader，此时的纪元是4。S1一样向其他服务器发送日志2，当发送到多数服务器S1,S2,S3时，此时并不提交该日志，而是继续复制日志4,直到日志4到达多数服务器后，提交日志4，即leader只会提交当前纪元的日志。如果提交了4之后宕机，S5就不会被选举为新的 Leader，如果在提交4之前宕机，那么日志2,日志4还是可能被覆盖，但是由于没有提交，也就没有执行日志中的命令，即使被覆盖也无关系。</p>
+<p>代码上就是：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/29e8a791cb858ef94625394d2248a5b3324b6130" alt="leader规则"><br>不间断的发送心跳</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/62d8da9e7f93e9a1d563314f394dce15ba0b64d8" alt="状态机的应用"></p>
+<h1 id="RequestVote-RPC"><a href="#RequestVote-RPC" class="headerlink" title="RequestVote RPC"></a>RequestVote RPC</h1><p>投票rpc的规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 1. 如果term &lt; currentTerm 则返回false</span><br><span class="line">&#x2F;&#x2F; 2. 如果本地的voteFor为空或者为candidateId,</span><br><span class="line">&#x2F;&#x2F; 		并且候选者的日志至少与接受者的日志一样新,则投给其选票</span><br><span class="line">&#x2F;&#x2F; 怎么定义日志新</span><br><span class="line">&#x2F;&#x2F; 比较两份日志中最后一条日志条目的索引值和任期号定义谁的日志比较新</span><br><span class="line">&#x2F;&#x2F; 如果两份日志最后的条目的任期号不同，那么任期号大的日志更加新</span><br><span class="line">&#x2F;&#x2F; 如果两份日志最后的条目任期号相同，那么日志比较长的那个就更加新。</span><br></pre></td></tr></table></figure>
+<p>需要注意的是日志新的处理，实现<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/4013b78bd55533501904a1747e24e26d24446417" alt="图片"><br>其中红色是通用规则</p>
+<blockquote>
+<p>如果Rpc请求或回复包括纪元T &gt; currentTerm: 设置currentTerm = T,转换成 follower, 并且设置 votedFor=-1，表示未投票</p>
+</blockquote>
+<p>这个通用规则的保证了有新纪元开始的时候，所有server都转变为follower，开始新一轮选举</p>
+<h1 id="AppendEntries-RPC"><a href="#AppendEntries-RPC" class="headerlink" title="AppendEntries RPC"></a>AppendEntries RPC</h1><p>有3类用途</p>
+<ol>
+<li>candidate赢得选举的后，宣誓主权</li>
+<li>保持心跳</li>
+<li>让follower的日志和自己保持一致</li>
+</ol>
+<p>接收者的处理逻辑：</p>
+<ol>
+<li>如果term &lt; currentTerm 则返回false</li>
+<li>如果日志不包含一个在preLogIndex位置纪元为prevLogTerm的条目,则返回 false，该规则是需要保证follower已经包含了leader在PrevLogIndex之前所有的日志了</li>
+<li>如果一个已存在的条目与新条目冲突(同样的索引但是不同的纪元),则删除现存的该条目与其后的所有条</li>
+<li>将不在log中的新条目添加到日志之中</li>
+<li>如果leaderCommit &gt; commitIndex,那么设置 commitIndex =min(leaderCommit,index of last new entry)</li>
+</ol>
+<p>在实现上也是完全按照上面的规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">func (rf *Raft) AppendEnties(args AppendEntiesArgs, reply *AppendEntiesReply) &#123;</span><br><span class="line">	if args.Term &lt; rf.currentTerm &#123;</span><br><span class="line">		reply.Term &#x3D; rf.currentTerm</span><br><span class="line">		reply.Success &#x3D; false</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">	&#x2F;&#x2F; 本身自己是leader，有可能收到别人的请求吗，实验中是可能的,会收到的一个大的term</span><br><span class="line">	&#x2F;&#x2F;if rf.status &#x3D;&#x3D; STATUS_LEADER &#123;</span><br><span class="line">	&#x2F;&#x2F;	log.Println(&quot;I am leader, but get AppendEnties&quot;,rf.Detail())</span><br><span class="line">	&#x2F;&#x2F;	log.Println(&quot;args.term&quot;,args.Term,&quot;currentTerm&quot;,rf.currentTerm)</span><br><span class="line">	&#x2F;&#x2F;&#125;</span><br><span class="line">	&#x2F;&#x2F; 心跳一定来自leader</span><br><span class="line">	rf.heartbeatChan &lt;- true</span><br><span class="line"></span><br><span class="line">	rf.mu.Lock()</span><br><span class="line">	defer rf.mu.Unlock()</span><br><span class="line">	rf.rpcRuleForAllServer(args.Term)</span><br><span class="line">	&#x2F;&#x2F; 如果日志在 prevLogIndex 位置处的日志条目的任期号和 prevLogTerm 不匹配，则返回 false</span><br><span class="line">	&#x2F;&#x2F; len(rf.log) &gt;&#x3D; args.PrevLogIndex + 1，说明本地日志长度 &gt;&#x3D; leader日志长度</span><br><span class="line">	if len(rf.log) &gt;&#x3D; args.PrevLogIndex + 1 &amp;&amp; rf.log[args.PrevLogIndex].Term &#x3D;&#x3D; args.PrevLogTerm &#123;</span><br><span class="line">		&#x2F;&#x2F; 该规则是需要保证follower已经包含了leader在PrevLogIndex之前所有的日志了</span><br><span class="line">		for i:&#x3D;0;i&lt;len(args.Entries);i++ &#123;</span><br><span class="line">			if args.PrevLogIndex+1+i &lt; len(rf.log)&#123;</span><br><span class="line">				if rf.log[args.PrevLogIndex+1+i] !&#x3D; args.Entries[i]&#123;</span><br><span class="line">					&#x2F;&#x2F; index相同，但是纪元不同</span><br><span class="line">					rf.log &#x3D; rf.log[:args.PrevLogIndex+1+i]&#x2F;&#x2F; 之前的还是相同的，再加上本条之后的</span><br><span class="line">					rf.log &#x3D; append(rf.log,args.Entries[i:]...)</span><br><span class="line">					break</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;else &#123;</span><br><span class="line">				&#x2F;&#x2F; 本条目不存在</span><br><span class="line">				rf.log &#x3D; append(rf.log,args.Entries[i:]...)</span><br><span class="line">				break</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if args.LeaderCommit &gt; rf.commitIndex &#123;</span><br><span class="line">			rf.commitIndex &#x3D; min(args.LeaderCommit,len(rf.log)-1)</span><br><span class="line">		&#125;</span><br><span class="line">		&#x2F;&#x2F; !!为了查明为什么日志错了</span><br><span class="line">		rf.checkLog(args)</span><br><span class="line">		&#x2F;&#x2F;在回复给RPCs之前需要更新到持久化存储之上</span><br><span class="line">		rf.persist()</span><br><span class="line">		reply.Term &#x3D; rf.currentTerm</span><br><span class="line">		reply.Success &#x3D; true</span><br><span class="line">		reply.NextIndex &#x3D; len(rf.log)</span><br><span class="line">		return</span><br><span class="line">	&#125;else &#123;</span><br><span class="line">		reply.Term &#x3D; rf.currentTerm</span><br><span class="line">		reply.Success &#x3D; false</span><br><span class="line">		reply.NextIndex &#x3D; min(rf.commitIndex+1,args.PrevLogIndex-1)&#x2F;&#x2F;</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是所有规则和代码对应的实现了，<a href="https://github.com/zhuanxuhit/distributed-system/blob/master/mit/src/raft/raft.go" target="_blank" rel="noopener">github地址</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/golang/" rel="tag"># golang</a>
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag"># 分布式</a>
+              <a href="/tags/raft/" rel="tag"># raft</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/10/14/lab2-raft/" rel="prev" title="raft 系列解读(2) 之 测试用例">
+      <i class="fa fa-chevron-left"></i> raft 系列解读(2) 之 测试用例
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/10/18/raft-etcd-learning/" rel="next" title="raft 系列解读(4) 之 etcd-raft学习">
+      raft 系列解读(4) 之 etcd-raft学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#最小规则"><span class="nav-number">1.</span> <span class="nav-text">最小规则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#follower"><span class="nav-number">2.</span> <span class="nav-text">follower</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#candidate"><span class="nav-number">3.</span> <span class="nav-text">candidate</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#leader规则"><span class="nav-number">4.</span> <span class="nav-text">leader规则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RequestVote-RPC"><span class="nav-number">5.</span> <span class="nav-text">RequestVote RPC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AppendEntries-RPC"><span class="nav-number">6.</span> <span class="nav-text">AppendEntries RPC</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

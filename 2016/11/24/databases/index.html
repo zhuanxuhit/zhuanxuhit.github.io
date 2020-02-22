@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文是orm系列的第一篇，内容来自github上的一个Markdown，清晰的讲述了一些数据库设计上常用的设计模式，并且阐述了orm是什么？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="orm 系列 之 常用设计模式">
+<meta property="og:url" content="http://yoursite.com/2016/11/24/databases/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="本文是orm系列的第一篇，内容来自github上的一个Markdown，清晰的讲述了一些数据库设计上常用的设计模式，并且阐述了orm是什么？">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/494e0e1e253a86f8d6c4f1699820098780c7771c">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/606cd10e91087e0e8c7c50f837b8cb08778b54f6">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/4452292423f4135794223755e899b86a76aea227">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/c188b086cf2243a5433956f74b955c92b1a15e61">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/560ab9b85cd52397cc562da2b82aa5819241c8e4">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/15973b643de9cfa4cdcbbdbcdcfc98cd20ec9ade">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/8e135cda8d1270133dc97aa97bf4e7f0342b7117">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/d76b9ad94416a6e7bd53b0798b9610e834243243">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/1dd06a735091a3c352ba40ef818b343473dbce6a">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/00c603f547af7a3fc61b9efd1d0d86bee92a2fe5">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/68788f10159d4d966cca36ed036a7332c9dec519">
+<meta property="article:published_time" content="2016-11-24T02:17:16.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.380Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="orm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/494e0e1e253a86f8d6c4f1699820098780c7771c">
+
+<link rel="canonical" href="http://yoursite.com/2016/11/24/databases/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>orm 系列 之 常用设计模式 | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/24/databases/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          orm 系列 之 常用设计模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-11-24 10:17:16" itemprop="dateCreated datePublished" datetime="2016-11-24T10:17:16+08:00">2016-11-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/11/24/databases/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 常用设计模式" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/494e0e1e253a86f8d6c4f1699820098780c7771c" alt="orm"></p>
+<p>本文是orm系列的第一篇，内容来自github上的一个Markdown，清晰的讲述了一些数据库设计上常用的设计模式，并且阐述了orm是什么？</p>
+<a id="more"></a>
+
+<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><hr>
+<p>主要分一下几部分：</p>
+<ul>
+<li>数据库设计模式</li>
+<li>DAL(Data Access Layer)</li>
+<li>ORM(Object Relational Mapping)</li>
+<li>存在的组件</li>
+<li>A Note About Domain-Driven Design</li>
+</ul>
+<hr>
+<h2 id="Quick-note"><a href="#Quick-note" class="headerlink" title="Quick note"></a>Quick note</h2><p>In our context, a <strong>database</strong> is seen as a server hosting:</p>
+<ul>
+<li>a set of <code>records</code>;</li>
+<li>organised through <code>tables</code> or <code>collections</code>;</li>
+<li>grouped by <code>databases</code>.</li>
+</ul>
+<hr>
+<h2 id="数据库设计模式"><a href="#数据库设计模式" class="headerlink" title="数据库设计模式"></a>数据库设计模式</h2><ul>
+<li>Row Data Gateway</li>
+<li>Table Data Gateway</li>
+<li>Active Record</li>
+<li>Data Mapper</li>
+<li>Identity Map</li>
+<li>etc.</li>
+</ul>
+<p>定义和插图来自 <a href="http://martinfowler.com/eaaCatalog/index.html" target="_blank" rel="noopener">Catalog of Patterns of Enterprise Application Architecture</a></p>
+<p>作者<strong>Martin Fowler</strong>.</p>
+<p>Don’t forget his name! Read his books!</p>
+<hr>
+<h3 id="Row-Data-Gateway"><a href="#Row-Data-Gateway" class="headerlink" title="Row Data Gateway"></a>Row Data Gateway</h3><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/606cd10e91087e0e8c7c50f837b8cb08778b54f6" alt="Row Data Gateway"></p>
+<hr>
+<p>一个对象扮演的角色就像是数据库中单行记录的网关（Gateway）</p>
+<p>每个对象对应一行</p>
+<pre><code>!php
+// This is the implementation of `BananaGateway`
+class Banana
+{
+    private $id;
+
+    private $name;
+
+    public function getId()
+    {
+        return $this-&gt;id;
+    }
+
+    public function getName()
+    {
+        return $this-&gt;name;
+    }
+
+    public function setName($name)
+    {
+        $this-&gt;name = $name;
+    }
+}</code></pre><hr>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><pre><code>!php
+$con = new Connection(&apos;...&apos;);
+
+$banana = new Banana();
+$banana-&gt;setName(&apos;Super Banana&apos;);
+
+// Save the banana
+$banana-&gt;insert($con);
+
+// Update it
+$banana-&gt;setName(&apos;New name for my banana&apos;);
+$banana-&gt;update($con);
+
+// Delete it
+$banana-&gt;delete($con);</code></pre><hr>
+<h4 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h4><pre><code>!php
+public function insert(Connection $con)
+{
+    // Prepared statement
+    $stmt = $this-&gt;con-&gt;prepare(&apos;INSERT INTO bananas VALUES (:name)&apos;);
+
+    $stmt-&gt;bindValue(&apos;:name&apos;, $name);
+
+    $stmt-&gt;execute();
+
+    // Set the id for this banana
+    //
+    // It becomes easy to know whether the banana is new or not,
+    // you just need to check if id is defined.
+    $this-&gt;id = $this-&gt;con-&gt;lastInsertId();
+}</code></pre><hr>
+<h3 id="Table-Data-Gateway"><a href="#Table-Data-Gateway" class="headerlink" title="Table Data Gateway"></a>Table Data Gateway</h3><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/4452292423f4135794223755e899b86a76aea227" alt=""></p>
+<hr>
+<p>扮演着数据库表的网关角色（<em>Gateway</em>）</p>
+<p>一个对象处理了表中所有的行记录</p>
+<p>It’s a <strong>D</strong>ata <strong>A</strong>ccess <strong>O</strong>bject.</p>
+<pre><code>!php
+$table = new BananaGateway(new Connection(&apos;...&apos;));
+
+// Insert a new record
+$id = $table-&gt;insert(&apos;My favorite banana&apos;);
+
+// Update it
+$table-&gt;update($id, &apos;THE banana&apos;);
+
+// Delete it
+$table-&gt;delete($id);</code></pre><h4 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h4><p>DAO实现了CURD操作</p>
+<p>读操作会比较负责，是一系列<strong>Finders</strong></p>
+<hr>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><pre><code>!php
+class BananaGateway
+{
+    private $con;
+
+    public function __construct(Connection $con)
+    {
+        $this-&gt;con = $con;
+    }
+
+    public function insert($name) {}
+
+    public function update($id, $name) {}
+
+    public function delete($id);
+}</code></pre><hr>
+<h4 id="insert操作"><a href="#insert操作" class="headerlink" title="insert操作"></a>insert操作</h4><pre><code>!php
+/**
+ * @param string $name The name of the banana you want to create
+ *
+ * @return int The id of the banana
+ */
+public function insert($name)
+{
+    // Prepared statement
+    $stmt = $this-&gt;con-&gt;prepare(&apos;INSERT INTO bananas VALUES (:name)&apos;);
+
+    $stmt-&gt;bindValue(&apos;:name&apos;, $name);
+
+    $stmt-&gt;execute();
+
+    return $this-&gt;con-&gt;lastInsertId();
+}</code></pre><hr>
+<h4 id="update操作"><a href="#update操作" class="headerlink" title="update操作"></a>update操作</h4><pre><code>!php
+/**
+ * @param int    $id   The id of the banana to update
+ * @param string $name The new name of the banana
+ *
+ * @return bool Returns `true` on success, `false` otherwise
+ */
+public function update($id, $name)
+{
+    $stmt = $this-&gt;con-&gt;prepare(&lt;&lt;&lt;SQL
+UPDATE bananas
+SET name = :name
+WHERE id = :id
+SQL
+    );
+
+    $stmt-&gt;bindValue(&apos;:id&apos;, $id);
+    $stmt-&gt;bindValue(&apos;:name&apos;, $name);
+
+    return $stmt-&gt;execute();
+}</code></pre><hr>
+<h4 id="delete操作"><a href="#delete操作" class="headerlink" title="delete操作"></a>delete操作</h4><pre><code>!php
+/**
+ * @param int $id The id of the banana to delete
+ *
+ * @return bool Returns `true` on success, `false` otherwise
+ */
+public function delete($id)
+{
+    $stmt = $this-&gt;con-&gt;prepare(&apos;DELETE FROM bananas WHERE id = :id&apos;);
+
+    $stmt-&gt;bindValue(&apos;:id&apos;, $id);
+
+    return $stmt-&gt;execute();
+}</code></pre><hr>
+<h4 id="Finder方法"><a href="#Finder方法" class="headerlink" title="Finder方法"></a>Finder方法</h4><pre><code>!php
+// Retrieve all bananas
+$bananas = $table-&gt;findAll();
+
+// Find bananas by name matching &apos;THE %&apos;
+$bananas = $table-&gt;findByName(&apos;THE %&apos;);
+
+// Retrieve a given banana using its id
+$banana = $table-&gt;find(123);
+
+// Find one banana by name matching &apos;THE %&apos;
+$banana = $table-&gt;findOneByName(&apos;THE %&apos;);</code></pre><blockquote>
+<p>使用魔术方法 <code>__call()</code>  来实现这些魔术般的finders<br><a href="http://www.php.net/manual/en/language.oop5.overloading.php#object.call" target="_blank" rel="noopener">http://www.php.net/manual/en/language.oop5.overloading.php#object.call</a>.</p>
+</blockquote>
+<hr>
+<h3 id="Active-Record"><a href="#Active-Record" class="headerlink" title="Active Record"></a>Active Record</h3><p> <img src="http://bos.nj.bpc.baidu.com/v1/agroup/c188b086cf2243a5433956f74b955c92b1a15e61" alt=""></p>
+<hr>
+<p>封装了表中的单行记录，除此之外加上了领域逻辑</p>
+<h4 id="Active-Record-Row-Data-Gateway-Domain-Logic"><a href="#Active-Record-Row-Data-Gateway-Domain-Logic" class="headerlink" title="Active Record = Row Data Gateway + Domain Logic"></a>Active Record = Row Data Gateway + Domain Logic</h4><pre><code>!php
+$con = new Connection(&apos;...&apos;);
+
+$banana = new Banana();
+$banana-&gt;setName(&apos;Another banana&apos;);
+$banana-&gt;save($con);
+
+// Call a method that is part of the domain logic
+// What can a banana do anyway?
+$banana-&gt;grow();
+
+// Smart `save()` method
+// use `isNew()` under the hood
+$banana-&gt;save($con);</code></pre><hr>
+<pre><code>!php
+class Banana
+{
+    private $height = 1;
+
+    public function grow()
+    {
+        $this-&gt;height++;
+    }
+
+    public function save(Connection $con)
+    {
+        if ($this-&gt;isNew()) {
+            // issue an INSERT query
+        } else {
+            // issue an UPDATE query
+        }
+    }
+
+    public function isNew()
+    {
+        // Yoda style
+        return null === $this-&gt;id;
+    }
+}</code></pre><hr>
+<h3 id="Data-Mapper"><a href="#Data-Mapper" class="headerlink" title="Data Mapper"></a>Data Mapper</h3><p> <img src="http://bos.nj.bpc.baidu.com/v1/agroup/560ab9b85cd52397cc562da2b82aa5819241c8e4" alt="Data Mapper"></p>
+<hr>
+<p>将内存中的数据映射到数据库中，同时保持着彼此之间的解耦</p>
+<p>Sort of <em>“Man in the Middle”</em>.</p>
+<pre><code>!php
+class BananaMapper
+{
+    private $con;
+
+    public function __construct(Connection $con)
+    {
+        $this-&gt;con = $con;
+    }
+
+    public function persist(Banana $banana)
+    {
+        // code to save the banana
+    }
+
+    public function remove(Banana $banana)
+    {
+        // code to delete the banana
+    }
+}</code></pre><hr>
+<h4 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h4><pre><code>!php
+$banana = new Banana();
+$banana-&gt;setName(&apos;Fantastic Banana&apos;);
+
+$con    = new Connection(&apos;...&apos;);
+$mapper = new BananaMapper($con);</code></pre><h4 id="Persist-Save-or-Update"><a href="#Persist-Save-or-Update" class="headerlink" title="Persist = Save or Update"></a>Persist = Save or Update</h4><pre><code>!php
+$mapper-&gt;persist($banana);</code></pre><h4 id="Remove"><a href="#Remove" class="headerlink" title="Remove"></a>Remove</h4><pre><code>!php
+$mapper-&gt;remove($banana);</code></pre><hr>
+<h3 id="Identity-Map"><a href="#Identity-Map" class="headerlink" title="Identity Map"></a>Identity Map</h3><p> <img src="http://bos.nj.bpc.baidu.com/v1/agroup/15973b643de9cfa4cdcbbdbcdcfc98cd20ec9ade" alt=""></p>
+<hr>
+<p>保证每个对象只会从数据库中加载一次，一旦加载进来，将其保存到一个map中</p>
+<pre><code>!php
+class Finder
+{
+    private $identityMap = [];
+
+    public function find($id)
+    {
+        if (!isset($this-&gt;identityMap[$id])) {
+            // fetch the object for the given id
+            $this-&gt;identityMap[$id] = ...;
+        }
+
+        return $this-&gt;identityMap[$id];
+    }
+}</code></pre><hr>
+<h3 id="Data-Access-Layer"><a href="#Data-Access-Layer" class="headerlink" title="Data Access Layer"></a>Data Access Layer</h3><hr>
+<h4 id="Data-Access-Layer-Data-Source-Name"><a href="#Data-Access-Layer-Data-Source-Name" class="headerlink" title="Data Access Layer / Data Source Name"></a>Data Access Layer / Data Source Name</h4><p>D<strong>ata **A</strong>ccess <strong>L</strong>ayer (DAL) 是标准的操作数据的api，不管你使用哪个数据库，都是一样的</p>
+<p><strong>D</strong>ata <strong>S</strong>ource <strong>N</strong>ame (DSN)则是区分到底在使用哪种数据库</p>
+<h4 id="PHP-Data-Object-PDO"><a href="#PHP-Data-Object-PDO" class="headerlink" title="PHP Data Object (PDO)"></a>PHP Data Object (PDO)</h4><p>A DSN in PHP looks like: <code>&lt;database&gt;:host=&lt;host&gt;;dbname=&lt;dbname&gt;</code> where:</p>
+<ul>
+<li><code>&lt;database&gt;</code> can be: <code>mysql</code>, <code>sqlite</code>, <code>pgsql</code>, etc;</li>
+<li><code>&lt;host&gt;</code> is the IP address of the database server (e.g. <code>localhost</code>);</li>
+<li><code>&lt;dbname&gt;</code> is your database name.</li>
+</ul>
+<blockquote>
+<p><a href="http://www.php.net/manual/en/intro.pdo.php" target="_blank" rel="noopener">http://www.php.net/manual/en/intro.pdo.php</a></p>
+</blockquote>
+<hr>
+<h4 id="PDO-usage"><a href="#PDO-usage" class="headerlink" title="PDO usage"></a>PDO usage</h4><pre><code>!php
+$dsn = &apos;mysql:host=localhost;dbname=test&apos;;
+
+$con = new PDO($dsn, $user, $password);
+
+// Prepared statement
+$stmt = $con-&gt;prepare($query);
+$stmt-&gt;execute();</code></pre><p>Looks like the <code>Connection</code> class you used before, right?</p>
+<pre><code>!php
+class Connection extends PDO
+{
+}</code></pre><h4 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h4><pre><code>!php
+$con = new Connection($dsn, $user, $password);</code></pre><hr>
+<h4 id="Refactoring"><a href="#Refactoring" class="headerlink" title="Refactoring"></a>Refactoring</h4><pre><code>!php
+class Connection extends PDO
+{
+    /**
+     * @param string $query
+     * @param array  $parameters
+     *
+     * @return bool Returns `true` on success, `false` otherwise
+     */
+    public function executeQuery($query, array $parameters = [])
+    {
+        $stmt = $this-&gt;prepare($query);
+
+        foreach ($parameters as $name =&gt; $value) {
+            $stmt-&gt;bindValue(&apos;:&apos; . $name, $value);
+        }
+
+        return $stmt-&gt;execute();
+    }
+}</code></pre><hr>
+<h4 id="Usage-1"><a href="#Usage-1" class="headerlink" title="Usage"></a>Usage</h4><pre><code>!php
+/**
+ * @param int    $id   The id of the banana to update
+ * @param string $name The new name of the banana
+ *
+ * @return bool Returns `true` on success, `false` otherwise
+ */
+public function update($id, $name)
+{
+    $query = &apos;UPDATE bananas SET name = :name WHERE id = :id&apos;;
+
+    return $this-&gt;con-&gt;executeQuery($query, [
+        &apos;id&apos;    =&gt; $id,
+        &apos;name&apos;  =&gt; $name,
+    ]);
+}</code></pre><hr>
+<h3 id="Object-Relational-Mapping"><a href="#Object-Relational-Mapping" class="headerlink" title="Object Relational Mapping"></a>Object Relational Mapping</h3><hr>
+<h4 id="对象之间的关系"><a href="#对象之间的关系" class="headerlink" title="对象之间的关系"></a>对象之间的关系</h4><p>介绍3种关系</p>
+<ul>
+<li>One-To-One;</li>
+<li>One-To-Many;</li>
+<li>Many-To-Many.</li>
+</ul>
+<p><strong>ORM</strong>一般认为是实现上面各种设计模式的一个工具，并且能很方便的处理对象之间的关系</p>
+<hr>
+<h4 id="One-To-One-1-1"><a href="#One-To-One-1-1" class="headerlink" title="One-To-One (1-1)"></a>One-To-One (1-1)</h4><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/8e135cda8d1270133dc97aa97bf4e7f0342b7117" alt="One-To-One"></p>
+<p><strong>Code Snippet</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">!php</span><br><span class="line">$profile = $banana-&gt;getProfile();</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="One-To-Many-1-N"><a href="#One-To-Many-1-N" class="headerlink" title="One-To-Many (1-N)"></a>One-To-Many (1-N)</h4><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/d76b9ad94416a6e7bd53b0798b9610e834243243" alt=""></p>
+<p><strong>Code Snippet</strong></p>
+<pre><code>!php
+$bananas = $bananaTree-&gt;getBananas();</code></pre><hr>
+<h4 id="Many-To-Many-N-N"><a href="#Many-To-Many-N-N" class="headerlink" title="Many-To-Many (N-N)"></a>Many-To-Many (N-N)</h4><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/1dd06a735091a3c352ba40ef818b343473dbce6a" alt="Many-To-Many"></p>
+<p><strong>Code Snippet</strong></p>
+<pre><code>!php
+$roles = [];
+foreach ($banana-&gt;getBananaRoles() as $bananaRole) {
+    $roles[] = $bananaRole-&gt;getRole();
+}
+
+// Or, better:
+$roles = $banana-&gt;getRoles();</code></pre><hr>
+<h3 id="存在的组件"><a href="#存在的组件" class="headerlink" title="存在的组件"></a>存在的组件</h3><h4 id="Propel-ORM"><a href="#Propel-ORM" class="headerlink" title="Propel ORM"></a>Propel ORM</h4><p>An ORM that implements the <strong>Table Data Gateway</strong> and <strong>Row Data Gateway</strong><br>patterns, often seen as an <strong>Active Record</strong> approach.</p>
+<blockquote>
+<p>Documentation: <a href="http://www.propelorm.org" target="_blank" rel="noopener">www.propelorm.org</a>.</p>
+</blockquote>
+<h4 id="Doctrine2-ORM"><a href="#Doctrine2-ORM" class="headerlink" title="Doctrine2 ORM"></a>Doctrine2 ORM</h4><p>An ORM that implements the <strong>Data Mapper</strong> pattern.</p>
+<blockquote>
+<p>Documentation: <a href="http://www.doctrine-project.org/" target="_blank" rel="noopener">www.doctrine-project.org</a>.</p>
+</blockquote>
+<hr>
+<h3 id="A-Note-About-Domain-Driven-Design"><a href="#A-Note-About-Domain-Driven-Design" class="headerlink" title="A Note About Domain-Driven Design"></a>A Note About Domain-Driven Design</h3><hr>
+<h4 id="Entities"><a href="#Entities" class="headerlink" title="Entities"></a>Entities</h4><p>可以通过id进行区分的对象<strong>entity</strong>:</p>
+<pre><code>!php
+class Customer
+{
+    private $id;
+
+    private $name;
+
+    public function __construct($id, Name $name)
+    {
+        $this-&gt;id   = $id;
+        $this-&gt;name = $name;
+    }
+
+    public function getId()
+    {
+        return $this-&gt;id;
+    }
+
+    public function getName()
+    {
+        return $this-&gt;name;
+    }
+}</code></pre><hr>
+<h4 id="Value-Objects"><a href="#Value-Objects" class="headerlink" title="Value Objects"></a>Value Objects</h4><p>直接通过值来分区，无id的对象，<strong>Value Object</strong>:</p>
+<pre><code>!php
+class Name
+{
+    private $firstName;
+
+    private $lastName;
+
+    public function __construct($firstName, $lastName)
+    {
+        $this-&gt;firstName = $firstName;
+        $this-&gt;lastName  = $lastName;
+    }
+
+    public function getFirstName()
+    {
+        return $this-&gt;firstName;
+    }
+
+    public function getLastName()
+    {
+        return $this-&gt;lastName;
+    }
+}</code></pre><hr>
+<h3 id="The-Repository-Pattern"><a href="#The-Repository-Pattern" class="headerlink" title="The Repository Pattern"></a>The Repository Pattern</h3><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/00c603f547af7a3fc61b9efd1d0d86bee92a2fe5" alt="The Repository Pattern"></p>
+<hr>
+<p>Repository<strong>协调了领域对象和数据映射层的关系</strong>，扮演着内存中领域对象集合（ <strong>in-memory domain object collection</strong>）的角色。</p>
+<pre><code>!php
+interface CustomerRepository
+{
+    /**
+     * @return Customer
+     */
+    public function find($customerId);
+
+    /**
+     * @return Customer[]
+     */
+    public function findAll();
+
+    public function add(Customer $user);
+
+    public function remove(Customer $user);
+}</code></pre><hr>
+<h1 id="The-Repository-Pattern-1"><a href="#The-Repository-Pattern-1" class="headerlink" title="The Repository Pattern"></a>The Repository Pattern</h1><p>客户端通过构造声明式的<strong>query specifications</strong>去Repository进行查询。</p>
+<p>对象可以被添加进Repository，同样的也能从Repository中移除，从这个角度讲，Repository有点类似于集合的概念，其内部封装了对象和数据库记录之间的映射关系，Repository提供了persistence的一个更面向对象的视角。</p>
+<p>Repository同时很好的解决了领域对象和数据映射层之间的耦合关系，充分的分离的关注点，领域对象和数据映射层可以独自的开发，演化。</p>
+<hr>
+<h3 id="The-Specification-Pattern"><a href="#The-Specification-Pattern" class="headerlink" title="The Specification Pattern"></a>The Specification Pattern</h3><p> <img src="http://bos.nj.bpc.baidu.com/v1/agroup/68788f10159d4d966cca36ed036a7332c9dec519" alt="Specification Pattern"></p>
+<hr>
+<p>Specification pattern可以将业务规则建模为独立的对象，其主要思想是关注一个对象的问题，可以通过<code>isSatisfiedBy()</code>来回答：</p>
+<pre><code>!php
+interface CustomerSpecification
+{
+    /**
+     * @return boolean
+     */
+    public function isSatisfiedBy(Customer $customer);
+}
+
+!php
+class CustomerIsPremium implements CustomerSpecification
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function isSatisfiedBy(Customer $customer)
+    {
+        // figure out if the customer is indeed premium,
+        // and return true or false.
+    }
+}</code></pre><hr>
+<h3 id="Repository-♥-Specification"><a href="#Repository-♥-Specification" class="headerlink" title="Repository ♥ Specification"></a>Repository ♥ Specification</h3><p>A <code>findSatisfying()</code> method can be added to the <code>CustomerRepository</code>:</p>
+<pre><code>!php
+interface CustomerRepository
+{
+    ...
+
+    /**
+     * @return Customer[]
+     */
+    public function findSatisfying(CustomerSpecification $specification);
+}</code></pre><h3 id="Usage-2"><a href="#Usage-2" class="headerlink" title="Usage"></a>Usage</h3><pre><code>!php
+$specification = new CustomerIsPremium();
+$customers     = $repository-&gt;findSatisfying($specification);</code></pre><hr>
+<h4 id="Combine-Them"><a href="#Combine-Them" class="headerlink" title="Combine Them!"></a>Combine Them!</h4><pre><code>!php
+class OrSpecification implements CustomerSpecification
+{
+    public function __construct(
+        CustomerSpecification $s1,
+        CustomerSpecification $s2
+    ) {
+        $this-&gt;s1 = $s1;
+        $this-&gt;s2 = $s2;
+    }
+
+    public function isSatisfiedBy(Customer $c)
+    {
+        return $this-&gt;s1-&gt;isSatisfiedBy($c) || $this-&gt;s2-&gt;isSatisfiedBy($c);
+    }
+}
+
+!php
+class AndSpecification implements CustomerSpecification
+{
+    ...
+
+    public function isSatisfiedBy(Customer $c)
+    {
+        return $this-&gt;s1-&gt;isSatisfiedBy($c) &amp;&amp; $this-&gt;s2-&gt;isSatisfiedBy($c);
+    }
+}</code></pre><hr>
+<pre><code>!php
+class NotSpecification implements CustomerSpecification
+{
+    public function __construct(CustomerSpecification $s)
+    {
+        $this-&gt;s = $s;
+    }
+
+    public function isSatisfiedBy(Customer $c)
+    {
+        return !$this-&gt;s-&gt;isSatisfiedBy($c);
+    }
+}</code></pre><h3 id="Usage-3"><a href="#Usage-3" class="headerlink" title="Usage"></a>Usage</h3><pre><code>!php
+// Find customers who have ordered exactly three times,
+// but who are not premium customers (yet?)
+$specification = new AndSpecification(
+    new CustomerHasOrderedThreeTimes(),
+    new NotSpecification(
+        new CustomerIsPremium()
+    )
+);
+
+$customers = $repository-&gt;findSatisfying($specification);</code></pre><hr>
+<h4 id="Specification-For-Business-Rules"><a href="#Specification-For-Business-Rules" class="headerlink" title="Specification For Business Rules"></a>Specification For Business Rules</h4><p>在业务层复用specifications</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">!php</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AwesomeOfferSender</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> $specification;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(CustomerIsPremium $specification)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;specification = $specification;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">sendOffersTo</span><span class="params">(Customer $customer)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;specification-&gt;isSatisfiedBy($customer)) &#123;</span><br><span class="line">            <span class="comment">// send offers</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>原文地址是：</p>
+<p><a href="https://github.com/willdurand-edu/php-slides/blob/master/src/common/09_databases.md" target="_blank" rel="noopener">https://github.com/willdurand-edu/php-slides/blob/master/src/common/09_databases.md</a></p>
+<p>这是orm的第一篇，你的鼓励是我继续写下去的动力，期待我们共同进步。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/orm/" rel="tag"># orm</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/22/The-Clean-Architecture-in-PHP-%E5%8D%81/" rel="prev" title="The Clean Architecture in PHP 读书笔记(十)">
+      <i class="fa fa-chevron-left"></i> The Clean Architecture in PHP 读书笔记(十)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/24/eloquent-1/" rel="next" title="orm 系列 之 Eloquent演化历程1">
+      orm 系列 之 Eloquent演化历程1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库"><span class="nav-number">1.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-note"><span class="nav-number">2.</span> <span class="nav-text">Quick note</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库设计模式"><span class="nav-number">3.</span> <span class="nav-text">数据库设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Row-Data-Gateway"><span class="nav-number">3.1.</span> <span class="nav-text">Row Data Gateway</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用"><span class="nav-number">3.1.1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#底层实现"><span class="nav-number">3.1.2.</span> <span class="nav-text">底层实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Table-Data-Gateway"><span class="nav-number">3.2.</span> <span class="nav-text">Table Data Gateway</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CRUD"><span class="nav-number">3.2.1.</span> <span class="nav-text">CRUD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现"><span class="nav-number">3.2.2.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#insert操作"><span class="nav-number">3.2.3.</span> <span class="nav-text">insert操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#update操作"><span class="nav-number">3.2.4.</span> <span class="nav-text">update操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#delete操作"><span class="nav-number">3.2.5.</span> <span class="nav-text">delete操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Finder方法"><span class="nav-number">3.2.6.</span> <span class="nav-text">Finder方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Active-Record"><span class="nav-number">3.3.</span> <span class="nav-text">Active Record</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Active-Record-Row-Data-Gateway-Domain-Logic"><span class="nav-number">3.3.1.</span> <span class="nav-text">Active Record &#x3D; Row Data Gateway + Domain Logic</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Mapper"><span class="nav-number">3.4.</span> <span class="nav-text">Data Mapper</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-1"><span class="nav-number">3.4.1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Persist-Save-or-Update"><span class="nav-number">3.4.2.</span> <span class="nav-text">Persist &#x3D; Save or Update</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Remove"><span class="nav-number">3.4.3.</span> <span class="nav-text">Remove</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Identity-Map"><span class="nav-number">3.5.</span> <span class="nav-text">Identity Map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Access-Layer"><span class="nav-number">3.6.</span> <span class="nav-text">Data Access Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Data-Access-Layer-Data-Source-Name"><span class="nav-number">3.6.1.</span> <span class="nav-text">Data Access Layer &#x2F; Data Source Name</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PHP-Data-Object-PDO"><span class="nav-number">3.6.2.</span> <span class="nav-text">PHP Data Object (PDO)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PDO-usage"><span class="nav-number">3.6.3.</span> <span class="nav-text">PDO usage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Usage"><span class="nav-number">3.6.4.</span> <span class="nav-text">Usage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Refactoring"><span class="nav-number">3.6.5.</span> <span class="nav-text">Refactoring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Usage-1"><span class="nav-number">3.6.6.</span> <span class="nav-text">Usage</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-Relational-Mapping"><span class="nav-number">3.7.</span> <span class="nav-text">Object Relational Mapping</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对象之间的关系"><span class="nav-number">3.7.1.</span> <span class="nav-text">对象之间的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#One-To-One-1-1"><span class="nav-number">3.7.2.</span> <span class="nav-text">One-To-One (1-1)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#One-To-Many-1-N"><span class="nav-number">3.7.3.</span> <span class="nav-text">One-To-Many (1-N)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Many-To-Many-N-N"><span class="nav-number">3.7.4.</span> <span class="nav-text">Many-To-Many (N-N)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存在的组件"><span class="nav-number">3.8.</span> <span class="nav-text">存在的组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Propel-ORM"><span class="nav-number">3.8.1.</span> <span class="nav-text">Propel ORM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Doctrine2-ORM"><span class="nav-number">3.8.2.</span> <span class="nav-text">Doctrine2 ORM</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Note-About-Domain-Driven-Design"><span class="nav-number">3.9.</span> <span class="nav-text">A Note About Domain-Driven Design</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Entities"><span class="nav-number">3.9.1.</span> <span class="nav-text">Entities</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Value-Objects"><span class="nav-number">3.9.2.</span> <span class="nav-text">Value Objects</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Repository-Pattern"><span class="nav-number">3.10.</span> <span class="nav-text">The Repository Pattern</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-Repository-Pattern-1"><span class="nav-number"></span> <span class="nav-text">The Repository Pattern</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Specification-Pattern"><span class="nav-number">0.1.</span> <span class="nav-text">The Specification Pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Repository-♥-Specification"><span class="nav-number">0.2.</span> <span class="nav-text">Repository ♥ Specification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Usage-2"><span class="nav-number">0.3.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Combine-Them"><span class="nav-number">0.3.1.</span> <span class="nav-text">Combine Them!</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Usage-3"><span class="nav-number">0.4.</span> <span class="nav-text">Usage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Specification-For-Business-Rules"><span class="nav-number">0.4.1.</span> <span class="nav-text">Specification For Business Rules</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

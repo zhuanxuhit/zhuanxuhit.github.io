@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Eloquent是laravel中的orm，采取的是active record的设计模式，里面的对象不仅包括领域逻辑，还包括了数据库操作，但是大家平时使用的时候可能没有探究eloquent是怎么设计的，active record这种模式的优缺点等问题，下面我会带领大家从头开始看看Eloquent是如何设计并实现的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="orm 系列 之 Eloquent演化历程1">
+<meta property="og:url" content="http://yoursite.com/2016/11/24/eloquent-1/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="Eloquent是laravel中的orm，采取的是active record的设计模式，里面的对象不仅包括领域逻辑，还包括了数据库操作，但是大家平时使用的时候可能没有探究eloquent是怎么设计的，active record这种模式的优缺点等问题，下面我会带领大家从头开始看看Eloquent是如何设计并实现的。">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/36061fd902bc3fc7ea60039cc53fe23b568679ef">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/9caeb87b8b7faf2a9c3a3d38d3cf400ef24edb17">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/08ad9cc87c6d57402ef59336caf14e985c6b5e68">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/39a9bc839b2c9ae61f2f9e3f9344bf153b455122">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/a0d408767d348ecee35d936d597391a9ae275c8c">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/e5b5d9dae99c3e685b3f408d0203c593bee7eb57">
+<meta property="article:published_time" content="2016-11-24T08:41:46.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.381Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="orm">
+<meta property="article:tag" content="eloquent">
+<meta property="article:tag" content="laravel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/36061fd902bc3fc7ea60039cc53fe23b568679ef">
+
+<link rel="canonical" href="http://yoursite.com/2016/11/24/eloquent-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>orm 系列 之 Eloquent演化历程1 | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/24/eloquent-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          orm 系列 之 Eloquent演化历程1
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-11-24 16:41:46" itemprop="dateCreated datePublished" datetime="2016-11-24T16:41:46+08:00">2016-11-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/11/24/eloquent-1/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 Eloquent演化历程1" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/36061fd902bc3fc7ea60039cc53fe23b568679ef" alt=""></p>
+<p>Eloquent是laravel中的orm，采取的是active record的设计模式，里面的对象不仅包括领域逻辑，还包括了数据库操作，但是大家平时使用的时候可能没有探究eloquent是怎么设计的，active record这种模式的优缺点等问题，下面我会带领大家从头开始看看Eloquent是如何设计并实现的。</p>
+<a id="more"></a>
+
+<p>本文是orm系列的第二篇，也是Eloquent演化的第一篇，Eloquent系列会尝试着讲清楚Eloquent是如何一步一步演化到目前功能强大的版本的，但是毕竟个人能力有限，不可能分析的非常完善，总会有不懂的地方，所以讲的错误的地方，<strong>恳请大牛们能不吝赐教</strong>；或者如果有什么地方是没看懂的，也请提出来，因为可能那地方就是我自己没看懂，所以没讲明白，你提出后我们就可以<strong>一起讨论</strong>，让我们能<strong>共同的进步</strong>的。</p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>首先要对数据库连接做抽象，于是有了<code>Connection</code>类，内部主要是对<code>PDO</code>的一个封装，但是如果只有Connection的话，一个问题是，我们需要直面sql，于是就有了<code>Builder</code>类，其功能就是屏蔽sql，让我们能用面向对象的方式来完成sql的查询功能，<code>Builder</code>应该是sql builder，此时Eloquent的主要的类就如下：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/9caeb87b8b7faf2a9c3a3d38d3cf400ef24edb17" alt=""></p>
+<p>其中Builder负责sql的组装，Connection负责具体的数据库交互，其中多出来一个Grammar，其负责主要是负责将Builder里面存储的数据转化为sql。</p>
+<blockquote>
+<p>note：此处版本是54d73c6，通过 git co 54d73c6 可以查看</p>
+</blockquote>
+<h2 id="model引入"><a href="#model引入" class="headerlink" title="model引入"></a>model引入</h2><p>接着我们继续演化，要引进Model，要实现Active Record模式，在<strong>46966ec</strong>中首次加入了<code>Eloquent/Model</code>类，有兴趣的同学可以<code>git co 46966ec</code>查看，刚提交上来的时候，Model类中大概如下：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/08ad9cc87c6d57402ef59336caf14e985c6b5e68" alt=""></p>
+<p>可以看到属性通过定义table,connection，将具体的数据库操作是委托给了<code>connection</code>类，然后Model自己是负责领域逻辑，同时会定义一些静态方法，如<code>create,find,save</code>，充当了<em>Row Data Gateway</em>角色，此时的类图如下：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/39a9bc839b2c9ae61f2f9e3f9344bf153b455122" alt=""></p>
+<p>此时新增的Model类直接依赖于Connection和Builder，带来的问题是耦合，于是就有了一个改动，在Model同一层级上引入了一新的Builder，具体通过<code>git co c420bd8</code>查看。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Database</span>\<span class="title">Query</span>\<span class="title">Builder</span> <span class="title">as</span> <span class="title">BaseBuilder</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Builder</span> <span class="keyword">extends</span> <span class="title">BaseBuilder</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * The model being queried.</span></span><br><span class="line"><span class="comment">	 *</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@var</span> Illuminate\Database\Eloquent\Model</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">protected</span> $model;</span><br><span class="line">	....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>里面具体就是在基础<code>BaseBuilder</code>上通过<code>Model</code>来获取一些信息设置，譬如<code>$this-&gt;from($model-&gt;getTable())</code>这种操作，还有一个好处是保持了<code>BaseBuilder</code>的纯净，没有形成Model和BaseBuilder之间的双向依赖，通过Model同层的Builder来去耦合，如下图所示：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/a0d408767d348ecee35d936d597391a9ae275c8c" alt=""></p>
+<h2 id="relation进入"><a href="#relation进入" class="headerlink" title="relation进入"></a>relation进入</h2><p>下一步是要引入1-1，1-N，N-N的关系了，可以通过<code>git co 912de03</code>查看，此时一个新增的类的情况如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">├── Builder.php</span><br><span class="line">├── Model.php</span><br><span class="line">└── Relations</span><br><span class="line">    ├── BelongsTo.php</span><br><span class="line">    ├── BelongsToMany.php</span><br><span class="line">    ├── HasMany.php</span><br><span class="line">    ├── HasOne.php</span><br><span class="line">    ├── HasOneOrMany.php</span><br><span class="line">    └── Relation.php</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>Relation</code>是基类，然后其他的几个都继承它。</p>
+<p>此时关系处理上主要的逻辑是调用Model的HasOne等表关系的方法，返回Relation的子类，然后通过Relation来处理进而返回数据，这么说可能有点绕，我们下面具体介绍下每个关系的实现，大家可能就理解了。</p>
+<p>先看HasOne，即OneToOne的关系，看代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">hasOne</span><span class="params">($related, $foreignKey = null)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  $foreignKey = $foreignKey ?: <span class="keyword">$this</span>-&gt;getForeignKey();</span><br><span class="line"></span><br><span class="line">  $instance = <span class="keyword">new</span> $related;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> HasOne($instance-&gt;newQuery(), <span class="keyword">$this</span>, $foreignKey);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们看到当调用Model的<code>hasOne</code>方法后，返回是一个HasOne，即Relation，当我们调用Relation的方法时，是怎么处理的呢？通过魔术方法<code>__call</code>，将其委托给了<code>Eloquent\Builder</code>，</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__call</span><span class="params">($method, $parameters)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (method_exists(<span class="keyword">$this</span>-&gt;query, $method))</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span> call_user_func_array(<span class="keyword">array</span>(<span class="keyword">$this</span>-&gt;query, $method), $parameters);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> \BadMethodCallException(<span class="string">"Method [$method] does not exist."</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>即其实Relation是对<code>Eloquent\Builder</code>的一个封装，支持面向对象式的sql操作，我们下面来看下当我们使用HasOne的时候发生了什么。</p>
+<p>假设我们有个User,Phone，然后User和Phone的关系是HasOne,在User声明上就会有</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Get the phone record associated with the user.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">phone</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;hasOne(<span class="string">'App\Phone'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时HasOne的构造函数如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// builder是Eloquent\Builder, parent是Uer,$foreign_key是user_id</span></span><br><span class="line">$relation = <span class="keyword">new</span> HasOne($builder, $parent, $foreign_key);</span><br></pre></td></tr></table></figure>
+
+<p>当使用<code>User::with(&#39;phone&#39;)-&gt;get()</code>的时候，就会去eager load进phone了，具体的过程中，在调用<code>Eloquent\Builder</code>的get的时候，里面有个逻辑是：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (count($models) &gt; <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">  $models = <span class="keyword">$this</span>-&gt;eagerLoadRelations($models);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取has one关系，我们跟着看到代码，会调用到函数<code>eagerLoadRelation</code>，具体看代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">eagerLoadRelation</span><span class="params">(array $models, $relation, Closure $constraints)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  $instance = <span class="keyword">$this</span>-&gt;getRelation($relation);</span><br><span class="line">  ...</span><br><span class="line">  $instance-&gt;addEagerConstraints($models);</span><br><span class="line">  </span><br><span class="line">  $models = $instance-&gt;initializeRelation($models, $relation);</span><br><span class="line">  </span><br><span class="line">  $results = $instance-&gt;get();</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> $instance-&gt;match($models, $results, $relation);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>getRelation</code>会调用到<code>User()-&gt;phone()</code>，即此处<code>$instance</code>是<code>HasOne</code>，接着调用<code>HasOne-&gt;addEagerConstraints()</code>和<code>HasOne-&gt;initializeRelation()</code>，具体的代码是：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// class HasOne</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addEagerConstraints</span><span class="params">(array $models)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">// 新增foreignKey的条件</span></span><br><span class="line">  <span class="keyword">$this</span>-&gt;query-&gt;whereIn(<span class="keyword">$this</span>-&gt;foreignKey, <span class="keyword">$this</span>-&gt;getKeys($models));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">initRelation</span><span class="params">(array $models, $relation)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">foreach</span> ($models <span class="keyword">as</span> $model)</span><br><span class="line">  &#123;</span><br><span class="line">    $model-&gt;setRelation($relation, <span class="keyword">null</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> $models;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// class Model</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setRelation</span><span class="params">($relation, $value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">$this</span>-&gt;relations[$relation] = $value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后调用match方法，就是正确的给每个model设置好relation关系。</p>
+<p>以上就是我们分析的HasOne的实现，其他的关系都类似，此处不再重复，然后eager load的含义是指，当我们要加载多个数据的时候，我们尽可能用一条sql解决，而不是多条sql，具体来说如果我们有多个Users，需要加载Phones的，如果不采用eager，在每个sql就是<code>where user_id=?</code>，而eager模式则是<code>where user_id in (?,?,?)</code>，这样差异就很明显了.</p>
+<blockquote>
+<p>note:以上分析的代码是：git co f6e2170</p>
+</blockquote>
+<p>讲到这，我们列举下对象之间的关系</p>
+<h3 id="One-To-One"><a href="#One-To-One" class="headerlink" title="One-To-One"></a>One-To-One</h3><p>User 和 Phone的1对1的关系，</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Get the phone record associated with the user.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">phone</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;hasOne(<span class="string">'App\Phone'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 逆向定义</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Phone</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Get the user that owns the phone.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">user</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;belongsTo(<span class="string">'App\User'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>sql的查询类似于下面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select id from phone where user_id in (1)</span><br><span class="line"></span><br><span class="line">select id from user where id in (phone.user_id)</span><br></pre></td></tr></table></figure>
+
+<h3 id="One-To-Many"><a href="#One-To-Many" class="headerlink" title="One-To-Many"></a>One-To-Many</h3><p>以Post和Comment为例，一个Post会有多个Comment</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Post</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Get the comments for the blog post.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">comments</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;hasMany(<span class="string">'App\Comment'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// reverse</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Comment</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Get the post that owns the comment.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">post</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;belongsTo(<span class="string">'App\Post'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此处的sql和HasOne一致</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select id from comment where post_id in (1)</span><br><span class="line"></span><br><span class="line">select id from post where id in (comment.post_id)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Many-To-Many"><a href="#Many-To-Many" class="headerlink" title="Many To Many"></a>Many To Many</h3><p>以user和role为例，一个用户会有不同的角色，一个角色也会有不同的人，这个时候就需要一张中间表<em>role_user</em>，代码声明上如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The roles that belong to the user.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">roles</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;belongsToMany(<span class="string">'App\Role'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Role</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The users that belong to the role.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">users</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;belongsToMany(<span class="string">'App\User'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个关系我们稍微具体讲下，我们在使用上可能会是下面这样子的</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="keyword">$this</span>-&gt;belongsToMany(<span class="string">'App\Role'</span>, <span class="string">'user_roles'</span>, <span class="string">'user_id'</span>, <span class="string">'role_id'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在构造函数中，会调用<code>addConstraints</code>方法，如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// class belongsToMany</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addConstraints</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">$this</span>-&gt;setSelect()-&gt;setJoin()-&gt;setWhere();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此处会预先设置<code>setSelect()-&gt;setJoin()-&gt;setWhere()</code>，作用分别是：</p>
+<p>setSelect() : 在select的字段中新增 role.*,user_role.id as pivot_id</p>
+<p>setJoin()：新增join， join user_role on role.id = user_role.role_id，联合查询</p>
+<p>setWhere()：新增 user_id = ?</p>
+<p>查询的表是role，join表user_role</p>
+<p>在get的时候，其逻辑和HasOne等关系也所有不同，代码如下:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// class belongsToMany</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">($columns = array<span class="params">(<span class="string">'*'</span>)</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  $models = <span class="keyword">$this</span>-&gt;query-&gt;getModels($columns);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">$this</span>-&gt;hydratePivotRelation($models);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (count($models) &gt; <span class="number">0</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    $models = <span class="keyword">$this</span>-&gt;query-&gt;eagerLoadRelations($models);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Collection($models);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此处有个方法叫<code>hydratePivotRelation</code>，我们进入看下到底是怎么回事</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// class belongsToMany</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">hydratePivotRelation</span><span class="params">(array $models)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="comment">// 将中间记录取出来，设置属性pivot为Model pivot</span></span><br><span class="line">  <span class="keyword">foreach</span> ($models <span class="keyword">as</span> $model)</span><br><span class="line">  &#123;</span><br><span class="line">    $values = <span class="keyword">$this</span>-&gt;cleanPivotAttributes($model);</span><br><span class="line"></span><br><span class="line">    $pivot = <span class="keyword">$this</span>-&gt;newExistingPivot($values);</span><br><span class="line"></span><br><span class="line">    $model-&gt;setRelation(<span class="string">'pivot'</span>, $pivot);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实做的事情就是设置了Role的pivot属性。</p>
+<p>到这，我们就分析完了eloquent在<strong>f6e2170</strong>版本上具有的功能了，到目前为止，eloquent的类图如下：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/e5b5d9dae99c3e685b3f408d0203c593bee7eb57" alt=""></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>目前，我们分析到的版本是<strong>f6e2170</strong>，已经具备了一个orm该需要的功能了，<code>Connection</code>负责数据库操作，<code>Builder</code>负责面向对象的sql操作，<code>Grammar</code>负责sql的拼装，<code>Eloquent/Model</code>是Active Record模式的核心Model，同时具备领域逻辑和数据库操作功能，其中数据库操作功能是委托给了<code>Eloquent/Builder</code>，同时我们也定义了对象的3种关系，1-1，1-N，N-N，下一阶段，Eloquent将会实现<strong>migrations or database modification logic</strong>的功能，尽情期待。</p>
+<p>这是orm的第二篇，你的鼓励是我继续写下去的动力，期待我们共同进步。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/orm/" rel="tag"># orm</a>
+              <a href="/tags/eloquent/" rel="tag"># eloquent</a>
+              <a href="/tags/laravel/" rel="tag"># laravel</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/24/databases/" rel="prev" title="orm 系列 之 常用设计模式">
+      <i class="fa fa-chevron-left"></i> orm 系列 之 常用设计模式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/27/eloquent-2/" rel="next" title="orm 系列 之 Eloquent演化历程2">
+      orm 系列 之 Eloquent演化历程2 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#model引入"><span class="nav-number">2.</span> <span class="nav-text">model引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#relation进入"><span class="nav-number">3.</span> <span class="nav-text">relation进入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#One-To-One"><span class="nav-number">3.1.</span> <span class="nav-text">One-To-One</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#One-To-Many"><span class="nav-number">3.2.</span> <span class="nav-text">One-To-Many</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Many-To-Many"><span class="nav-number">3.3.</span> <span class="nav-text">Many To Many</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>
