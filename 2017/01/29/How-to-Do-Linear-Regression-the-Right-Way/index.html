@@ -23,23 +23,23 @@
   <meta name="description" content="本文是YouTube上视频How to Do Linear Regression the Right Way笔记 假设我们有一堆数据，并且他们是线性相关的，那我们怎么找出最合适的那条直线呢？ 此处关键是定义什么是最合适？可以通过每个点到直线的距离来定义整个合适，如图：  在上面的过程中，直线y&#x3D;mx+b中m和b不管变化，从而找到最合适的直线，这个判断的依据就是：  上面公式的含义是：假设点是(x,">
 <meta property="og:type" content="article">
 <meta property="og:title" content="线性回归背后的数学">
-<meta property="og:url" content="http://yoursite.com/2017/01/29/2017-01-29-How-to-Do-Linear-Regression-the-Right-Way/index.html">
+<meta property="og:url" content="http://yoursite.com/2017/01/29/How-to-Do-Linear-Regression-the-Right-Way/index.html">
 <meta property="og:site_name" content="程序猿的进击之路">
 <meta property="og:description" content="本文是YouTube上视频How to Do Linear Regression the Right Way笔记 假设我们有一堆数据，并且他们是线性相关的，那我们怎么找出最合适的那条直线呢？ 此处关键是定义什么是最合适？可以通过每个点到直线的距离来定义整个合适，如图：  在上面的过程中，直线y&#x3D;mx+b中m和b不管变化，从而找到最合适的直线，这个判断的依据就是：  上面公式的含义是：假设点是(x,">
 <meta property="og:image" content="https://raw.githubusercontent.com/mattnedrich/GradientDescentExample/master/gradient_descent_example.gif">
 <meta property="og:image" content="https://spin.atomicobject.com/wp-content/uploads/linear_regression_error1.png">
 <meta property="og:image" content="https://spin.atomicobject.com/wp-content/uploads/gradient_descent_error_surface.png">
-<meta property="og:image" content="http://3qeqpr26caki16dnhd19sv6by6v.wpengine.netdna-cdn.com/wp-content/uploads/2016/03/Large-Bowl.jpg">
+<meta property="og:image" content="http://yoursite.com/images/Large-Bowl.jpg">
 <meta property="og:image" content="http://mathinsight.org/media/image/image/partial_derivative_as_slope.png">
 <meta property="og:image" content="https://spin.atomicobject.com/wp-content/uploads/linear_regression_gradient1.png">
 <meta property="article:published_time" content="2017-01-29T01:58:16.000Z">
-<meta property="article:modified_time" content="2020-02-22T12:18:44.397Z">
+<meta property="article:modified_time" content="2020-02-22T14:25:50.301Z">
 <meta property="article:author" content="颛顼">
 <meta property="article:tag" content="机器学习基石">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/mattnedrich/GradientDescentExample/master/gradient_descent_example.gif">
 
-<link rel="canonical" href="http://yoursite.com/2017/01/29/2017-01-29-How-to-Do-Linear-Regression-the-Right-Way/">
+<link rel="canonical" href="http://yoursite.com/2017/01/29/How-to-Do-Linear-Regression-the-Right-Way/">
 
 
 <script id="page-configurations">
@@ -161,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/2017-01-29-How-to-Do-Linear-Regression-the-Right-Way/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/How-to-Do-Linear-Regression-the-Right-Way/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
@@ -191,11 +191,11 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <time title="Modified: 2020-02-22 22:25:50" itemprop="dateModified" datetime="2020-02-22T22:25:50+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2017/01/29/2017-01-29-How-to-Do-Linear-Regression-the-Right-Way/" class="post-meta-item leancloud_visitors" data-flag-title="线性回归背后的数学" title="Views">
+            <span id="/2017/01/29/How-to-Do-Linear-Regression-the-Right-Way/" class="post-meta-item leancloud_visitors" data-flag-title="线性回归背后的数学" title="Views">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -221,7 +221,7 @@
 <p>上面公式的含义是：假设点是(x,y)，那相同x的直线上的点就是：(x,mx+b)，而这两者之间的距离就是(y-(mx+b))，为了防止出现负数，因此我们就计算了平方，有了这个衡量的标准后，我们就可以画出上面公式的一个图了：</p>
 <p><img src="https://spin.atomicobject.com/wp-content/uploads/gradient_descent_error_surface.png" alt=""></p>
 <p>此处画出来是一个立体图，我们要找的一个最佳的直线，对应到图中其实就是一个最低点，更形象的例子是：</p>
-<p><img src="http://3qeqpr26caki16dnhd19sv6by6v.wpengine.netdna-cdn.com/wp-content/uploads/2016/03/Large-Bowl.jpg" alt=""></p>
+<p><img src="/images/Large-Bowl.jpg" alt=""></p>
 <p>如果我们此时放一个弹珠到碗里，最终弹珠停下来的点就是我们要找的最佳点，现在我们没有弹珠，我们要怎么找到这个最佳点呢？这就要讲到偏导数（partial derivatives）的概念了，以前大学里学偏导数的是时候一直不明白为什么叫偏导，直到最近看到英文：partial derivatives才明白，我们来看图：</p>
 <p><img src="http://mathinsight.org/media/image/image/partial_derivative_as_slope.png" alt=""></p>
 <p>图中的函数f是一个表面，如果我们固定住y，则是一个曲线，如图中绿色的线，此时我们在计算点(a,b,f(a,b))在绿色线上的斜率，就可以得到沿着x方向的斜率了，同样的我们固定x，就可以得到y方向的斜率，这样子解释，英文partial derivatives就很形象了，即计算的部分的斜率，合在一起才是曲面上这个点相切的一个平面。</p>
