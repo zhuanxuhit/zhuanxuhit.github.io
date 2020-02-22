@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文是Distributed systems for fun and profit的第三部分，本文是阅读该文后的一些记录。 Time and order先来看第一个问题：   What is order and why is it important?  为什么我们要关心是否 A happened before B? 回答这个问题之前，我们先来看下分布式编程的定义。   the art of s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="袖珍分布式系统（三）">
+<meta property="og:url" content="http://yoursite.com/2017/01/23/2017-01-23-Distributed-systems-for-fun-and-profit-3/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="本文是Distributed systems for fun and profit的第三部分，本文是阅读该文后的一些记录。 Time and order先来看第一个问题：   What is order and why is it important?  为什么我们要关心是否 A happened before B? 回答这个问题之前，我们先来看下分布式编程的定义。   the art of s">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/267b8d3b1c03219824d3ae54eee6b1246f443c1b">
+<meta property="article:published_time" content="2017-01-23T06:27:07.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.395Z">
+<meta property="article:author" content="颛顼">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/267b8d3b1c03219824d3ae54eee6b1246f443c1b">
+
+<link rel="canonical" href="http://yoursite.com/2017/01/23/2017-01-23-Distributed-systems-for-fun-and-profit-3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>袖珍分布式系统（三） | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/23/2017-01-23-Distributed-systems-for-fun-and-profit-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          袖珍分布式系统（三）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-01-23 14:27:07" itemprop="dateCreated datePublished" datetime="2017-01-23T14:27:07+08:00">2017-01-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2017/01/23/2017-01-23-Distributed-systems-for-fun-and-profit-3/" class="post-meta-item leancloud_visitors" data-flag-title="袖珍分布式系统（三）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/267b8d3b1c03219824d3ae54eee6b1246f443c1b" alt=""></p>
+<p>本文是<a href="http://book.mixu.net/distsys/single-page.html" target="_blank" rel="noopener">Distributed systems for fun and profit</a>的第三部分，本文是阅读该文后的一些记录。</p>
+<h2 id="Time-and-order"><a href="#Time-and-order" class="headerlink" title="Time and order"></a>Time and order</h2><p>先来看第一个问题：</p>
+<blockquote>
+<p> What is order and why is it important?</p>
+</blockquote>
+<p>为什么我们要关心是否 <em>A happened before B?</em></p>
+<p>回答这个问题之前，我们先来看下分布式编程的定义。</p>
+<blockquote>
+<p> the art of solving the same problem that you can solve on a single computer using multiple computers.</p>
+</blockquote>
+<p>在单机系统中，传统的模式是： a single program, one process, one memory space running on one CPU。我们做了很多努力来给编程者提供一种简单的编程模型，一种顺序执行的模型，让程序实际执行的顺序就是代码的顺序。</p>
+<p>但是我们一旦来到分布式环境中，我们却发现再也没有这种简单的编程模型了，程序实际执行的顺序你忽然间就无法预测了，因为每个节点时钟不是严格同步的，当然你可以去用复杂的技术来实现所有节点的时钟同步，然后给予每个操作一个时间戳，从而得到一个全局的<strong><em>total order</em></strong>；另一个思路是通过一个communication system，给每个操作都编号，从而得到一个顺序，但是就像我们之前说的一样，在分布式系统中，通信是不可靠的，您不可能确定的知道另外一个节点的状态，我们可以看到以上两种方法都很难。</p>
+<h2 id="Total-and-partial-order"><a href="#Total-and-partial-order" class="headerlink" title="Total and partial order"></a>Total and partial order</h2><p>在分布式环境中一种常见的状态是：partial order，即部分有，在集合中不是任意两个元素都是可比较的。</p>
+<p>Total 和 partial order 都满足 自反性和传递性。</p>
+<blockquote>
+<p>If a ≤ b and b ≤ a then a = b </p>
+<p>(antisymmetry); </p>
+<p>If a ≤ b and b ≤ c then a ≤ c </p>
+<p>(transitivity);</p>
+</blockquote>
+<p>total order还满足：</p>
+<blockquote>
+<p> a ≤ b or b ≤ a (totality) for all a, b in X</p>
+</blockquote>
+<p>即所有集合中的元素都是有序的，而partial order则：</p>
+<blockquote>
+<p> a ≤ a (reflexivity) for all a in X</p>
+</blockquote>
+<p>即集合中的元素不是都有序，只满足自反性。</p>
+<p>在单机系统中，所有的指令和消息的执行都是可预测的，是有一个total order的，因此程序的行为是可预测的，但是在分布式系统中想要实现total order，代价是巨大的，因为</p>
+<blockquote>
+<p>communication is expensive, and time synchronization is diﬃcult and fragile</p>
+</blockquote>
+<h2 id="What-is-time"><a href="#What-is-time" class="headerlink" title="What is time?"></a>What is time?</h2><blockquote>
+<p>Time is a source of order - it allows us to deﬁne the order of operations- which coincidentally also has an interpretation that people can understand (a second, a minute, a day and so on).</p>
+</blockquote>
+<p>什么是时间？时间有时候就像一个计数器，只不过时间这个计数器比较重要，我们用这个计数器产生的数值来定义整个人类的最重要的概念：时间。</p>
+<blockquote>
+<p>Timestamps really are a shorthand value for representing the state of the world from the start of the universe to the current moment - if something occurred at a particular timestamp, then it was potentially inﬂuenced by everything that happened before it.</p>
+</blockquote>
+<p>什么是时间戳（Timestamps），Timestamps定义了世界从初始到现在的状态，如果某件事发生在一个特定的时间点上，是之前影响产生的结果。</p>
+<p>此处有个大前提，所有的时间都以相同的速率前行着，time and timestamps在程序中应用的时候，有3个常用的解释：</p>
+<ul>
+<li>Order</li>
+<li>Duration</li>
+<li>Interpretation</li>
+</ul>
+<p>当我说：time is a source of order，我指的是：</p>
+<ul>
+<li>we can attach timestamps to unordered events to order them【通过给事件安排一个时间戳，从而给事件排序】</li>
+<li>we can use timestamps to enforce a speciﬁc ordering of operations or the delivery of messages (for example, by delaying an operation if it arrives out of order)【我们可以通过时间戳给操作重新排序】</li>
+<li>we can use the value of a timestamp to determine whether something happened chronologically before something else【通过时间戳知道哪个事件发生在前】</li>
+</ul>
+<blockquote>
+<p>Interpretation - time as a universally comparable value.</p>
+</blockquote>
+<p>时间戳的绝对值解释为日期（date），对人们非常有用的概念</p>
+<blockquote>
+<p>Duration - durations measured in time have some relation to the real world.</p>
+</blockquote>
+<p>像算法一般只关心Duration，通过Duration来判断延迟，一个好的算法都希望能有低延迟。</p>
+<h2 id="Does-time-progress-at-the-same-rate-everywhere"><a href="#Does-time-progress-at-the-same-rate-everywhere" class="headerlink" title="Does time progress at the same rate everywhere?"></a>Does time progress at the same rate everywhere?</h2><p>对于问题：时间以同样的速率进行吗？有3个常见的回答：</p>
+<ul>
+<li>“Global clock”: yes</li>
+<li>“Local clock”: no, but</li>
+<li>“No clock”: no!</li>
+</ul>
+<p>以上回答的的意思是：</p>
+<ul>
+<li>the synchronous system model has a global clock, </li>
+<li>the partially synchronous model has a local clock, and </li>
+<li>in the asynchronous system model one cannot use clocks at all</li>
+</ul>
+<p>下面分别来看下</p>
+<h3 id="Time-with-a-“global-clock”-assumption"><a href="#Time-with-a-“global-clock”-assumption" class="headerlink" title="Time with a “global-clock” assumption"></a>Time with a “global-clock” assumption</h3><p>全局时钟（global-clock）假设是我们有个非常精确的时钟，我们任何人在任何地方都能看到他。这也是平时生活中我们最习以为常的时钟，对于不同时钟间微小的差别我们并不关注。</p>
+<p>在实际系统中，如果我们假设有个global-clock，即每个节点的时钟都是同步的，那么我们可以通过timestamps都就可以得到一个total order，但是在系统间维持时钟同步是非常难的，我们只能做到一定的范围内的同步。</p>
+<p>目前忽略时钟之间的不同步问题做出来的系统有：</p>
+<ul>
+<li>Facebook’s Cassandra：通过时间戳来解决冲突</li>
+<li>Google’s Spanner：时间戳+偏差范围来定义顺序</li>
+</ul>
+<h3 id="Time-with-a-“Local-clock”-assumption"><a href="#Time-with-a-“Local-clock”-assumption" class="headerlink" title="Time with a “Local-clock” assumption"></a>Time with a “Local-clock” assumption</h3><p>它假设了一个偏序关系</p>
+<blockquote>
+<p> events on each system are ordered but events cannot be ordered across systems by only using a clock.</p>
+</blockquote>
+<p>同一个机器上我们可以通过时间戳来排序，但是不同机器上的时间戳不能比较</p>
+<h3 id="Time-with-a-“No-clock”-assumption"><a href="#Time-with-a-“No-clock”-assumption" class="headerlink" title="Time with a “No-clock” assumption"></a>Time with a “No-clock” assumption</h3><p>不在使用时间戳，而是使用counter，通过传递消息来交换counter，从而定义不同机器之间的事件的前后顺序，比较有名的论文就是：<a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/time-clocks.pdf" target="_blank" rel="noopener">time, clocks and the ordering of events</a>。</p>
+<h2 id="How-is-time-used-in-a-distributed-system"><a href="#How-is-time-used-in-a-distributed-system" class="headerlink" title="How is time used in a distributed system?"></a>How is time used in a distributed system?</h2><p>时间的好处是：</p>
+<ol>
+<li>Time can deﬁne order across a system (without communication)</li>
+<li>Time can deﬁne boundary conditions for algorithms</li>
+</ol>
+<p>在分布式系统中，定义事件的顺序非常重要，因为：</p>
+<ul>
+<li>where correctness depends on (agreement on) correct event ordering, for example serializability in a distributed database【正确性依赖于事件的顺序】</li>
+<li>order can be used as a tie breaker when resource contention occurs, for example if there are two orders for a widget, fulﬁll the ﬁrst and cancel the second one【当发生资源争用的时候可以用来做裁决】</li>
+</ul>
+<p>当我们有全局时钟的时候，我们不需要通信就能够确定顺序，不幸的是，我们一般都没有全局时钟，因此只能通过通信来确定时序。</p>
+<p>时间除了用来确定时序外，还能定义算法的边界，特别是可以区分 high latency 和 server or network link is down，而用来探测它俩区别的算法就是：failure detectors。</p>
+<h2 id="Failure-detectors-time-for-cutoﬀ"><a href="#Failure-detectors-time-for-cutoﬀ" class="headerlink" title="Failure detectors (time for cutoﬀ)"></a>Failure detectors (time for cutoﬀ)</h2><p>在分布式环境中，我们怎么知道一个节点是否宕机了呢？我们可以通过等待一定时间后认为节点失败了。</p>
+<p>那问题是这个一定时间是多久呢？</p>
+<p>这依赖于节点之间的延迟，算法一般不会直接设置一个精确的值，而是会对“<strong>一定时间</strong>”这个概念做个很好的抽象。</p>
+<blockquote>
+<p> A failure detector is a way to abstract away the exact timing assumptions. Failure detectors are implemented using heartbeat messages and timers. Processes exchange heartbeat messages. If a message response is not received before the timeout occurs, then the process suspects the other process.</p>
+</blockquote>
+<p>而failure detector是一个解决方案，通过心挑信息来探测存活性。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/01/22/2017-01-22-Distributed-systems-for-fun-and-profit-2/" rel="prev" title="袖珍分布式系统（二）">
+      <i class="fa fa-chevron-left"></i> 袖珍分布式系统（二）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/01/24/2017-01-24-Distributed-systems-for-fun-and-profit-4/" rel="next" title="袖珍分布式系统（四）">
+      袖珍分布式系统（四） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Time-and-order"><span class="nav-number">1.</span> <span class="nav-text">Time and order</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Total-and-partial-order"><span class="nav-number">2.</span> <span class="nav-text">Total and partial order</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-time"><span class="nav-number">3.</span> <span class="nav-text">What is time?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Does-time-progress-at-the-same-rate-everywhere"><span class="nav-number">4.</span> <span class="nav-text">Does time progress at the same rate everywhere?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Time-with-a-“global-clock”-assumption"><span class="nav-number">4.1.</span> <span class="nav-text">Time with a “global-clock” assumption</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Time-with-a-“Local-clock”-assumption"><span class="nav-number">4.2.</span> <span class="nav-text">Time with a “Local-clock” assumption</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Time-with-a-“No-clock”-assumption"><span class="nav-number">4.3.</span> <span class="nav-text">Time with a “No-clock” assumption</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-is-time-used-in-a-distributed-system"><span class="nav-number">5.</span> <span class="nav-text">How is time used in a distributed system?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Failure-detectors-time-for-cutoﬀ"><span class="nav-number">6.</span> <span class="nav-text">Failure detectors (time for cutoﬀ)</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="上篇讲到了数据库Relation的实现，本篇接着讲migrations or database modification logic的功能，此处开始的git是gic coaa98553。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="orm 系列 之 Eloquent演化历程2">
+<meta property="og:url" content="http://yoursite.com/2016/11/27/2016-11-27-eloquent-2/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="上篇讲到了数据库Relation的实现，本篇接着讲migrations or database modification logic的功能，此处开始的git是gic coaa98553。">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/2f10325b69cc4b1dd7264c5a05e53edba013ba7e">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/0df7a6fd1e0e6e3d3b470b7cf4e138f784668356">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/279f0d47f77249dbee7d6b56272dbca6b8aac0f9">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/1a40b0eff9e52819764663e5eb64f23d9471548a">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/c63cda2bce5062aa99f2a7f330a5aa797f5eab62">
+<meta property="article:published_time" content="2016-11-27T08:50:28.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.382Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="orm">
+<meta property="article:tag" content="eloquent">
+<meta property="article:tag" content="laravel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/2f10325b69cc4b1dd7264c5a05e53edba013ba7e">
+
+<link rel="canonical" href="http://yoursite.com/2016/11/27/2016-11-27-eloquent-2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>orm 系列 之 Eloquent演化历程2 | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/27/2016-11-27-eloquent-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          orm 系列 之 Eloquent演化历程2
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-11-27 16:50:28" itemprop="dateCreated datePublished" datetime="2016-11-27T16:50:28+08:00">2016-11-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/11/27/2016-11-27-eloquent-2/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 Eloquent演化历程2" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/2f10325b69cc4b1dd7264c5a05e53edba013ba7e" alt="Eloquent ORM"></p>
+<p>上篇讲到了数据库Relation的实现，本篇接着讲<strong>migrations or database modification logic</strong>的功能，此处开始的git是<code>gic coaa98553</code>。</p>
+<a id="more"></a>
+
+<p>本文是orm系列的第三篇，也是Eloquent演化的第二篇，Eloquent系列会尝试着讲清楚Eloquent是如何一步一步演化到目前功能强大的版本的，但是毕竟个人能力有限，不可能分析的非常完善，总会有不懂的地方，所以讲的错误的地方，<strong>恳请大牛们能不吝赐教</strong>；或者如果有什么地方是没看懂的，也请提出来，因为可能那地方就是我自己没看懂，所以没讲明白，你提出后我们就可以<strong>一起讨论</strong>，让我们能<strong>共同的进步</strong>的。</p>
+<h2 id="数据库蓝图"><a href="#数据库蓝图" class="headerlink" title="数据库蓝图"></a>数据库蓝图</h2><p>先开始本文的主题。数据库管理相关的代码都放在Schema目录下， 最开始的结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">src&#x2F;Illuminate&#x2F;Database&#x2F;Schema</span><br><span class="line">├── Blueprint.php</span><br><span class="line">└── Builder.php</span><br></pre></td></tr></table></figure>
+
+<p>就两个文件Blueprint和Builder，Schema/Builder负责提供数据库操作的面向对象似的操作，而Schema/Blueprint则负责存储具体的操作数据，包括数据库操作的命令和数据库表的定义，因此有下面的结构：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/0df7a6fd1e0e6e3d3b470b7cf4e138f784668356" alt=""></p>
+<p>接着，我们看看是怎么使用Blueprint的，下看创建table</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$grammar = <span class="keyword">new</span> Illuminate\Database\Schema\Grammars\MySqlGrammar;</span><br><span class="line">$blueprint = <span class="keyword">new</span> Blueprint(<span class="string">'users'</span>);</span><br><span class="line">$blueprint-&gt;create();</span><br><span class="line">$blueprint-&gt;increments(<span class="string">'id'</span>);</span><br><span class="line">$blueprint-&gt;string(<span class="string">'email'</span>);</span><br><span class="line">$statements = $blueprint-&gt;toSql($grammar);</span><br></pre></td></tr></table></figure>
+
+<p>此时返回的<code>$statements</code>是一个array，有<code>count($statements)==1</code>，并且<code>$statements[0]</code>为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create table &#96;users&#96; (&#96;id&#96; int not null auto_increment primary key, &#96;email&#96; varchar(255) not null)</span><br></pre></td></tr></table></figure>
+
+<p>我们现在来看下上述是怎么实现的？</p>
+<p>首先构造函数传入表名<code>users</code>，而<code>create</code>则是加了一个命令</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">create</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">$this</span>-&gt;addCommand(<span class="string">'create'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>addCommand</code>则是将命令加入进<code>$this-&gt;commands</code>中，而下面的<code>increments</code>函数如下:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">increments</span><span class="params">($column)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;integer($column, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">integer</span><span class="params">($column, $autoIncrement = false)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;addColumn(<span class="string">'integer'</span>, $column, compact(<span class="string">'autoIncrement'</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其最终是调用了<code>addColumn</code>将其加入进<code>$this-&gt;columns</code>中，下面看下<code>toSql</code>函数，其核心是下面的部分:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;commands <span class="keyword">as</span> $command)</span><br><span class="line">&#123;</span><br><span class="line">  $method = <span class="string">'compile'</span>.ucfirst($command-&gt;name);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (method_exists($grammar, $method))</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( ! is_null($sql = $grammar-&gt;$method(<span class="keyword">$this</span>, $command)))</span><br><span class="line">    &#123;</span><br><span class="line">      $statements = array_merge($statements, (<span class="keyword">array</span>) $sql);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于每个命令，我们都调用grammar的<code>compileCommand</code>函数，此处我们调用的是<code>compileCreate</code>函数，至此我们就分析完了数据库表操作的方法，下面我们来看<strong>migrations</strong>功能。</p>
+<h2 id="数据库迁移"><a href="#数据库迁移" class="headerlink" title="数据库迁移"></a>数据库迁移</h2><p>让我们先看目录结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">src&#x2F;Illuminate&#x2F;Database&#x2F;Console</span><br><span class="line">└── Migrations</span><br><span class="line">    ├── MigrateCommand.php</span><br><span class="line">    ├── MigrationRepositoryInterface.php</span><br><span class="line">    └── Migrator.php</span><br></pre></td></tr></table></figure>
+
+<p>此处有个新的知识点，也是laravel中一大亮点Artisan，Artisan是 Laravel 自带的命令行接口名称，此处不做具体的介绍了，有机会再细说的，当我们在命令行中执行<code>php artisan command</code>的时候，会去调用migrateCommand，然后最后会调用Migrator中的函数<code>runMigrations</code>函数，看下面分析：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">runMigrations</span><span class="params">(OuputInterface $output, $package, $path, $pretend = false)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">$this</span>-&gt;output-&gt;writeln(<span class="string">'&lt;info&gt;Running migrations at path: '</span>.$path.<span class="string">'&lt;/info&gt;'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 从文件中获取migrate files</span></span><br><span class="line">  $files = <span class="keyword">$this</span>-&gt;getMigrationFiles($path);</span><br><span class="line">  <span class="comment">// 获取已经执行的migration</span></span><br><span class="line">  $ran = <span class="keyword">$this</span>-&gt;repository-&gt;getRanMigrations($package);</span><br><span class="line">  <span class="comment">// 比较不同</span></span><br><span class="line">  $migrations = array_diff($files, $ran);</span><br><span class="line"> <span class="comment">// 执行未执行的migration</span></span><br><span class="line">  <span class="keyword">$this</span>-&gt;runMigrationList($output, $migrations, $package, $pretend);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="大版本前夜"><a href="#大版本前夜" class="headerlink" title="大版本前夜"></a>大版本前夜</h2><p>看完上面的最基本版本的migrator，我们跨越下直接来看tag v1.1.1版本的eloquent，</p>
+<blockquote>
+<p>git co v1.1.1</p>
+</blockquote>
+<p>此版本是v4.0.0之前的一个版本，从这以后laravel会以组件的形式组织各个功能，让我们分析下v1.1.1的版本，目前具有哪些功能，都是怎么实现的，先看下目录结构：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/279f0d47f77249dbee7d6b56272dbca6b8aac0f9" alt=""></p>
+<p>分别介绍下：</p>
+<p>Console和Migrations：这是本篇讲<strong>migrations or database modification logic</strong>的功能</p>
+<p>Eloquent：是前一篇讲的对于Active Record模式中Model的功能，包括了Model、Builder和Relation功能，忘记的可以去看前一篇<a href="http://www.jianshu.com/p/6364958b138f" target="_blank" rel="noopener">orm 系列 之 Eloquent演化历程1</a>的内容</p>
+<p>Query：包含了最基本的Sql的操作和语法逻辑，类似于自定义了一个DSL语言，提供了面向对象的操作方式</p>
+<p>Schema：这也是本篇讲<strong>migrations or database modification logic</strong>的功能，主要是对数据库表操作sql的建模</p>
+<p>此处Connectors是之前没有介绍过的，Connectors是在<strong><em>f917efa</em></strong>中第一次加入的，我们看下到底做了什么，其目录结构是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">src&#x2F;Illuminate&#x2F;Database&#x2F;Connectors</span><br><span class="line">├── ConnectionFactory.php</span><br><span class="line">├── Connector.php</span><br><span class="line">├── ConnectorInterface.php</span><br><span class="line">├── MySqlConnector.php</span><br><span class="line">├── PostgresConnector.php</span><br><span class="line">├── SQLiteConnector.php</span><br><span class="line">└── SqlServerConnector.php</span><br></pre></td></tr></table></figure>
+
+<p>看名字我们就知道大致是怎么回事了，<code>ConnectorInterface</code>定义了接口，<code>Connector</code>是基类，<code>ConnectionFactory</code>是工厂模式，负责创建具体的Connectors，再看下Connector文件，里面有个函数叫：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createConnection</span><span class="params">($dsn, array $config, array $options)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  $username = array_get($config, <span class="string">'username'</span>);</span><br><span class="line"></span><br><span class="line">  $password = array_get($config, <span class="string">'password'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> PDO($dsn, $username, $password, $options);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实就是对创建PDO的封装，随着代码复杂度的提高，我们根据SOLID原则（SOLID原则可以看<a href="http://www.jianshu.com/p/f7a4ed97773f" target="_blank" rel="noopener">The Clean Architecture in PHP 读书笔记(三)</a>），将创建PDO这部分功能单独抽离出来，变为了Connectors，然后根据SOLID原则，我们再继续看下<code>ConnectionInterface</code>和<code>ConnectionResolverInterface</code>，分别负责的功能可以看下图：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/1a40b0eff9e52819764663e5eb64f23d9471548a" alt=""></p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/c63cda2bce5062aa99f2a7f330a5aa797f5eab62" alt=""></p>
+<p>我们可以看到<code>ConnectionInterface</code>负责数据库的操作，<code>ConnectionResolverInterface</code>负责connection的管理，原先这些功能在稍早的版本中都是揉在一起的，还是那个观点：</p>
+<blockquote>
+<p>随着项目复杂度的提升，我们遵循关注点分离的原则，不断去对系统做解耦工作</p>
+</blockquote>
+<h2 id="新增功能"><a href="#新增功能" class="headerlink" title="新增功能"></a>新增功能</h2><p>我们接着本篇开头介绍的migrate功能，来看下v1.1.0版本中有的功能，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">src&#x2F;Illuminate&#x2F;Database&#x2F;Console</span><br><span class="line">├── Migrations</span><br><span class="line">│   ├── BaseCommand.php</span><br><span class="line">│   ├── InstallCommand.php</span><br><span class="line">│   ├── MakeCommand.php</span><br><span class="line">│   ├── MigrateCommand.php</span><br><span class="line">│   ├── RefreshCommand.php</span><br><span class="line">│   ├── ResetCommand.php</span><br><span class="line">│   └── RollbackCommand.php</span><br><span class="line">└── SeedCommand.php</span><br></pre></td></tr></table></figure>
+
+<p>此时Migrations目录下都是支持的命令，而Migrations下面是具体的实现了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">src&#x2F;Illuminate&#x2F;Database&#x2F;Migrations</span><br><span class="line">├── DatabaseMigrationRepository.php</span><br><span class="line">├── Migration.php</span><br><span class="line">├── MigrationCreator.php</span><br><span class="line">├── MigrationRepositoryInterface.php</span><br><span class="line">├── Migrator.php</span><br><span class="line">└── stubs</span><br><span class="line">    ├── blank.php</span><br><span class="line">    ├── create.php</span><br><span class="line">    └── update.php</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到Eloquent中到处都是接口，接口定义了要满足的契约，彼此之间都过接口交流，最大的进行了解耦。</p>
+<p>我们通过一个比较有意思的命令Make来看下migration的实现，make的作用是新建一个migration文件，其会根据命令函数参数，去读取<em>src/Illuminate/Database/Migrations/stubs</em>下面的3个文件中的一个，然后调用下面的函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">populateStub</span><span class="params">($name, $stub, $table)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  $stub = str_replace(<span class="string">'&#123;&#123;class&#125;&#125;'</span>, camel_case($name), $stub);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Here we will replace the table place-holders with the table specified by</span></span><br><span class="line">  <span class="comment">// the developer. This is useful for quickly creaeting a tables creation</span></span><br><span class="line">  <span class="comment">// or update migration from the console instead of typing it manually</span></span><br><span class="line">  <span class="keyword">if</span> ( ! is_null($table))</span><br><span class="line">  &#123;</span><br><span class="line">    $stub = str_replace(<span class="string">'&#123;&#123;table&#125;&#125;'</span>, $table, $stub);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> $stub;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>做一个简单的字符串替换，然后产生文件，然后还有一个比较有意思的是<code>DatabaseMigrationRepository</code>类，其作用是：我们需要记录migration哪些已经做了，哪些还没有做，这些记录方式我们通过<code>DatabaseMigrationRepository</code>来实现，最终是通过将执行记录以log的形式插入到数据库中。</p>
+<p>本文最后讲下Eloquent中新增的对象之间的关系：多态关系，以下内容摘自<a href="http://laravelacademy.org/post/6191.html#ipt_kb_toc_6191_2" target="_blank" rel="noopener">[ Laravel 5.3 文档 ] Eloquent ORM —— 关联关系</a></p>
+<p><strong>表结构</strong></p>
+<p>多态关联允许一个模型在单个关联下属于多个不同模型。例如，假设应用用户既可以对文章进行评论也可以对视频进行评论，使用多态关联，你可以在这两种场景下使用单个<code>comments</code>表，首先，让我们看看构建这种关联关系需要的表结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">posts</span><br><span class="line">id - integer</span><br><span class="line">title - string</span><br><span class="line">    body - text</span><br><span class="line"></span><br><span class="line">videos</span><br><span class="line">  id - integer</span><br><span class="line">  title - string</span><br><span class="line">  url - string</span><br><span class="line"></span><br><span class="line">comments</span><br><span class="line">    id - integer</span><br><span class="line">    body - text</span><br><span class="line">    commentable_id - integer</span><br><span class="line">    commentable_type - string</span><br></pre></td></tr></table></figure>
+
+<p>两个重要的需要注意的列是 <code>comments</code> 表上的 <code>commentable_id</code> 和 <code>commentable_type</code>。<code>commentable_id</code>列对应 <code>Post</code> 或<code>Video</code> 的 ID 值，而 <code>commentable_type</code> 列对应所属模型的类名。当访问 <code>commentable</code> 关联时，ORM 根据<code>commentable_type</code> 字段来判断所属模型的类型并返回相应模型实例。</p>
+<p><strong>模型结构</strong></p>
+<p>接下来，让我们看看构建这种关联关系需要在模型中定义什么：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Database</span>\<span class="title">Eloquent</span>\<span class="title">Model</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Comment</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Get all of the owning commentable models.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">commentable</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;morphTo();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Post</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Get all of the post's comments.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">comments</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;morphMany(<span class="string">'App\Comment'</span>, <span class="string">'commentable'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Video</span> <span class="keyword">extends</span> <span class="title">Model</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Get all of the video's comments.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">comments</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;morphMany(<span class="string">'App\Comment'</span>, <span class="string">'commentable'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上内容来自<a href="http://laravelacademy.org/post/6191.html#ipt_kb_toc_6191_2" target="_blank" rel="noopener">[ Laravel 5.3 文档 ] Eloquent ORM —— 关联关系</a>，接下去让我们看下这是怎么实现的？</p>
+<p>首先是<code>morphMany</code>的构造函数：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(Builder $query, Model $parent, $morphName)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">$this</span>-&gt;morphType = <span class="string">"&#123;$morphName&#125;_type"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">$this</span>-&gt;morphClass = get_class($parent);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">parent</span>::__construct($query, $parent, <span class="string">"&#123;$morphName&#125;_id"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后<code>morphMany</code>其实是扩展是<code>HasOneOrMany</code>，然后再加限制的时候，新增了一个<code>$this-&gt;query-&gt;where($this-&gt;morphType, $this-&gt;morphClass);</code>，通过这个限制就可以解决多态关联了，那上面的例子来说，就是多个条件<code>commentable_type=Video</code>，至于<code>HasOneOrMany</code>的分析参考上一篇文章。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是v4.0.0之前的Eloquent的大致功能，目前orm功能已经完善了，数据库迁移功能，Active Record模式的实现，下一步Eloquent的方向是什么呢？让我们跟着git继续追踪吧^_^</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://laravelacademy.org/post/6191.html#ipt_kb_toc_6191_2" target="_blank" rel="noopener">[ Laravel 5.3 文档 ] Eloquent ORM —— 关联关系</a></p>
+<p>这是orm的第三篇，你的鼓励是我继续写下去的动力，期待我们共同进步。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/orm/" rel="tag"># orm</a>
+              <a href="/tags/eloquent/" rel="tag"># eloquent</a>
+              <a href="/tags/laravel/" rel="tag"># laravel</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/24/2016-11-24-eloquent-1/" rel="prev" title="orm 系列 之 Eloquent演化历程1">
+      <i class="fa fa-chevron-left"></i> orm 系列 之 Eloquent演化历程1
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/28/2016-11-28-eloquent-3/" rel="next" title="orm 系列 之 Eloquent使用1">
+      orm 系列 之 Eloquent使用1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库蓝图"><span class="nav-number">1.</span> <span class="nav-text">数据库蓝图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库迁移"><span class="nav-number">2.</span> <span class="nav-text">数据库迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大版本前夜"><span class="nav-number">3.</span> <span class="nav-text">大版本前夜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新增功能"><span class="nav-number">4.</span> <span class="nav-text">新增功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

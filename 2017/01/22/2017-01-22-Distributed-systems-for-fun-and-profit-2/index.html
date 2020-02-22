@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文是Distributed systems for fun and profit的第二部分，本文是阅读该文后的一些记录。 分布式编程大多数数时间都是在处理分布式后带来的影响。为什么这么说呢？因为虽然理想情况是：我们在分布式系统上编程跟在单机上编程一样，这种抽象对于程序员来说是最友好的，但是呢？理想很丰满，现实很骨感，我们必须拨开抽象，去处理影藏在单机抽象背后的多机系统带来的问题，才可能很好的解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="袖珍分布式系统（二）">
+<meta property="og:url" content="http://yoursite.com/2017/01/22/2017-01-22-Distributed-systems-for-fun-and-profit-2/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="本文是Distributed systems for fun and profit的第二部分，本文是阅读该文后的一些记录。 分布式编程大多数数时间都是在处理分布式后带来的影响。为什么这么说呢？因为虽然理想情况是：我们在分布式系统上编程跟在单机上编程一样，这种抽象对于程序员来说是最友好的，但是呢？理想很丰满，现实很骨感，我们必须拨开抽象，去处理影藏在单机抽象背后的多机系统带来的问题，才可能很好的解">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/267b8d3b1c03219824d3ae54eee6b1246f443c1b">
+<meta property="article:published_time" content="2017-01-22T02:35:34.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.395Z">
+<meta property="article:author" content="颛顼">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/267b8d3b1c03219824d3ae54eee6b1246f443c1b">
+
+<link rel="canonical" href="http://yoursite.com/2017/01/22/2017-01-22-Distributed-systems-for-fun-and-profit-2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>袖珍分布式系统（二） | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/22/2017-01-22-Distributed-systems-for-fun-and-profit-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          袖珍分布式系统（二）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-01-22 10:35:34" itemprop="dateCreated datePublished" datetime="2017-01-22T10:35:34+08:00">2017-01-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2017/01/22/2017-01-22-Distributed-systems-for-fun-and-profit-2/" class="post-meta-item leancloud_visitors" data-flag-title="袖珍分布式系统（二）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/267b8d3b1c03219824d3ae54eee6b1246f443c1b" alt=""></p>
+<p>本文是<a href="http://book.mixu.net/distsys/single-page.html" target="_blank" rel="noopener">Distributed systems for fun and profit</a>的第二部分，本文是阅读该文后的一些记录。</p>
+<p>分布式编程大多数数时间都是在处理分布式后带来的影响。为什么这么说呢？因为虽然理想情况是：我们在分布式系统上编程跟在单机上编程一样，这种抽象对于程序员来说是最友好的，但是呢？理想很丰满，现实很骨感，我们必须拨开抽象，去处理影藏在单机抽象背后的多机系统带来的问题，才可能很好的解决问题。因此，我们现在不断在寻求一个更好的抽象模型，尽可能的让编程在分布式环境下变的简单。</p>
+<p>那问题来了，怎么定义一个抽象更好呢？</p>
+<blockquote>
+<p>What do we mean when say X is more abstract than Y? First, that X does not introduce anything new or fundamentally diﬀerent from Y. In fact, X may remove some aspects of Y or present them in a way that makes them more manageable. Second, that X is in some sense easier to grasp than Y, assuming that the things that X removed from Y are not important to the matter at hand.</p>
+</blockquote>
+<p>总结起来就是：用尽可能少的假设来描述清楚一个东西。</p>
+<p>抽象非常重要，能够帮我们抓住主要问题，如果我们能抓住本质，那此时想出来的解决方案已定也是最通用的。</p>
+<p>那问题有来了，我们怎么知道哪些东西是只要的，或者说是本质的？</p>
+<p>我们每次在实际问题上，剥离掉系统一个具体的限制的时候（假设这个不是主要问题），都可能给系统埋下隐患，这也是为什么后期系统必须要重新将限制引入系统，因为这些去掉的限制，才是影响到系统工作的真正因素。</p>
+<p>有了这个概念，接着就可以介绍在保持下系统工作的同时，最少的假设条件是多少，这种假设条件演化出来的就是我们经常说的系统模型。</p>
+<h2 id="A-system-model"><a href="#A-system-model" class="headerlink" title="A system model"></a>A system model</h2><p>分布式系统最大的属性就是：分布式，更具体来说，一个分布式系统中的程序具有的属性有：</p>
+<ul>
+<li>run concurrently on independent nodes …【独立节点上并发执行】</li>
+<li>are connected by a network that may introduce nondeterminism and message loss …【通过网络互连】</li>
+<li>and have no shared memory or shared clock.【不共享内存和时钟】</li>
+</ul>
+<p>具体解释是：</p>
+<ul>
+<li>each node executes a program concurrently【每个节点都并发执行】</li>
+<li>knowledge is local: nodes have fast access only to their local state, and any information about global state is potentially out of date 【每个节点只知道自己节点上的信息】</li>
+<li>nodes can fail and recover from failure independently 【每个节点失败和恢复都是独立的】</li>
+<li>messages can be delayed or lost (independent of node failure; it is not easy to distinguish network failure and node failure) 【通信是不可靠的】</li>
+<li>and clocks are not synchronized across nodes (local timestamps do not correspond to the global real time order, which cannot be easily observed)【时钟不同步】</li>
+</ul>
+<p>那什么是系统模型？</p>
+<blockquote>
+<p>System model：a set of assumptions about the environment and facilities on which a distributed system is implemented</p>
+</blockquote>
+<p>系统模型定义了关于 environment and facilities 的假设，这些假设包括：</p>
+<ul>
+<li>what capabilities the nodes have and how they may fail 【每个节点能力和失败方式】</li>
+<li>how communication links operate and how they may fail and 【节点间通信方式和失败方式】</li>
+<li>properties of the overall system, such as assumptions about time and order【整个系统属性：如时序】</li>
+</ul>
+<p>什么是抗造系统，就是系统模型做了最少的假设，由于假设少，基于这种系统设计的算法，都是容错性非常好的，但是同样的，由于假设少，所以算法也很难理解。</p>
+<p>下面是具体介绍：properties of nodes, links and time and order</p>
+<h2 id="Nodes-in-our-system-model"><a href="#Nodes-in-our-system-model" class="headerlink" title="Nodes in our system model"></a>Nodes in our system model</h2><p>节点是系统有计算和存储能力的hosts，它们能：</p>
+<ul>
+<li>the ability to execute a program </li>
+<li>the ability to store data into volatile memory (which can be lost upon failure) and into stable state (which can be read after a failure) </li>
+<li>a clock (which may or may not be assumed to be accurate)</li>
+</ul>
+<p>此处我们假设node的failure models是 <strong>crash-recovery failure model</strong>，而考虑 <strong>Byzantine fault tolerance</strong></p>
+<h2 id="Communication-links-in-our-system-model"><a href="#Communication-links-in-our-system-model" class="headerlink" title="Communication links in our system model"></a>Communication links in our system model</h2><p>分布式系统中最难处理的假设就是通信假设，我们在分布式系统中，一个系统很难知道另一个系统的情况，因为任何的通信都是不可靠的，信息都无法交流，还怎么知道别人的情况，因此分布式系统中，能依赖的只有节点本身的信息。</p>
+<h2 id="Timing-ordering-assumptions"><a href="#Timing-ordering-assumptions" class="headerlink" title="Timing / ordering assumptions"></a>Timing / ordering assumptions</h2><p>在分布式系统中我们必须认识到：每个node看到的世界都是不同的，这个不同来自于一个事实：信息的传输需要时间。对于同一件事情，每个节点看到这个事情的时间都是不一样的，因此每个节点看到的世界，其时间点都是不同的。</p>
+<p>有两个主要的关于时间的模型:</p>
+<blockquote>
+<p>Synchronous system </p>
+<p>​    model Processes execute in lock-step; there is a known upper bound on message transmission delay; each process has an accurate clock </p>
+<p>Asynchronous system </p>
+<p>​    model No timing assumptions - e.g. processes execute at independent rates; there is no bound on message transmission delay; useful clocks do not exist</p>
+</blockquote>
+<h2 id="The-consensus-problem"><a href="#The-consensus-problem" class="headerlink" title="The consensus problem"></a>The consensus problem</h2><p>下面对网络是否分区包含在错误模型中和网络传输是同步还是异步模型两个条件的讨论</p>
+<ul>
+<li>whether or not network partitions are included in the failure model, and</li>
+<li>synchronous vs. asynchronous timing assumptions</li>
+</ul>
+<p>先介绍下什么一致性模型</p>
+<ol>
+<li>Agreement: Every correct process must agree on the same value.</li>
+<li>Integrity: Every correct process decides at most one value, and if it decides some value, then it must have been proposed by some process.</li>
+<li>Termination: All processes eventually reach a decision.</li>
+<li>Validity: If all correct processes propose the same value V, then all correct processes decide V.</li>
+</ol>
+<h2 id="Two-impossibility-results"><a href="#Two-impossibility-results" class="headerlink" title="Two impossibility results"></a>Two impossibility results</h2><p>什么是impossibility results</p>
+<blockquote>
+<p>A proof of impossibility, also known as negative proof, proof of an impossibility theorem, or negative result, is a <a href="http://dict.eudic.net/dicts/en/Mathematical_proof.html" target="_blank" rel="noopener">proof</a> demonstrating that a particular problem cannot be solved, or cannot be solved in general. Often proofs of impossibility have put to rest decades or centuries of work attempting to find a solution. To prove that something is impossible is usually much harder than the opposite task; it is necessary to develop a theory. Impossibility theorems are usually expressible as universal propositions in logic (see <a href="http://dict.eudic.net/dicts/en/Universal_quantification.html" target="_blank" rel="noopener">universal quantification</a>).</p>
+</blockquote>
+<p>说白点就是证明了某项事情是不可能的，这样子人们就不用去朝着这个东西再去白费力气了。</p>
+<p>在分布式中有两个重要的impossibility results，FLP 和 CAP，FLP的重要性在于学术研究，此处不做过多介绍，下面主要介绍下CAP</p>
+<h2 id="The-CAP-theorem"><a href="#The-CAP-theorem" class="headerlink" title="The CAP theorem"></a>The CAP theorem</h2><p>CAP中每个字母代表是：</p>
+<ul>
+<li>Consistency: all nodes see the same data at the same time.（一致性）</li>
+<li>Availability: node failures do not prevent survivors from continuing to operate.（可用性）</li>
+<li>Partition tolerance: the system continues to operate despite message loss due to network and/or node failure（分区容忍性）</li>
+</ul>
+<p>上面3个特性，只有2个能同时满足，因此我们会有3种系统：</p>
+<ul>
+<li>CA (consistency + availability). Examples include full strict quorum protocols, such as two-phase commit.</li>
+<li>CP (consistency + partition tolerance). Examples include majority quorum protocols in which minority partitions are unavailable such as Paxos.</li>
+<li>AP (availability + partition tolerance). Examples include protocols using conﬂict resolution, such as Dynamo.</li>
+</ul>
+<p>CA和CP系统都提供了强一致性模型，不同是CA不可以容忍网络分区，而CP在2f+1个节点中，可以容忍f个节点失败，原因很简单：</p>
+<ul>
+<li>A CA system does not distinguish between node failures and network failures, and hence must stop accepting writes everywhere to avoid introducing divergence (multiple copies). It cannot tell whether a remote node is down, or whether just the network connection is down: so the only safe thing is to stop accepting writes.【不能区分网络分区和节点失败，因此必须停止写入避免引入不一致】</li>
+<li>A CP system prevents divergence (e.g. maintains single-copy consistency) by forcing asymmetric behavior on the two sides of the partition. It only keeps the majority partition around, and requires the minority partition to become unavailable (e.g. stop accepting writes), which retains a degree of availability (the majority partition) and still ensures single-copy consistency.【即使网络分区了，大多数节点的一方还是能够提供服务】</li>
+</ul>
+<p>CP系统因为将网络分区考虑到了failure model中，因此能够通过类似Paxos, Raft 的协议来区分a majority partition and a minority partition</p>
+<p>CA则由于没有考虑网络分区的情况，因此无法知道一个节点不响应式因为节点收不到消息还是节点失败了，因此只能够通过停止服务来防止出现数据一致，在CA中由于不能保证网络可靠性，因此通过使用two-phase commit algorithm来保证数据一致性。</p>
+<p>当分区出现的时候，我们有两个选择：availability 还是 consistency。</p>
+<p>从CAP理论中我们能得到4个结论：</p>
+<ol>
+<li>First, that many system designs used in early distributed relational database systems did not take into account partition tolerance (e.g. they were CA designs). Partition tolerance is an important property for modern systems, since network partitions become much more likely if the system is geographically distributed (as many large systems are).【早期系统大多没有考虑P，因此是CA系统，但是现代系统，特别是出现异地多主后，必须考虑分区了】</li>
+<li>Second, that there is a tension between strong consistency and high availability during network partitions. The CAP theorem is an illustration of the tradeoﬀs that occur between strong guarantees and distributed computation.【P既然无法避免，我们只能在C和A之间做选择，有时候我们可以通过降低数据的一致性模型，不再追求强一致，从而达到”CAP”】</li>
+<li>Third, that there is a tension between strong consistency and performance in normal operation.【当一个操作涉及的消息数和节点的数少的时候，延迟自然就低，但是这也意味着有些节点不会被经常访问，意味着数据会是旧数据】</li>
+<li>Fourth - and somewhat indirectly - that if we do not want to give up availability during a network partition, then we need to explore whether consistency models other than strong consistency are workable for our purposes.【有时候3选2可能是误解，我们如果将自己不限制在强一致性模型，我们会有更多的选择】</li>
+</ol>
+<p>我们要记住：</p>
+<blockquote>
+<p>ACID consistency != CAP consistency != Oatmeal consistency</p>
+</blockquote>
+<p>一致性模型的概念是：</p>
+<blockquote>
+<p>Consistency model </p>
+<p>a contract between programmer and system, wherein the system guarantees that if the programmer follows some speciﬁc rules, the results of operations on the data store will be predictable</p>
+</blockquote>
+<p>一致性模型是编程者和系统之间的契约，只要编程者按照某种规则，那计算机的操作结果就是可预测的。</p>
+<p>下面介绍一些一致性模型：</p>
+<h2 id="Strong-consistency-vs-other-consistency-models"><a href="#Strong-consistency-vs-other-consistency-models" class="headerlink" title="Strong consistency vs. other consistency models"></a>Strong consistency vs. other consistency models</h2><ul>
+<li>Strong consistency models (capable of maintaining a single copy)<ul>
+<li>Linearizable consistency</li>
+<li>Sequential consistency</li>
+</ul>
+</li>
+<li>Weak consistency models (not strong)<ul>
+<li>Client-centric consistency models</li>
+<li>Causal consistency: strongest model available</li>
+<li>Eventual consistency models</li>
+</ul>
+</li>
+</ul>
+<p>一致性模型可以分为两大类：强一致和弱一致。</p>
+<p>强一致模型给编程者提供的是一个和单机系统一样的模型，而弱一致，则让编程者清楚的意识要是在分布式环境下编程，而不是单机环境。</p>
+<h2 id="Strong-consistency-models"><a href="#Strong-consistency-models" class="headerlink" title="Strong consistency models"></a>Strong consistency models</h2><p>强一致性模型可以再细分为两大类：</p>
+<ul>
+<li>Linearizable consistency: Under linearizable consistency, all operations appear to have executed atomically in an order that is consistent with the global real-time ordering of operations. (Herlihy &amp; Wing, 1991)</li>
+<li>Sequential consistency: Under sequential consistency, all operations appear to have executed atomically in some order that is consistent with the order seen at individual nodes and that is equal at all nodes. (Lamport, 1979)</li>
+</ul>
+<p>两者的最大不同是：linearizable consistency要求操作的结果要和操作实际执行的顺序一致，而Sequential consistency则允许操作实际发生的顺序和操作产生结果的顺序不同，只要每个节点看到的顺序是一样的就行。两者之间的差别基本上可以忽略。</p>
+<h2 id="Client-centric-consistency-models"><a href="#Client-centric-consistency-models" class="headerlink" title="Client-centric consistency models"></a>Client-centric consistency models</h2><p>该一致性模型主要是为了解决下面的情况：客户端进行了某个操作，同时也看到了最新的结果，但是由于网络中断，重新连接到server，此时不能因为重新连接而看到一个旧的结果。</p>
+<h2 id="Eventual-consistency"><a href="#Eventual-consistency" class="headerlink" title="Eventual consistency"></a>Eventual consistency</h2><p>最终一致性我们需要知道两点：</p>
+<ol>
+<li>最终一致，这个最终是多久？我们需要有个下限，或者至少是一个平均值</li>
+<li>多个副本怎么达成一致？</li>
+</ol>
+<ul>
+<li>First, how long is “eventually”? It would be useful to have a strict lower bound, or at least some idea of how long it typically takes for the system to converge to the same value.【最终，这个时间是多久】</li>
+<li>Second, how do the replicas agree on a value? how非常重要，因为如果设计的不好，可能会导致数据丢失。</li>
+</ul>
+<p>因此，在谈论最终一致的时候，我们需要知道这可能是：”eventually last- writer-wins, and read-the-latest-observed-value in the meantime”</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/01/19/2017-01-19-Distributed-systems-for-fun-and-profit/" rel="prev" title="袖珍分布式系统（一）">
+      <i class="fa fa-chevron-left"></i> 袖珍分布式系统（一）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/01/23/2017-01-23-Distributed-systems-for-fun-and-profit-3/" rel="next" title="袖珍分布式系统（三）">
+      袖珍分布式系统（三） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#A-system-model"><span class="nav-number">1.</span> <span class="nav-text">A system model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nodes-in-our-system-model"><span class="nav-number">2.</span> <span class="nav-text">Nodes in our system model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Communication-links-in-our-system-model"><span class="nav-number">3.</span> <span class="nav-text">Communication links in our system model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Timing-ordering-assumptions"><span class="nav-number">4.</span> <span class="nav-text">Timing &#x2F; ordering assumptions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-consensus-problem"><span class="nav-number">5.</span> <span class="nav-text">The consensus problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Two-impossibility-results"><span class="nav-number">6.</span> <span class="nav-text">Two impossibility results</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-CAP-theorem"><span class="nav-number">7.</span> <span class="nav-text">The CAP theorem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Strong-consistency-vs-other-consistency-models"><span class="nav-number">8.</span> <span class="nav-text">Strong consistency vs. other consistency models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Strong-consistency-models"><span class="nav-number">9.</span> <span class="nav-text">Strong consistency models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Client-centric-consistency-models"><span class="nav-number">10.</span> <span class="nav-text">Client-centric consistency models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Eventual-consistency"><span class="nav-number">11.</span> <span class="nav-text">Eventual consistency</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

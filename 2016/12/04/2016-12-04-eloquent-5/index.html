@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="通过Eloquent实现Repository模式">
+<meta property="og:url" content="http://yoursite.com/2016/12/04/2016-12-04-eloquent-5/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/47f7847030e12ec9b13bda3393d853235eff1308">
+<meta property="article:published_time" content="2016-12-04T04:56:03.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.386Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="orm">
+<meta property="article:tag" content="eloquent">
+<meta property="article:tag" content="repository">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/47f7847030e12ec9b13bda3393d853235eff1308">
+
+<link rel="canonical" href="http://yoursite.com/2016/12/04/2016-12-04-eloquent-5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>通过Eloquent实现Repository模式 | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/04/2016-12-04-eloquent-5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          通过Eloquent实现Repository模式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-12-04 12:56:03" itemprop="dateCreated datePublished" datetime="2016-12-04T12:56:03+08:00">2016-12-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/12/04/2016-12-04-eloquent-5/" class="post-meta-item leancloud_visitors" data-flag-title="通过Eloquent实现Repository模式" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/47f7847030e12ec9b13bda3393d853235eff1308" alt=""></p>
+<a id="more"></a>
+
+<h2 id="胖胖的Eloquent"><a href="#胖胖的Eloquent" class="headerlink" title="胖胖的Eloquent"></a>胖胖的Eloquent</h2><p>Eloquent采用了ActiveRecord的模式，这也让Eloquent招致了好多批评，让我们去看现在<code>Eloquent/Model.php</code>文件， 该文件已经有3500多行，此时的Model集成了太多的功能了，一个新人很难短时去理解Model并去很好的使用了，目前Eloquent/Model中主要混合了4个功能：</p>
+<ol>
+<li>Domain Model（包括了data model和领域逻辑）</li>
+<li>Row Data Gateway（例如save，delete等数据持久化操作）</li>
+<li>Table data gateway（各种find方法）</li>
+<li>Factory（新建model）</li>
+</ol>
+<p>上面介绍的几种ORM设计模式，可以去之前的文章查看：<a href="http://www.jianshu.com/p/b0a3ab7f8d47" target="_blank" rel="noopener">orm 系列 之 常用设计模式</a></p>
+<p>我们可以看到Model中混合了各种模式，这就要求使用者在使用的时候清楚的知道怎么使用，这里的清楚知道怎么用是指根据SOILD原则，优雅的使用Model，本文的目的就是帮助Model的使用者达成优雅的目标。</p>
+<p>那理想的Model使用是什么样子的呢？我们希望Model的使用不是ActiveRecord，而是较为清晰的DataMapper模式，能够让domain model和database解耦，然后由DataMapper来完成映射工作，更具体点，我们希望的是像clean architecture中定义的架构一样，内层是Domain Model，外面是Domain Services，Domain Services又可以具体分为：</p>
+<ul>
+<li><p>Repositories</p>
+<p>服务领域对象的存取，如果后端是数据库，就是负责将数据从数据库中取出，将对象存入数据库。</p>
+</li>
+<li><p>Factories</p>
+<p>负责对象的创建。</p>
+</li>
+<li><p>Services</p>
+<p>具体的业务逻辑，通过调用多个对象和其他服务来完成一个业务目标。</p>
+</li>
+</ul>
+<p>由此实现很好的解耦和关注点分离，更具体的关注clean architecture可以查看简书专题：<a href="http://www.jianshu.com/collection/06fa35470be2" target="_blank" rel="noopener"><a href="http://www.jianshu.com/collection/06fa35470be2" target="_blank" rel="noopener">clean architecture</a></a>.</p>
+<h2 id="Eloquent拆解"><a href="#Eloquent拆解" class="headerlink" title="Eloquent拆解"></a>Eloquent拆解</h2><p>讲述了一些方法论后，我们来动手实作一下</p>
+<blockquote>
+<p>talk is cheap, show me the code</p>
+</blockquote>
+<p>第一步，我们定义一个member表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:migration MemberCreate</span><br></pre></td></tr></table></figure>
+
+<p>第二步，编写表定义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Schema::create(&#39;members&#39;,function(Blueprint $table)&#123;</span><br><span class="line">    $table-&gt;increments(&#39;id&#39;);</span><br><span class="line">    $table-&gt;string(&#39;login_name&#39;);</span><br><span class="line">    $table-&gt;string(&#39;display_name&#39;);</span><br><span class="line">    $table-&gt;integer(&#39;posts&#39;)-&gt;unsigned();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>第三步，执行migration</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan migrate</span><br></pre></td></tr></table></figure>
+
+<p>第四步，生成model文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php make:model Member</span><br></pre></td></tr></table></figure>
+
+<p>下面开始定义一些接口</p>
+<p>The Member Model Interface</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">interface MemberInterface</span><br><span class="line">&#123;</span><br><span class="line">    public function getID();</span><br><span class="line">    public function getLoginName();</span><br><span class="line">    public function getDisplayName();   </span><br><span class="line">    public function getPostCount();</span><br><span class="line">    public function incrementPostCount();</span><br><span class="line">    public function decrementPostCount();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The Eloquent Member Model Implementation</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Member</span> <span class="keyword">extends</span> <span class="title">Model</span> <span class="keyword">implements</span> <span class="title">MemberInterface</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> ATTR_DISPLAY_NAME = ‘display_name’;</span><br><span class="line">    <span class="keyword">const</span> ATTR_LOGIN_NAME = ‘login_name’;</span><br><span class="line">    <span class="keyword">const</span> ATTR_POST_COUNT = ‘posts’;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">protected</span> $fillable = [</span><br><span class="line">        <span class="keyword">self</span>::ATTR_LOGIN_NAME,</span><br><span class="line">        <span class="keyword">self</span>::ATTR_DISPLAY_NAME</span><br><span class="line">    ];</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getID</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;getKey()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getLoginName</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;&#123;<span class="keyword">self</span>::ATTR_LOGIN_NAME&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getDisplayName</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;&#123;<span class="keyword">self</span>::ATTR_DISPLAY_NAME&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getPostCount</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;&#123;<span class="keyword">self</span>::ATTR_POST_COUNT&#125;;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">incrementPostCount</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;&#123;<span class="keyword">self</span>::ATTR_POST_COUNT&#125;++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">decrementPostCount</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;getPostCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;&#123;<span class="keyword">self</span>::ATTR_POST_COUNT&#125;--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The Member Repository Interface</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">MemberRepositoryInterface</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">find</span><span class="params">($id)</span></span>;</span><br><span class="line">   <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">findTopPosters</span><span class="params">($count = <span class="number">10</span>)</span></span>;</span><br><span class="line">   <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">save</span><span class="params">(MemberInterface $member)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The Eloquent Member Repository Implementation</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">class EloquentMemberRepository implements MemberRepositoryInterface &#123;</span><br><span class="line">    &#x2F;** @var  Member *&#x2F;</span><br><span class="line">    protected $model;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * EloquentMemberRepository constructor.</span><br><span class="line">     *</span><br><span class="line">     * @param \App\Member $model</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public function __construct( Member $model )</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;model &#x3D; $model;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function find( $id )</span><br><span class="line">    &#123;</span><br><span class="line">        return $this-&gt;model-&gt;find($id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * @param int $count</span><br><span class="line">     *</span><br><span class="line">     * @return \Illuminate\Support\Collection</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public function findTopPosters( $count &#x3D; 10 )</span><br><span class="line">    &#123;</span><br><span class="line">        return $this-&gt;model</span><br><span class="line">            -&gt;orderBy(($this-&gt;model)::ATTR_POST_COUNT, &#39;DESC&#39;)</span><br><span class="line">            -&gt;take($count)</span><br><span class="line">            -&gt;get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function save( MemberInterface $member )</span><br><span class="line">    &#123;</span><br><span class="line">        $member-&gt;save();</span><br><span class="line">        &#x2F;*</span><br><span class="line">      注意：此处我们接口声明上是 MemberInterface ，这个是普适的规则</span><br><span class="line">        但是此处的 Eloquent 实现是基于 Eloquent Model的，因此假设 传入的</span><br><span class="line">        MemberInterface 实现了 save 方法</span><br><span class="line">      *&#x2F;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>基本使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">DemonstrationController</span><br><span class="line">&#123;</span><br><span class="line">    public function createPost(MemberRepositoryInterface $repository)</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; validate request, create the post, and...</span><br><span class="line">        $member &#x3D; Auth::user()-&gt;member();</span><br><span class="line">        $member-&gt;incrementPostCount();</span><br><span class="line">        $respository-&gt;save($member);</span><br><span class="line">    &#125;</span><br><span class="line">    public function deletePost(MemberRepositoryInterface $repository)</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; validate request, delete the post, and...</span><br><span class="line">        $member &#x3D; Auth::user()-&gt;member();</span><br><span class="line">        $member-&gt;decrementPostCount();</span><br><span class="line">        $respository-&gt;save($member);</span><br><span class="line">     &#125;</span><br><span class="line">    public function dashboard(MemberRespositoryInterface $repository)</span><br><span class="line">    &#123;</span><br><span class="line">        $members &#x3D; $repository-&gt;findTopPosters(20);</span><br><span class="line">        return view(&#39;dashboard&#39;, compact(&#39;members&#39;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用的时候我们看到了好的方式，那如果我们没有定义repository和interface，会怎么样呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">DemonstrationController</span><br><span class="line">&#123;</span><br><span class="line">    public function createPost()</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; validate request, create the post, and...</span><br><span class="line">        $member &#x3D; Auth::user()-&gt;getMember();</span><br><span class="line">        $member-&gt;posts++;</span><br><span class="line">        $member-&gt;save();</span><br><span class="line">    &#125;</span><br><span class="line">    public function deletePost()</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; validate request, delete the post, and...</span><br><span class="line">        $member &#x3D; Auth::user()-&gt;getMember();</span><br><span class="line">        if ($member-&gt;posts &gt; 0) &#123;</span><br><span class="line">            $member-&gt;posts--;</span><br><span class="line">            $member-&gt;save();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    public function dashboard()</span><br><span class="line">    &#123;</span><br><span class="line">        $members &#x3D; Member::orderBy(&#39;posts&#39;, &#39;DESC&#39;)-&gt;take(20)-&gt;get(); </span><br><span class="line">        return view(&#39;dashboard&#39;, compact(&#39;members&#39;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面简单的业务逻辑posts不能小于0，都没有很好的封装，如果上面我们一些增加和减少的功能和save封装到一起呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">DemonstrationController</span><br><span class="line">&#123;</span><br><span class="line">    public function createPost()</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; validate request, create the post, and...</span><br><span class="line">        $member &#x3D; Auth::user()-&gt;member();</span><br><span class="line">        $member-&gt;incrementPostCount();</span><br><span class="line">    &#125;</span><br><span class="line">    public function deletePost()</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; validate request, delete the post, and...</span><br><span class="line">        $member &#x3D; Auth::user()-&gt;member();</span><br><span class="line">        $member-&gt;decrementPostCount();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">class Member extends Model implements MemberInterface</span><br><span class="line">&#123;</span><br><span class="line">    &#x2F;&#x2F;...</span><br><span class="line">    </span><br><span class="line">  </span><br><span class="line">    public function incrementPostCount()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;&#123;self::ATTR_POST_COUNT&#125;++;</span><br><span class="line">        $this-&gt;save();</span><br><span class="line">    &#125;</span><br><span class="line">    public function decrementPostCount()</span><br><span class="line">    &#123;</span><br><span class="line">        if ($this-&gt;getPostCount() &gt; 0) &#123;</span><br><span class="line">            $this-&gt;&#123;self::ATTR_POST_COUNT&#125;--;</span><br><span class="line">            $this-&gt;save();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样做主要有两个问题</p>
+<ol>
+<li>如果我们将Model的实现由Eloquen转换为其他呢？这将会使应用出错</li>
+<li>我们每个更改都是执行一个sql语句，严重浪费，我们完全可以做完更改后，统一一次update</li>
+</ol>
+<p>通过上面的对比，我们更能发现使用Repository和Interface的好处，能让我们更好的实现关注点分离，下面我们会更深入的讨论一些问题：包括Collections, Relations, Eager Loading, 和 Schema Changes。</p>
+<h2 id="Eloquent进阶"><a href="#Eloquent进阶" class="headerlink" title="Eloquent进阶"></a>Eloquent进阶</h2><p>首先介绍collection的问题，看代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class FooController</span><br><span class="line">&#123;</span><br><span class="line">   public function bar(PostRepositoryInterface $repository)</span><br><span class="line">   &#123;</span><br><span class="line">      $posts &#x3D; $repository-&gt;findActivePosts();</span><br><span class="line">      $posts-&gt;load(&#39;author&#39;);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，虽然我们使用的type hint表明使用的repository是PostRepositoryInterface，但是方法<code>findActivePosts</code>返回的collection显然是跟Eloquent耦合的Eloquent\Collection，那怎么解决这个问题呢？有以下几个方案</p>
+<ol>
+<li>让<code>findActivePosts</code>返回Collection，而不是Eloquent\Collection，避免在Repository之外使用Eloquent相关的功能</li>
+<li>通过<a href="http://laravel.com/docs/5.1/eloquent-collections#custom-collections" target="_blank" rel="noopener">custom collections</a>方法，返回自定义的collection</li>
+</ol>
+<p>下面介绍第二个议题Eager Loading</p>
+<p>还是看代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class FooController</span><br><span class="line">&#123;</span><br><span class="line">   public function bar(PostRepositoryInterface $repository)</span><br><span class="line">   &#123;</span><br><span class="line">      $posts &#x3D; $repository-&gt;findActivePosts([&#39;author&#39;]);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码通过参数[‘author’]的传入，将eager loading的操作封装在了<code>findActivePosts</code>之内，但是这样子做，反而让调用方必须知道实现细节，即本来是功能上的优化，通过eager loading来解决N+1问题的方案，变为了业务需要知道的业务的逻辑了，明显是不合理的。</p>
+<p>更可怕的时候，你可能会希望通过传入参数让<code>findActivePosts</code>实现更多的功能，于是变为了下面的函数<code>findActivePostsInDateRange($start, $end, $eagerLoading = null)</code>，我们看到随着项目复杂度的提升，我们不得不通过通过参数来满足更多的需求，但是这也使得接口变得更复杂，功能更多，到最后我们不得不面对各种ugly的代码，那面对Eager Loading我们到底应该怎么办呢？下面给出一个建议：</p>
+<p>在提供非eager loading的方法同时，提供一个eager loading的方法。这可能会被人说：这也不是让用户知道了实现细节了嘛。是的，这方法是一个性能和使用上的妥协。</p>
+<p>最后介绍Relations，看到代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">interface MemberInterface</span><br><span class="line">&#123;</span><br><span class="line">   public function getID();</span><br><span class="line">   public function getLoginName();</span><br><span class="line">   public function getDisplayName();   </span><br><span class="line">   public function getPostCount();</span><br><span class="line">   public function incrementPostCount();</span><br><span class="line">   public function decrementPostCount();</span><br><span class="line">   public function getPosts();</span><br><span class="line">   public function getFavoritePosts();</span><br><span class="line">&#125;</span><br><span class="line">class Member extends Model implements MemberInterface</span><br><span class="line">&#123;</span><br><span class="line">   ...</span><br><span class="line"></span><br><span class="line">   public function posts()</span><br><span class="line">   &#123;</span><br><span class="line">      return $this-&gt;hasMany(Post::class);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public function getPosts()</span><br><span class="line">   &#123;</span><br><span class="line">       return $this-&gt;posts;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public function getFavoritePosts()</span><br><span class="line">   &#123;</span><br><span class="line">       &#x2F;&#x2F; I think this will work!</span><br><span class="line">       return $this-&gt;posts()</span><br><span class="line">                   -&gt;newQuery()</span><br><span class="line">                   -&gt;whereHas(&#39;favorites&#39;, function($q) &#123;</span><br><span class="line">                        $q-&gt;where(Favorite::ATTR_MEMBER_ID, $this-&gt;getID()); </span><br><span class="line">                     &#125;)-&gt;get();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们没有办法将relation Method设置为protect或者private（这样设置的目的是让外面不使用，限制使用范围），但是这样子会导致想whereHas这种方法执行不成功。</p>
+<p>此处还注意到一个问题，我们此时使用的<code>posts</code>是表示relation，但是之前是member的一个字段，明显冲突了，我们需要修改字段名，从<em>posts</em>到<em>post_count</em>，因为我们之前使用了常量来定义属性，因此只需要下面一行代码就解决问题了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const ATTR_POST_COUNT &#x3D; ‘post_count’;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>介绍了这么多，我们解决了一个核心问题：因为Eloquent的功能耦合，我们应该正确的使用它，Eloquent的ActiveRecord模式可以让我们非常容易的实现DataMapper，根据Clean architecture的定义，我们将domain services分为了Repositories，Factories，Services，实现了关注点分离。</p>
+<p>但是到目前，还有一个问题没有解决，那就是通过Repository，我们很难实先Eloquent/Builder那样丰富的查询功能，我们不得不每次新增一个查询条件，就去新增接口或者参数，不慎其烦，就像之前的<code>findActivePostsInDateRange</code>方法一样丑陋，那到底有什么办法解决呢？尽情期待下一篇内容，Repository的实作。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://medium.com/laravel-news/separation-of-concerns-with-laravel-s-eloquent-part-1-an-introduction-c9a6dc6b4a65#.xikk3imyh" target="_blank" rel="noopener">Separation of Concerns with Laravel’s Eloquent Part 1: An Introduction</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/orm/" rel="tag"># orm</a>
+              <a href="/tags/eloquent/" rel="tag"># eloquent</a>
+              <a href="/tags/repository/" rel="tag"># repository</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/12/02/2016-12-02-collections-1/" rel="prev" title="Say No to Loop!">
+      <i class="fa fa-chevron-left"></i> Say No to Loop!
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/12/06/2016-12-06-eloquent-6/" rel="next" title="repository实作">
+      repository实作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#胖胖的Eloquent"><span class="nav-number">1.</span> <span class="nav-text">胖胖的Eloquent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Eloquent拆解"><span class="nav-number">2.</span> <span class="nav-text">Eloquent拆解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Eloquent进阶"><span class="nav-number">3.</span> <span class="nav-text">Eloquent进阶</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

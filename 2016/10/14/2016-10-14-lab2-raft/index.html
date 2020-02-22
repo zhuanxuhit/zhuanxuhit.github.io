@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="raft 系列解读(2) 之 测试用例基于mit的6.824课程，github代码地址：https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit&#x2F;distributed-system case1：TestInitialElection测试中3个server，然后启动，验证在同一个任期（term）内是否只有一个leader，并且在2 * RaftElectionTimeout后，由于心跳的存在，不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="raft 系列解读(2) 之 测试用例">
+<meta property="og:url" content="http://yoursite.com/2016/10/14/2016-10-14-lab2-raft/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="raft 系列解读(2) 之 测试用例基于mit的6.824课程，github代码地址：https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit&#x2F;distributed-system case1：TestInitialElection测试中3个server，然后启动，验证在同一个任期（term）内是否只有一个leader，并且在2 * RaftElectionTimeout后，由于心跳的存在，不">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/dfb5dfe2636d558fadf13b3d0c45a2938dbc64c7">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/43e4d96943a1158c68f52201605d57109c5e090d">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/c33e9f67e5195256abc5c20c89d7ab765c73d06c">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/78fb169056b2c6161fa176df54eb94cd13fe0b3d">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/707b81e3b252e9872a29c6e1e747e8d134fa1566">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/865abdc247ed5f85ebcc5638377b351745f8a2b1">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/bcbdd9928a74df4adc3b9b683545fe94ceae4657">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/08b43293b3d71a530c4b6e55c4ab3218d9d9b1f4">
+<meta property="article:published_time" content="2016-10-14T08:39:00.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.363Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="raft">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/dfb5dfe2636d558fadf13b3d0c45a2938dbc64c7">
+
+<link rel="canonical" href="http://yoursite.com/2016/10/14/2016-10-14-lab2-raft/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>raft 系列解读(2) 之 测试用例 | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/14/2016-10-14-lab2-raft/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          raft 系列解读(2) 之 测试用例
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-14 16:39:00" itemprop="dateCreated datePublished" datetime="2016-10-14T16:39:00+08:00">2016-10-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/10/14/2016-10-14-lab2-raft/" class="post-meta-item leancloud_visitors" data-flag-title="raft 系列解读(2) 之 测试用例" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="raft-系列解读-2-之-测试用例"><a href="#raft-系列解读-2-之-测试用例" class="headerlink" title="raft 系列解读(2) 之 测试用例"></a>raft 系列解读(2) 之 测试用例</h1><p>基于mit的6.824课程，github代码地址：<a href="https://github.com/zhuanxuhit/distributed-system" target="_blank" rel="noopener">https://github.com/zhuanxuhit/distributed-system</a></p>
+<h2 id="case1：TestInitialElection"><a href="#case1：TestInitialElection" class="headerlink" title="case1：TestInitialElection"></a>case1：TestInitialElection</h2><p>测试中3个server，然后启动，验证在同一个任期（term）内是否只有一个leader，并且在<code>2 * RaftElectionTimeout</code>后，由于心跳的存在，不会发生重选。</p>
+<p>在代码实现中，主要有以下几点：</p>
+<ul>
+<li>实现<code>AppendEnties</code>和<code>RequestVote</code>两个rpc部分功能</li>
+<li>实现<code>Make</code>新建Raft</li>
+</ul>
+<p>我们来看下其中主要的关键点：</p>
+<p>程序整体组织上是在<code>Make</code>中启动了一个goroutine，是一个无限循环，根据不同的状态进行不同的处理，结构如下：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/dfb5dfe2636d558fadf13b3d0c45a2938dbc64c7" alt="图片"></p>
+<h3 id="follower"><a href="#follower" class="headerlink" title="follower"></a>follower</h3><p>先讲第一个状态<code>follower</code>的处理<br>所有的server重启后第一个状态都是<code>follower</code>，如果在<code>election timeout</code>时间内，既没有收到leader的<code>heartbeat</code>，也没有收到<code>RequestVote</code>请求，那么开启选举过程，此时状态将转换为<code>candidate</code>，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rf.resetElectionTimeout()</span><br><span class="line"><span class="comment">// 等待心跳，如果心跳未到，但是选举超时了，则开始新一轮选举</span></span><br><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> &lt;-rf.heartbeatChan:</span><br><span class="line"><span class="keyword">case</span> &lt;-time.After(rf.randomizedElectionTimeout):</span><br><span class="line"><span class="comment">// 开始重新选举</span></span><br><span class="line">	log.Println(<span class="string">"election timeout:"</span>, rf.randomizedElectionTimeout)</span><br><span class="line">	<span class="keyword">if</span> rf.status != STATUS_FOLLOWER &#123;</span><br><span class="line">		<span class="comment">// panic</span></span><br><span class="line">		log.Fatal(<span class="string">"status not right when in follower and after randomizedElectionTimeout:"</span>, rf.randomizedElectionTimeout)</span><br><span class="line">	&#125;</span><br><span class="line">	rf.convertToCandidate()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="candidate"><a href="#candidate" class="headerlink" title="candidate"></a>candidate</h3><p>接着开始第二个状态<code>candidate</code>的处理：</p>
+<ul>
+<li>第一步，新增本地任期和投票</li>
+<li>第二步，重置 election timer 并开始广播</li>
+<li>第三步等待结果<ul>
+<li>1)他自己赢得了选举;</li>
+<li>2)收到AppendEntries得知另外一个服务器确立他为Leader，转变为follower</li>
+<li>3) 一个周期时间过去但是没有任何人赢得选举，开始新的选举</li>
+</ul>
+</li>
+</ul>
+<p>结构大致如下：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/43e4d96943a1158c68f52201605d57109c5e090d" alt="图片"></p>
+<h3 id="leader"><a href="#leader" class="headerlink" title="leader"></a>leader</h3><p>如果此时赢得了选举，则进入第3个状态<code>leader</code>的处理：目前leader只实现了一个功能，周期性的发送心跳，功能非常简单，此处不再贴代码了。</p>
+<h3 id="rpc"><a href="#rpc" class="headerlink" title="rpc"></a>rpc</h3><p>剩下就是两个rpc的发送和接收处理了，其中需要特别注意的点如下：</p>
+<ul>
+<li>所有rpc处理中：如果收到的<strong>请求或者响应</strong>中，包含的term大于当前的currentTerm，设置currentTerm=term，然后变为follower</li>
+<li>所有rpc处理中：判断任期是否小于currentTerm，小于的都丢弃</li>
+</ul>
+<p>在完成第一个测试的过程中：AppendEnties只需要处理心跳请求即可。</p>
+<p>最后给出代码的地址：<a href="https://github.com/zhuanxuhit/distributed-system，tag是：lab3-raft-case1" target="_blank" rel="noopener">https://github.com/zhuanxuhit/distributed-system，tag是：lab3-raft-case1</a></p>
+<h2 id="case2：TestReElection"><a href="#case2：TestReElection" class="headerlink" title="case2：TestReElection"></a>case2：TestReElection</h2><p>有3个server，选举出来一个leader后，模拟leader故障，重新选举出一个leader，然后再模拟older leader故障恢复重新加入，此时也只会有一个leader，再模拟3个2个都故障了，那理论上就不会有leader出现了，此时再逐个加入故障的server，都只会有一个leader</p>
+<p>直接运行测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go <span class="built_in">test</span> -v -run ReElection</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>leader故障，新的leader选出来</li>
+<li>老的leader加入，不影响只有一个leader</li>
+<li>两个server故障，不会有新的leader</li>
+<li>恢复一个server，出现leader</li>
+<li>再次恢复一个server，出现leader</li>
+</ol>
+<p>先看第1个，出现的调试信息:</p>
+<pre><code>2016/10/10 18:44:46 follower: 0 election timeout: 1.287113937s
+2016/10/10 18:44:46 now I begin to candidate,index: 0
+2016/10/10 18:44:47 follower: 2 election timeout: 1.54916732s
+2016/10/10 18:44:47 now I begin to candidate,index: 2</code></pre><p>可以看到0开始选举后，不知道为什么2没有投票，去看代码，发现问题是：</p>
+<ul>
+<li>当发现远端term大于本地term后，直接转换为follower，并更新当前的currentTerm和<strong>voteFor</strong></li>
+</ul>
+<p>修改后即可通过测试，接着马上又出现另一个问题：</p>
+<pre><code>2016/10/10 18:54:50 candidate: 0 &apos;slog is not at least as up-to-date as receiver’s log</code></pre><p>但是我们现在做的是没有日志的，查看代码发现问题是：</p>
+<ul>
+<li>(args.LastLogIndex &lt; rf.commitIndex || args.LastLogTerm &lt; currentTerm)，因为currentTerm增加了，但是LastLogTerm是0，所以要考虑<code>rf.commitIndex == 0</code>表示还没有日志，则没必要检查</li>
+</ul>
+<p>修改完后，再次运行case，这次是<strong>两个server故障，不会有新的leader</strong>出问题了，选举不出来，接着查原因：</p>
+<p>在处理投票的时候，往<code>heartbeatChan</code>写的时候阻塞了，<code>rf.heartbeatChan = make(chan bool, 1)</code>是有一个缓冲的channel，那为什么会阻塞呢，我们看下有几个地方会写，几个地方会去读</p>
+<p>有两个地方会去写：</p>
+<ol>
+<li>AppendEnties中收到心跳会去写，当去写的时候，说明是已经有leader了，自己会转变为follower</li>
+<li>RequestVote中收到投票也会去写</li>
+</ol>
+<p>读的地方也有两个</p>
+<ol>
+<li>在状态follower中，去读<code>heartbeatChan</code>，如果选举超时内没收到心跳，则开始candidate</li>
+<li>在candidate状态，去读去读<code>heartbeatChan</code>，表示已经有新的leader产生了</li>
+</ol>
+<p>于是就发现了问题：</p>
+<ul>
+<li>在实现leader任务的时候，没有一个点去触发退出心跳</li>
+<li>选举失败，应该等待超时，然后重新开始新一轮选举，而不是马上开始新一轮选举，这样子造成彼此都不成功</li>
+</ul>
+<p>修改代码后，通过case2</p>
+<h2 id="case3：TestBasicAgree"><a href="#case3：TestBasicAgree" class="headerlink" title="case3：TestBasicAgree"></a>case3：TestBasicAgree</h2><p>这个case开始要做提交了，实现<code>Start()</code>函数了，这个case主要测试是：有5个server，没提交前检查没有提交的log，然后提交后，测试该log是否已经被每个server都存储了。</p>
+<p>在实现start中，其做的步骤是：</p>
+<pre><code>// 客户端的一次日志请求操作触发
+// 1)Leader将该请求记录到自己的日志之中;
+// 2)Leader将请求的日志以并发的形式,发送AppendEntries RCPs给所有的服务器;
+// 3)Leader等待获取多数服务器的成功回应之后(如果总共5台,那么只要收到另外两台回应),
+// 将该请求的命令应用到状态机(也就是提交),更新自己的commitIndex 和 lastApplied值;
+// 4)Leader在与Follower的下一个AppendEntries RPCs通讯中,
+// 就会使用更新后的commitIndex,Follower使用该值更新自己的commitIndex;
+// 5)Follower发现自己的 commitIndex &gt; lastApplied
+// 则将日志commitIndex的条目应用到自己的状态机(这里就是Follower提交条目的时机)</code></pre><p>实现的关键点：在Start函数中，一旦判断出当前server是leader，马上开启一个goroutine，开始异步进行agree工作，然后立即返回，代码如下：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/c33e9f67e5195256abc5c20c89d7ab765c73d06c" alt="图片"></p>
+<p>此处第4步和第5步需要在另外的地方完成，一个是heartbeat中，另一个是follower在处理AppendEntries过程中</p>
+<p>还有就是在成为leader的时候，需要初始化<code>nextIndex,matchIndex</code><br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/78fb169056b2c6161fa176df54eb94cd13fe0b3d" alt="图片"><br>而在发送heartbeat中，判断log的最大index ≥ nextIndex,如果大于，需要发送从nextIndex开始的log，在发送完后需要判断成功与否，成功则更新<code>nextIndex,matchIndex</code>，失败则减少<code>nextIndex</code>，并重试<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/707b81e3b252e9872a29c6e1e747e8d134fa1566" alt="图片"></p>
+<p>还有最重要的一点：为了通过测试，记住要在日志提交后，发送消息<code>ApplyMsg</code>给<code>applymsg</code>，这样才能通过测试</p>
+<p>好了到此为止，写的代码刚好通过第三个测试，继续下一关的！</p>
+<h2 id="case4：TestFailAgree"><a href="#case4：TestFailAgree" class="headerlink" title="case4：TestFailAgree"></a>case4：TestFailAgree</h2><p>测试的内容是：有3个server，其中一个follower故障，发的命令只有2个能收到，当恢复故障后，发的命令都能收到</p>
+<p>出现的问题：由于每个command真正提交都是通过goroutine来执行的，因此每个goroutine之间并发执行，怎么保证前一个agree了，下一个才能agree成功呢？<br>现在出现的问题是：<br>map[3:103 5:104 1:101 2:102]，乱序，即4还没有提交了，5就提交成功了</p>
+<p>现在的问题是：谁也不服谁，当follower恢复后，大家都竞选，但是没有一个成功，查明原因后发现是因为没有处理一个概念：<br>    &gt;如果候选人的日志至少和大多数的服务器节点一样新</p>
+<p>这个一样新通过：比较两份日志中最后一条日志条目的索引值和任期号定义谁的日志比较新。如果两份日志最后的条目的任期号不同，那么任期号大的日志更加新。如果两份日志最后的条目任期号相同，那么日志比较长的那个就更加新。</p>
+<p>进行到这，发现已经很难调试了，代码太乱，逻辑混乱，于是准备开始重构</p>
+<p>现有代码的问题：</p>
+<ul>
+<li>临界区的混乱，到底哪里加锁，哪里不加</li>
+<li>各个goroutine之间交互的混乱</li>
+<li>代码功能组织的问题</li>
+</ul>
+<p>重构的代码最重要的一点是：抽象出了状态机，在里面去更新</p>
+<h2 id="case5：FailNoAgree"><a href="#case5：FailNoAgree" class="headerlink" title="case5：FailNoAgree"></a>case5：FailNoAgree</h2><p>测试内容是：5个server，3个follow故障，此时提交的命令将不会Committed，然后恢复3个follower，此时发送第3个命令，会忘记第2个没有确认的命令，此时第3个命令的index应该还是2</p>
+<p>现在出现的问题是：<br>follow的日志没更新，但是leader的nextIndex确更新了！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">2016&#x2F;10&#x2F;13 10:44:20 leader is 4</span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 server:0,currentTerm:3,role:candidate</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 server:1,currentTerm:3,role:candidate</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 server:2,currentTerm:3,role:candidate</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 server:3,currentTerm:2,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125; &#123;2 20 2&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 server:4,currentTerm:2,role:leader</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125; &#123;2 20 2&#125;]</span><br><span class="line">nextIndex is:[2 2 2 3 3]</span><br><span class="line">matchIndex is:[1 1 1 2 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 恢复3个server</span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:25 LeaderId: 4 has big term: 5 than follower: 3 currentTerm: 4</span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:25 server 3 len(rf.log) 3 args.PrevLogIndex 1</span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 重新选举后leader is 4</span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 server:0,currentTerm:5,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 server:1,currentTerm:5,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 server:2,currentTerm:5,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 server:3,currentTerm:5,role:follower</span><br><span class="line">commitIndex:2,lastApplied:2</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125; &#123;2 20 2&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 server:4,currentTerm:5,role:leader</span><br><span class="line">commitIndex:2,lastApplied:2</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125; &#123;2 20 2&#125;]</span><br><span class="line">nextIndex is:[3 3 3 3 3]</span><br><span class="line">matchIndex is:[2 2 2 2 0]</span><br></pre></td></tr></table></figure>
+<p>看重新选举后，leader4：matchIndex is:[2 2 2 2 0]，但是其他的follower确没有收到新的日志，怎么回事呢？看代码什么情况下回去更新matchIndex呢？</p>
+<p>问题在于发送心跳的时候返回了reply=true了，确没有去检查日志是否是最新的</p>
+<p>此处记住appendEntries如果返回true，则一定表示是日志一样新了！</p>
+<blockquote>
+<p>true  if follower contained entry matching prevLogIndex and prevLogTerm</p>
+</blockquote>
+<h2 id="case6：ConcurrentStarts"><a href="#case6：ConcurrentStarts" class="headerlink" title="case6：ConcurrentStarts"></a>case6：ConcurrentStarts</h2><p>这个case测试的是：<br>同时发送5个命令，然后测试5个命令能够被顺序的提交<br>测试中的修改是：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/865abdc247ed5f85ebcc5638377b351745f8a2b1" alt="图片"><br>将红色框中的内容移动到了锁里面，为了防止并发访问的时候，index得到相同。</p>
+<h2 id="case7：Rejoin"><a href="#case7：Rejoin" class="headerlink" title="case7：Rejoin"></a>case7：Rejoin</h2><p>测试重新加入直接通过了，之前的代码就能实现<br>测试内容是：3个server，leader故障，然后向故障的leader发送命令，同时向新选举出来的leader发送命令,大致如下图，最后能统一<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/bcbdd9928a74df4adc3b9b683545fe94ceae4657" alt="图片"></p>
+<h2 id="case8：Backup"><a href="#case8：Backup" class="headerlink" title="case8：Backup"></a>case8：Backup</h2><p>类似case7：不同在于此处有5个server，然后命令更多，测试也是网络分区后出现多leader，然后恢复网络后，再重新同步数据<br>不用修改，直接通过</p>
+<h2 id="case9：Count"><a href="#case9：Count" class="headerlink" title="case9：Count"></a>case9：Count</h2><p>case9主要是性能测试，测试rpc的次数不能太多</p>
+<h2 id="case10-12：Persist1-3"><a href="#case10-12：Persist1-3" class="headerlink" title="case10-12：Persist1-3"></a>case10-12：Persist1-3</h2><p>持久化的逻辑一直没有加上，此处加上的</p>
+<p>先看需要持久化哪些数据，然后持久化的时机是什么时候？</p>
+<p>需要持久化哪些日志？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">e.Encode(rf.currentTerm) &#x2F;&#x2F; 当前任期</span><br><span class="line">e.Encode(rf.log) &#x2F;&#x2F; 收到的日志</span><br><span class="line">e.Encode(rf.votedFor) &#x2F;&#x2F; 投票的</span><br><span class="line">e.Encode(rf.commitIndex) &#x2F;&#x2F; 已经确认的一致性日志，之后的日志表示还没有确认是否可以同步，一旦确认的日志都不会改变了</span><br></pre></td></tr></table></figure>
+<p>既然这几个需要同步，那就是发生改变的时候把数据持久化下来就可以了</p>
+<p>需要调用<code>persist()</code>函数的地方有：</p>
+<ul>
+<li>leader向各个follower发送完日志，确认提交的时候</li>
+<li>follower处理AppendEnties有新日志或者commiIndex更新的时候</li>
+</ul>
+<h2 id="case13：Figure8"><a href="#case13：Figure8" class="headerlink" title="case13：Figure8"></a>case13：Figure8</h2><p>测试主要测试的是下面的这张图：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/08b43293b3d71a530c4b6e55c4ab3218d9d9b1f4" alt="图片"><br>描述的问题是：为什么领导人无法通过老的日志的任期号来判断其提交状态。</p>
+<ul>
+<li>(a) S1 是领导者，部分的复制了索引位置 2 的日志条目</li>
+<li>(b) S1 崩溃了，然后 S5 在任期 3 里通过 S3、S4 和自己的选票赢得选举，然后从客户端接收了一条不一样的日志条目放在了索引2 处</li>
+<li>(c) S5 又崩溃了；S1 重新启动，选举成功，开始复制日志。在这时，来自任期 2 的那条日志已经被复制到了集群中的大多数机器上，但是还没有被提交</li>
+<li>(d)  S1 又崩溃了，S5 可以重新被选举成功（通过来自 S2，S3 和 S4 的选票），然后覆盖了他们在索引 2 处的日志。但是，在崩溃之前，如果 S1 在自己的任期里复制了日志条目到大多数机器上</li>
+<li>(e) 然后这个条目就会被提交（S5 就不可能选举成功）。 在这个时候，之前的所有日志就会被正常提交处理</li>
+</ul>
+<p>Raft采用计算副本数的方式,使得永远不会提交前前 面纪元的日志条目，</p>
+<p>现在出现的问题是commit了不同的值？<br>即在没有达成一致的情况下就就行了提交！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Test: Figure 8 ...</span><br><span class="line">2016&#x2F;10&#x2F;13 20:38:35 server:0,currentTerm:2,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;1 1752890841475247006 1&#125;]</span><br><span class="line">nextIndex is:[1 1 1 1 1]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 20:38:35 server:2,currentTerm:2,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;1 1752890841475247006 1&#125;]</span><br><span class="line">nextIndex is:[1 1 1 1 1]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 20:38:35 server:4,currentTerm:2,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;1 1752890841475247006 1&#125;]</span><br><span class="line">nextIndex is:[1 1 1 1 1]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 20:38:35 apply error: commit index&#x3D;2 server&#x3D;1 4541014630978635374 !&#x3D; server&#x3D;3 8558661384468427932</span><br></pre></td></tr></table></figure>
+
+
+
+<p>到这就得加上之前忘记的一个策略</p>
+<blockquote>
+<p>如果存在以个N满足 N&gt;commitIndex,多数的matchIndex[i] &gt;= N,并且 log[N].term == currentTerm:设置commitIndex = N</p>
+</blockquote>
+<p>主要是指：leader只会提交本纪元的日志</p>
+<h2 id="case14：UnreliableAgree"><a href="#case14：UnreliableAgree" class="headerlink" title="case14：UnreliableAgree"></a>case14：UnreliableAgree</h2><p>模拟网络不可靠，在不可靠的情况下<code>cfg.setunreliable(false)</code>，则有概率还是丢弃请求，在这种情况下测试协议最后还能达成一致</p>
+<h2 id="case15：Figure8Unreliable"><a href="#case15：Figure8Unreliable" class="headerlink" title="case15：Figure8Unreliable"></a>case15：Figure8Unreliable</h2><p>通过设置<code>cfg.setlongreordering(true)</code>，在labrpc中会直接睡眠一段时间，模拟这次情况下协议还是达成一致</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ms :&#x3D; 200 + rand.Intn(1 + rand.Intn(2000))</span><br><span class="line">time.Sleep(time.Duration(ms) * time.Millisecond)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">2016&#x2F;10&#x2F;14 14:51:11 server:4,currentTerm:31,role:follower</span><br><span class="line">commitIndex:3,lastApplied:3</span><br><span class="line">2016&#x2F;10&#x2F;14 14:51:11 server:3,currentTerm:31,role:follower</span><br><span class="line">commitIndex:3,lastApplied:3</span><br><span class="line">2016&#x2F;10&#x2F;14 14:51:11 server:2,currentTerm:31,role:follower</span><br><span class="line">commitIndex:3,lastApplied:3</span><br><span class="line">2016&#x2F;10&#x2F;14 14:51:11 server:1,currentTerm:31,role:follower</span><br><span class="line">commitIndex:3,lastApplied:3</span><br><span class="line">2016&#x2F;10&#x2F;14 14:51:11 server:0,currentTerm:31,role:leader</span><br><span class="line">commitIndex:3,lastApplied:3</span><br><span class="line">nextIndex is:[186 53 58 51 62]</span><br><span class="line">matchIndex is:[185 0 0 0 0]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2016&#x2F;10&#x2F;14 16:09:45 check log type: raft.AppendEntiesArgs value: &#123;6 1 1 1 1 [&#123;1 4411 2&#125; &#123;2 9540 3&#125; &#123;4 3863 4&#125; &#123;6 2769 5&#125;]&#125;</span><br><span class="line">2016&#x2F;10&#x2F;14 16:09:45 error log indexserver:0,currentTerm:6,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;1 606 1&#125; &#123;1 4411 2&#125; &#123;4 3863 4&#125; &#123;6 2769 5&#125;]</span><br><span class="line">nextIndex is:[84 0 0 3 2]</span><br><span class="line">matchIndex is:[83 1 1 2 1]</span><br></pre></td></tr></table></figure>
+<p>错误日志，由于没有很好的传递日志，代码bug</p>
+<h2 id="case16-17：TestReliableChurn，UnreliableChurn"><a href="#case16-17：TestReliableChurn，UnreliableChurn" class="headerlink" title="case16-17：TestReliableChurn，UnreliableChurn"></a>case16-17：TestReliableChurn，UnreliableChurn</h2><p>测试通过</p>
+<p>下一篇的计划是结合代码再次看下关键实现</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/golang/" rel="tag"># golang</a>
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag"># 分布式</a>
+              <a href="/tags/raft/" rel="tag"># raft</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/10/08/raft1/" rel="prev" title="raft 系列解读(1) 之 原理">
+      <i class="fa fa-chevron-left"></i> raft 系列解读(1) 之 原理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/10/14/2016-10-14-raft3-code-and-rule/" rel="next" title="raft 系列解读(3) 之 代码实现">
+      raft 系列解读(3) 之 代码实现 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#raft-系列解读-2-之-测试用例"><span class="nav-number">1.</span> <span class="nav-text">raft 系列解读(2) 之 测试用例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#case1：TestInitialElection"><span class="nav-number">1.1.</span> <span class="nav-text">case1：TestInitialElection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#follower"><span class="nav-number">1.1.1.</span> <span class="nav-text">follower</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#candidate"><span class="nav-number">1.1.2.</span> <span class="nav-text">candidate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#leader"><span class="nav-number">1.1.3.</span> <span class="nav-text">leader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rpc"><span class="nav-number">1.1.4.</span> <span class="nav-text">rpc</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case2：TestReElection"><span class="nav-number">1.2.</span> <span class="nav-text">case2：TestReElection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case3：TestBasicAgree"><span class="nav-number">1.3.</span> <span class="nav-text">case3：TestBasicAgree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case4：TestFailAgree"><span class="nav-number">1.4.</span> <span class="nav-text">case4：TestFailAgree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case5：FailNoAgree"><span class="nav-number">1.5.</span> <span class="nav-text">case5：FailNoAgree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case6：ConcurrentStarts"><span class="nav-number">1.6.</span> <span class="nav-text">case6：ConcurrentStarts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case7：Rejoin"><span class="nav-number">1.7.</span> <span class="nav-text">case7：Rejoin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case8：Backup"><span class="nav-number">1.8.</span> <span class="nav-text">case8：Backup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case9：Count"><span class="nav-number">1.9.</span> <span class="nav-text">case9：Count</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case10-12：Persist1-3"><span class="nav-number">1.10.</span> <span class="nav-text">case10-12：Persist1-3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case13：Figure8"><span class="nav-number">1.11.</span> <span class="nav-text">case13：Figure8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case14：UnreliableAgree"><span class="nav-number">1.12.</span> <span class="nav-text">case14：UnreliableAgree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case15：Figure8Unreliable"><span class="nav-number">1.13.</span> <span class="nav-text">case15：Figure8Unreliable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#case16-17：TestReliableChurn，UnreliableChurn"><span class="nav-number">1.14.</span> <span class="nav-text">case16-17：TestReliableChurn，UnreliableChurn</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

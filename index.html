@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="从小白到大神，一路走来，你我相伴">
+<meta property="og:type" content="website">
+<meta property="og:title" content="程序猿的进击之路">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="从小白到大神，一路走来，你我相伴">
+<meta property="article:author" content="颛顼">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: true,
+    isPost: false
+  };
+</script>
+
+  <title>程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/22/2020-02-22-hello-my-30/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/22/2020-02-22-hello-my-30/" class="post-title-link" itemprop="url">hello my 30</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-02-22 18:24:12 / Modified: 20:17:36" itemprop="dateCreated datePublished" datetime="2020-02-22T18:24:12+08:00">2020-02-22</time>
+            </span>
+
+          
+            <span id="/2020/02/22/2020-02-22-hello-my-30/" class="post-meta-item leancloud_visitors" data-flag-title="hello my 30" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/2017-06-24-CS224d-lesson2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/24/2017-06-24-CS224d-lesson2/" class="post-title-link" itemprop="url">CS224d-lesson2</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-06-24 00:10:57" itemprop="dateCreated datePublished" datetime="2017-06-24T00:10:57+08:00">2017-06-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2017/06/24/2017-06-24-CS224d-lesson2/" class="post-meta-item leancloud_visitors" data-flag-title="CS224d-lesson2" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/93fe31c390e61d768dc215241cfeb4a0dd53e193" alt=""></p>
+<p>这是cs224d课程的第二课，非专业角度来看nlp。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017/06/24/2017-06-24-CS224d-lesson2/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/30/2017-01-30-How-to-Make-a-Neural-Network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/01/30/2017-01-30-How-to-Make-a-Neural-Network/" class="post-title-link" itemprop="url">How to Make a Neural Network</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-01-30 09:33:15" itemprop="dateCreated datePublished" datetime="2017-01-30T09:33:15+08:00">2017-01-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2017/01/30/2017-01-30-How-to-Make-a-Neural-Network/" class="post-meta-item leancloud_visitors" data-flag-title="How to Make a Neural Network" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>outlasts：比…长久，比…活得长</p>
+<p>can be passed down from generation to generation：可以被传下来，一代一代</p>
+<p>synthesize：人工合成</p>
+<p>diverse：不同的</p>
+<p>obstacles：障碍物</p>
+<p>molecular：分子</p>
+<p>参考：</p>
+<p><a href="http://blog.csdn.net/abcjennifer/article/details/7758797" target="_blank" rel="noopener">Stanford机器学习—第五讲. 神经网络的学习 Neural Networks learning</a>：从中学到了bp中为什么del_err_hidden是怎么推导出来的</p>
+<p><a href="https://www.zhihu.com/question/27239198" target="_blank" rel="noopener">如何直观的解释back propagation算法</a>：知乎问答</p>
+<p><a href="http://blog.csdn.net/shijing_0214/article/details/51923547" target="_blank" rel="noopener">通俗解释反向传播（Backpropagation）的计算</a></p>
+<p><a href="http://blog.csdn.net/myue5/article/details/8980376" target="_blank" rel="noopener">关于点到直线距离的理解</a></p>
+<p><a href="https://www.youtube.com/watch?v=QNbM8kxMvnc" target="_blank" rel="noopener">平面向量-點到直線距離公式說明</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/2017-01-29-How-to-Do-Linear-Regression-the-Right-Way/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/01/29/2017-01-29-How-to-Do-Linear-Regression-the-Right-Way/" class="post-title-link" itemprop="url">线性回归背后的数学</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-01-29 09:58:16" itemprop="dateCreated datePublished" datetime="2017-01-29T09:58:16+08:00">2017-01-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2017/01/29/2017-01-29-How-to-Do-Linear-Regression-the-Right-Way/" class="post-meta-item leancloud_visitors" data-flag-title="线性回归背后的数学" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文是YouTube上视频<a href="https://www.youtube.com/watch?v=uwwWVAgJBcM&list=PL2-dafEMk2A7YdKv4XfKpfbTH5z6rEEj3&index=2" target="_blank" rel="noopener">How to Do Linear Regression the Right Way</a>笔记</p>
+<p>假设我们有一堆数据，并且他们是线性相关的，那我们怎么找出最合适的那条直线呢？</p>
+<p>此处关键是定义什么是最合适？可以通过每个点到直线的距离来定义整个合适，如图：</p>
+<p><img src="https://raw.githubusercontent.com/mattnedrich/GradientDescentExample/master/gradient_descent_example.gif" alt=""></p>
+<p>在上面的过程中，直线<code>y=mx+b</code>中m和b不管变化，从而找到最合适的直线，这个判断的依据就是：</p>
+<p><img src="https://spin.atomicobject.com/wp-content/uploads/linear_regression_error1.png" alt=""></p>
+<p>上面公式的含义是：假设点是(x,y)，那相同x的直线上的点就是：(x,mx+b)，而这两者之间的距离就是(y-(mx+b))，为了防止出现负数，因此我们就计算了平方，有了这个衡量的标准后，我们就可以画出上面公式的一个图了：</p>
+<p><img src="https://spin.atomicobject.com/wp-content/uploads/gradient_descent_error_surface.png" alt=""></p>
+<p>此处画出来是一个立体图，我们要找的一个最佳的直线，对应到图中其实就是一个最低点，更形象的例子是：</p>
+<p><img src="http://3qeqpr26caki16dnhd19sv6by6v.wpengine.netdna-cdn.com/wp-content/uploads/2016/03/Large-Bowl.jpg" alt=""></p>
+<p>如果我们此时放一个弹珠到碗里，最终弹珠停下来的点就是我们要找的最佳点，现在我们没有弹珠，我们要怎么找到这个最佳点呢？这就要讲到偏导数（partial derivatives）的概念了，以前大学里学偏导数的是时候一直不明白为什么叫偏导，直到最近看到英文：partial derivatives才明白，我们来看图：</p>
+<p><img src="http://mathinsight.org/media/image/image/partial_derivative_as_slope.png" alt=""></p>
+<p>图中的函数f是一个表面，如果我们固定住y，则是一个曲线，如图中绿色的线，此时我们在计算点(a,b,f(a,b))在绿色线上的斜率，就可以得到沿着x方向的斜率了，同样的我们固定x，就可以得到y方向的斜率，这样子解释，英文partial derivatives就很形象了，即计算的部分的斜率，合在一起才是曲面上这个点相切的一个平面。</p>
+<p>由此我们就有了偏导数：</p>
+<p><img src="https://spin.atomicobject.com/wp-content/uploads/linear_regression_gradient1.png" alt=""></p>
+<p>根据上面的这些我们就有了最后的代码:<a href="https://github.com/llSourcell/linear_regression_live" target="_blank" rel="noopener">https://github.com/llSourcell/linear_regression_live</a></p>
+<p>疑问：</p>
+<p>一些视频的中的词汇记录：</p>
+<p>back of your hand：了如指掌</p>
+<p>gradient descent：梯度下降</p>
+<p>partial derivatives：偏导数</p>
+<p>calculus：微积分</p>
+<p>correlation：相关性</p>
+<p>intercept：截断</p>
+<p>slope:斜率</p>
+<p>Convergence：收敛</p>
+<p>slope formula：斜率公式</p>
+<p>magnitude：大小</p>
+<p>with respect to：关于</p>
+<p>tangent：切线</p>
+<p>好书推荐：Machine Learning and Probabilistic Approach</p>
+<p>推荐资源</p>
+<p>More learning resources:<br><a href="http://mathinsight.org/image/partial_derivative_as_slope" target="_blank" rel="noopener">http://mathinsight.org/image/partial_…</a><br><a href="http://www.dummies.com/education/math/calculus/how-to-use-a-partial-derivative-to-measure-a-slope-in-three-dimensions/" target="_blank" rel="noopener">http://www.dummies.com/education/math…</a><br><a href="https://spin.atomicobject.com/2014/06/24/gradient-descent-linear-regression/" target="_blank" rel="noopener">https://spin.atomicobject.com/2014/06…</a><br><a href="https://www.quora.com/What-is-an-intuitive-explanation-of-gradient-descent" target="_blank" rel="noopener">https://www.quora.com/What-is-an-intu…</a><br><a href="http://machinelearningmastery.com/gradient-descent-for-machine-learning/" target="_blank" rel="noopener">http://machinelearningmastery.com/gra…</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/2017-01-24-Distributed-systems-for-fun-and-profit-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/01/24/2017-01-24-Distributed-systems-for-fun-and-profit-4/" class="post-title-link" itemprop="url">袖珍分布式系统（四）</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-01-24 14:22:21" itemprop="dateCreated datePublished" datetime="2017-01-24T14:22:21+08:00">2017-01-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2017/01/24/2017-01-24-Distributed-systems-for-fun-and-profit-4/" class="post-meta-item leancloud_visitors" data-flag-title="袖珍分布式系统（四）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/267b8d3b1c03219824d3ae54eee6b1246f443c1b" alt=""></p>
+<p>本文是<a href="http://book.mixu.net/distsys/single-page.html" target="_blank" rel="noopener">Distributed systems for fun and profit</a>的第四部分，本文是阅读该文后的一些记录。</p>
+<h2 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h2><p>Replication 问题是分布式系统中最主要的问题，本文讨论 Replication 问题不会泛泛而谈，而是会聚焦于：</p>
+<ul>
+<li>leader election, </li>
+<li>failure detection, </li>
+<li>mutual exclusion, </li>
+<li>consensus and global snapshots</li>
+</ul>
+<p>我们首先得知道Replication 问题本质上是一个group communication 问题，而实现Replication的方法有很多，我们不会讲一些具体的算法，而是会讲一些共性的东西。既然Replication是一个通信问题，那我们就来看下同步和异步两个通信模型：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/ebd1062bbe4bb6e96e57b0bb46c11f997ec2c5b6" alt=""></p>
+<p>我们可以将复制步骤分为4步：</p>
+<ol>
+<li>(Request) The client sends a request to a server </li>
+<li>(Sync) The synchronous portion of the replication takes place </li>
+<li>(Response) A response is returned to the client </li>
+<li>(Async) The asynchronous portion of the replication takes place</li>
+</ol>
+<p>基于上面的4个步骤，又可以分为同步和异步复制</p>
+<h2 id="Synchronous-replication"><a href="#Synchronous-replication" class="headerlink" title="Synchronous replication"></a>Synchronous replication</h2><p>同步复制（synchronous replication）又称为：active, or eager, or push, or pessimistic replication，其原理如下图</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/509ace9a2286fd4c24b4235ca06b2a78fe3e8c2a" alt=""></p>
+<p>同步复制中client发送请求，接着客户端阻塞，第一个server发送请求给S2和S3，等待都响应后再回复客户端。</p>
+<p>从上述过程的描述中，我们可以知道：</p>
+<ol>
+<li>系统的性能由最慢的server决定</li>
+<li>系统对于网络延迟非常敏感，意味请求返回需要等待每一个server响应请求</li>
+<li>一旦其中一个server fail，系统将只能提供读服务</li>
+</ol>
+<h2 id="Asynchronous-replication"><a href="#Asynchronous-replication" class="headerlink" title="Asynchronous replication"></a>Asynchronous replication</h2><p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/80688ed6525343f45010f6b669f4d9fe4aa6781d" alt=""></p>
+<p>异步复制在master (/leader / coordinator)收到请求后，只是简单的做一些local处理，然后就返回了，不阻塞客户端，接着异步将请求复制给其他server。</p>
+<p>从性能角度看，因为复制是异步进行的，延迟非常小，但是系统的一致性是弱一致的，最重要的是系统无法保证数据的持久性，因为写入master的数据，可能在master复制给其他slaver的前，master就故障了，此时数据的就丢失了。</p>
+<h2 id="An-overview-of-major-replication-approaches"><a href="#An-overview-of-major-replication-approaches" class="headerlink" title="An overview of major replication approaches"></a>An overview of major replication approaches</h2><p>讲完同步和异步复制两个思路后，我们来看一些稍微具体的算法，有许多方法来对复制算法分类，除了上面的同步和异步外，还能这么分：</p>
+<ul>
+<li>Replication methods that prevent divergence (single copy systems) and</li>
+<li>Replication methods that risk divergence (multi-master systems)</li>
+</ul>
+<p>第一类系统遵循着“”behave like a single system”的原则，当partial failures发生的时候，算法能保证系统中只有一份数据是有效的，实现single-copy consistency的算法主要有：</p>
+<ul>
+<li>1n messages (asynchronous primary/backup)</li>
+<li>2n messages (synchronous primary/backup)</li>
+<li>4n messages (2-phase commit, Multi-Paxos)</li>
+<li>6n messages (3-phase commit, Paxos with repeated leader election)</li>
+</ul>
+<p>这些算法的不同之处在于他们考虑的types of faults不同，上面简单的通过算法中交换消息的数量进行了划分，这么划分的原因是因为作者尝试回答：<strong><em>what are we buying with the added message exchange</em>s?</strong></p>
+<p>先看一张图：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/5ced5dcc428f7c739c215f27866dade4d8face5b" alt=""></p>
+<p>上图来自：Google App Engine的co-founder Ryan Barrett在2009年的google i/o上的演讲《<a href="http://snarfed.org/transactions_across_datacenters_io.html" target="_blank" rel="noopener">Transaction Across DataCenter</a>》（视频： <a href="http://www.youtube.com/watch?v=srOgpXECblk" target="_blank" rel="noopener">http://www.youtube.com/watch?v=srOgpXECblk</a>）</p>
+<p>consistency, latency, throughput, data loss and failover characteristics 归根结底来自于两个不同的复制方法：同步还是异步。下面我们具体看下每一种复制方法。</p>
+<h2 id="Primary-backup-replication"><a href="#Primary-backup-replication" class="headerlink" title="Primary/backup replication"></a>Primary/backup replication</h2><blockquote>
+<p>All updated are performed on the primary, and a log of operations (or alternatively, changes) is shipped across the network to the backup replicas.</p>
+</blockquote>
+<p>最基本的一种复制方法，在复制log上有两种方法：</p>
+<ul>
+<li>asynchronous primary/backup replication and</li>
+<li>synchronous primary/backup replication</li>
+</ul>
+<p>同步方法需要涉及到两个消息（”update” + “acknowledge receipt”），而异步则只有一个(“update”)。</p>
+<p>但是在mysql中，即使是同步复制也不能完全保证数据的一致性，考虑场景：</p>
+<ul>
+<li>the primary receives a write and sends it to the backup</li>
+<li>the backup persists and ACKs the write</li>
+<li>and then primary fails before sending ACK to the client</li>
+</ul>
+<p>在primary返回客户端之前，primary挂了，此时backup提交了，客户端认为primay没有提交，如果此时马上切换到backup，backup是已经提交了，造成不一致，那有什么方法能解决呢？这就要多引入一个来回的消息，这就是2PC。</p>
+<h2 id="Two-phase-commit-2PC"><a href="#Two-phase-commit-2PC" class="headerlink" title="Two phase commit (2PC)"></a>Two phase commit (2PC)</h2><p>2PC相比较于Primary/backup的1PC，其多出来的一步提供了可以回滚操作的能力。</p>
+<blockquote>
+<p>Note：2PC assumes that the data in stable storage at each node is never lost and that no node crashes forever. Data loss is still possible if the data in the stable storage is corrupted in a crash</p>
+</blockquote>
+<p>2PC基于的假设是数据存储是可靠的，节点不会永久故障，因此一旦这些假设不满足，数据还是有可能丢失的。</p>
+<p>在前一章CAP理论中，我们讲过2PC是一个CA系统，其考虑的失败模型中没有考虑network partitions，一旦发送网络分区，只能终止服务，人工接入，因此现在的系统一般都会考虑使用a partition tolerant consensus algorithm，能够很好的处理网络分区</p>
+<h2 id="Partition-tolerant-consensus-algorithms"><a href="#Partition-tolerant-consensus-algorithms" class="headerlink" title="Partition tolerant consensus algorithms"></a>Partition tolerant consensus algorithms</h2><p>分区容忍的算法比较有名的就是Paxos和Raft，在具体看算法之前，我们先回答第一个问题：</p>
+<p><strong>What is a network partition?</strong>什么是网络分区</p>
+<blockquote>
+<p>A network partition is the failure of a network link to one or several nodes. The nodes themselves continue to stay active, and they may even be able to receive requests from clients on their side of the network partition</p>
+</blockquote>
+<p>网络分区的一个特点是我们很难网络分区和节点故障区分开，一旦网络分区发生，系统中就会有多个部分都是出于active的状态，在Primary/backup中就会出现两个primary。因此，Partition tolerant consensus algorithms必须要解决的一个问题就是：during a network partition, only one partition of the system remains active</p>
+<p>解决的方法主要从：</p>
+<ul>
+<li>Majority decisions：在N个节点中，只有有N/2+1个还正常就能正常工作</li>
+<li>Roles：有两种思路（all nodes may have the same responsibilities, or nodes may have separate, distinct roles.）通过选出一个master，能使系统变得更有效，最简单的好处就是：操作都经过master，就使得所有的操作都强制排序了。</li>
+<li>Epochs：Epochs作用类似于逻辑时钟，能够使得不同节点对当前系统状态有个统一的认知。</li>
+</ul>
+<p>除了上面给出的方法外，还需要注意的点有：</p>
+<ul>
+<li>practical optimizations:<ul>
+<li>avoiding repeated leader election via leadership leases (rather than heartbeats)【防止重复leader选举，手段是通过租期而不是心跳】</li>
+<li>avoiding repeated propose messages when in a stable state where the leader identity does not change【防止重复propose消息】</li>
+</ul>
+</li>
+<li>ensuring that followers and proposers do not lose items in stable storage and that results stored in stable storage are not subtly corrupted (e.g. disk corruption)【对于items要持久化存储防止丢失】</li>
+<li>enabling cluster membership to change in a safe manner (e.g. base Paxos depends on the fact that majorities always intersect in one node, which does not hold if the membership can change arbitrarily)</li>
+<li>procedures for bringing a new replica up to date in a safe and eﬃcient manner after a crash, disk loss or when a new node is provisioned</li>
+<li>procedures for snapshotting and garbage collecting the data required to guarantee safety after some reasonable period (e.g. balancing storage requirements and fault tolerance requirements)</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本章作者主要介绍了保证strong consistency的各种算法，以比较同步和异步复制开始，然后逐渐讨论随着考虑的错误变多算法需要怎么调整，下面是算法的一些关键点总结：</p>
+<ul>
+<li>Primary/Backup<ul>
+<li>Single, static master</li>
+<li>Replicated log, slaves are not involved in executing operations</li>
+<li>No bounds on replication delay</li>
+<li>Not partition tolerant</li>
+<li>Manual/ad-hoc failover, not fault tolerant, “hot backup”</li>
+</ul>
+</li>
+<li>2PC<ul>
+<li>Unanimous vote: commit or abort</li>
+<li>Static master</li>
+<li>2PC cannot survive simultaneous failure of the coordinator and a node during a commit</li>
+<li>Not partition tolerant, tail latency sensitive</li>
+</ul>
+</li>
+<li>Paxos<ul>
+<li>Majority vote</li>
+<li>Dynamic master</li>
+<li>Robust to n/2-1 simultaneous failures as part of protocol</li>
+<li>Less sensitive to tail latency</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/23/2017-01-23-Distributed-systems-for-fun-and-profit-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/01/23/2017-01-23-Distributed-systems-for-fun-and-profit-3/" class="post-title-link" itemprop="url">袖珍分布式系统（三）</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-01-23 14:27:07" itemprop="dateCreated datePublished" datetime="2017-01-23T14:27:07+08:00">2017-01-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2017/01/23/2017-01-23-Distributed-systems-for-fun-and-profit-3/" class="post-meta-item leancloud_visitors" data-flag-title="袖珍分布式系统（三）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/267b8d3b1c03219824d3ae54eee6b1246f443c1b" alt=""></p>
+<p>本文是<a href="http://book.mixu.net/distsys/single-page.html" target="_blank" rel="noopener">Distributed systems for fun and profit</a>的第三部分，本文是阅读该文后的一些记录。</p>
+<h2 id="Time-and-order"><a href="#Time-and-order" class="headerlink" title="Time and order"></a>Time and order</h2><p>先来看第一个问题：</p>
+<blockquote>
+<p> What is order and why is it important?</p>
+</blockquote>
+<p>为什么我们要关心是否 <em>A happened before B?</em></p>
+<p>回答这个问题之前，我们先来看下分布式编程的定义。</p>
+<blockquote>
+<p> the art of solving the same problem that you can solve on a single computer using multiple computers.</p>
+</blockquote>
+<p>在单机系统中，传统的模式是： a single program, one process, one memory space running on one CPU。我们做了很多努力来给编程者提供一种简单的编程模型，一种顺序执行的模型，让程序实际执行的顺序就是代码的顺序。</p>
+<p>但是我们一旦来到分布式环境中，我们却发现再也没有这种简单的编程模型了，程序实际执行的顺序你忽然间就无法预测了，因为每个节点时钟不是严格同步的，当然你可以去用复杂的技术来实现所有节点的时钟同步，然后给予每个操作一个时间戳，从而得到一个全局的<strong><em>total order</em></strong>；另一个思路是通过一个communication system，给每个操作都编号，从而得到一个顺序，但是就像我们之前说的一样，在分布式系统中，通信是不可靠的，您不可能确定的知道另外一个节点的状态，我们可以看到以上两种方法都很难。</p>
+<h2 id="Total-and-partial-order"><a href="#Total-and-partial-order" class="headerlink" title="Total and partial order"></a>Total and partial order</h2><p>在分布式环境中一种常见的状态是：partial order，即部分有，在集合中不是任意两个元素都是可比较的。</p>
+<p>Total 和 partial order 都满足 自反性和传递性。</p>
+<blockquote>
+<p>If a ≤ b and b ≤ a then a = b </p>
+<p>(antisymmetry); </p>
+<p>If a ≤ b and b ≤ c then a ≤ c </p>
+<p>(transitivity);</p>
+</blockquote>
+<p>total order还满足：</p>
+<blockquote>
+<p> a ≤ b or b ≤ a (totality) for all a, b in X</p>
+</blockquote>
+<p>即所有集合中的元素都是有序的，而partial order则：</p>
+<blockquote>
+<p> a ≤ a (reflexivity) for all a in X</p>
+</blockquote>
+<p>即集合中的元素不是都有序，只满足自反性。</p>
+<p>在单机系统中，所有的指令和消息的执行都是可预测的，是有一个total order的，因此程序的行为是可预测的，但是在分布式系统中想要实现total order，代价是巨大的，因为</p>
+<blockquote>
+<p>communication is expensive, and time synchronization is diﬃcult and fragile</p>
+</blockquote>
+<h2 id="What-is-time"><a href="#What-is-time" class="headerlink" title="What is time?"></a>What is time?</h2><blockquote>
+<p>Time is a source of order - it allows us to deﬁne the order of operations- which coincidentally also has an interpretation that people can understand (a second, a minute, a day and so on).</p>
+</blockquote>
+<p>什么是时间？时间有时候就像一个计数器，只不过时间这个计数器比较重要，我们用这个计数器产生的数值来定义整个人类的最重要的概念：时间。</p>
+<blockquote>
+<p>Timestamps really are a shorthand value for representing the state of the world from the start of the universe to the current moment - if something occurred at a particular timestamp, then it was potentially inﬂuenced by everything that happened before it.</p>
+</blockquote>
+<p>什么是时间戳（Timestamps），Timestamps定义了世界从初始到现在的状态，如果某件事发生在一个特定的时间点上，是之前影响产生的结果。</p>
+<p>此处有个大前提，所有的时间都以相同的速率前行着，time and timestamps在程序中应用的时候，有3个常用的解释：</p>
+<ul>
+<li>Order</li>
+<li>Duration</li>
+<li>Interpretation</li>
+</ul>
+<p>当我说：time is a source of order，我指的是：</p>
+<ul>
+<li>we can attach timestamps to unordered events to order them【通过给事件安排一个时间戳，从而给事件排序】</li>
+<li>we can use timestamps to enforce a speciﬁc ordering of operations or the delivery of messages (for example, by delaying an operation if it arrives out of order)【我们可以通过时间戳给操作重新排序】</li>
+<li>we can use the value of a timestamp to determine whether something happened chronologically before something else【通过时间戳知道哪个事件发生在前】</li>
+</ul>
+<blockquote>
+<p>Interpretation - time as a universally comparable value.</p>
+</blockquote>
+<p>时间戳的绝对值解释为日期（date），对人们非常有用的概念</p>
+<blockquote>
+<p>Duration - durations measured in time have some relation to the real world.</p>
+</blockquote>
+<p>像算法一般只关心Duration，通过Duration来判断延迟，一个好的算法都希望能有低延迟。</p>
+<h2 id="Does-time-progress-at-the-same-rate-everywhere"><a href="#Does-time-progress-at-the-same-rate-everywhere" class="headerlink" title="Does time progress at the same rate everywhere?"></a>Does time progress at the same rate everywhere?</h2><p>对于问题：时间以同样的速率进行吗？有3个常见的回答：</p>
+<ul>
+<li>“Global clock”: yes</li>
+<li>“Local clock”: no, but</li>
+<li>“No clock”: no!</li>
+</ul>
+<p>以上回答的的意思是：</p>
+<ul>
+<li>the synchronous system model has a global clock, </li>
+<li>the partially synchronous model has a local clock, and </li>
+<li>in the asynchronous system model one cannot use clocks at all</li>
+</ul>
+<p>下面分别来看下</p>
+<h3 id="Time-with-a-“global-clock”-assumption"><a href="#Time-with-a-“global-clock”-assumption" class="headerlink" title="Time with a “global-clock” assumption"></a>Time with a “global-clock” assumption</h3><p>全局时钟（global-clock）假设是我们有个非常精确的时钟，我们任何人在任何地方都能看到他。这也是平时生活中我们最习以为常的时钟，对于不同时钟间微小的差别我们并不关注。</p>
+<p>在实际系统中，如果我们假设有个global-clock，即每个节点的时钟都是同步的，那么我们可以通过timestamps都就可以得到一个total order，但是在系统间维持时钟同步是非常难的，我们只能做到一定的范围内的同步。</p>
+<p>目前忽略时钟之间的不同步问题做出来的系统有：</p>
+<ul>
+<li>Facebook’s Cassandra：通过时间戳来解决冲突</li>
+<li>Google’s Spanner：时间戳+偏差范围来定义顺序</li>
+</ul>
+<h3 id="Time-with-a-“Local-clock”-assumption"><a href="#Time-with-a-“Local-clock”-assumption" class="headerlink" title="Time with a “Local-clock” assumption"></a>Time with a “Local-clock” assumption</h3><p>它假设了一个偏序关系</p>
+<blockquote>
+<p> events on each system are ordered but events cannot be ordered across systems by only using a clock.</p>
+</blockquote>
+<p>同一个机器上我们可以通过时间戳来排序，但是不同机器上的时间戳不能比较</p>
+<h3 id="Time-with-a-“No-clock”-assumption"><a href="#Time-with-a-“No-clock”-assumption" class="headerlink" title="Time with a “No-clock” assumption"></a>Time with a “No-clock” assumption</h3><p>不在使用时间戳，而是使用counter，通过传递消息来交换counter，从而定义不同机器之间的事件的前后顺序，比较有名的论文就是：<a href="http://research.microsoft.com/en-us/um/people/lamport/pubs/time-clocks.pdf" target="_blank" rel="noopener">time, clocks and the ordering of events</a>。</p>
+<h2 id="How-is-time-used-in-a-distributed-system"><a href="#How-is-time-used-in-a-distributed-system" class="headerlink" title="How is time used in a distributed system?"></a>How is time used in a distributed system?</h2><p>时间的好处是：</p>
+<ol>
+<li>Time can deﬁne order across a system (without communication)</li>
+<li>Time can deﬁne boundary conditions for algorithms</li>
+</ol>
+<p>在分布式系统中，定义事件的顺序非常重要，因为：</p>
+<ul>
+<li>where correctness depends on (agreement on) correct event ordering, for example serializability in a distributed database【正确性依赖于事件的顺序】</li>
+<li>order can be used as a tie breaker when resource contention occurs, for example if there are two orders for a widget, fulﬁll the ﬁrst and cancel the second one【当发生资源争用的时候可以用来做裁决】</li>
+</ul>
+<p>当我们有全局时钟的时候，我们不需要通信就能够确定顺序，不幸的是，我们一般都没有全局时钟，因此只能通过通信来确定时序。</p>
+<p>时间除了用来确定时序外，还能定义算法的边界，特别是可以区分 high latency 和 server or network link is down，而用来探测它俩区别的算法就是：failure detectors。</p>
+<h2 id="Failure-detectors-time-for-cutoﬀ"><a href="#Failure-detectors-time-for-cutoﬀ" class="headerlink" title="Failure detectors (time for cutoﬀ)"></a>Failure detectors (time for cutoﬀ)</h2><p>在分布式环境中，我们怎么知道一个节点是否宕机了呢？我们可以通过等待一定时间后认为节点失败了。</p>
+<p>那问题是这个一定时间是多久呢？</p>
+<p>这依赖于节点之间的延迟，算法一般不会直接设置一个精确的值，而是会对“<strong>一定时间</strong>”这个概念做个很好的抽象。</p>
+<blockquote>
+<p> A failure detector is a way to abstract away the exact timing assumptions. Failure detectors are implemented using heartbeat messages and timers. Processes exchange heartbeat messages. If a message response is not received before the timeout occurs, then the process suspects the other process.</p>
+</blockquote>
+<p>而failure detector是一个解决方案，通过心挑信息来探测存活性。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/22/2017-01-22-Distributed-systems-for-fun-and-profit-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/01/22/2017-01-22-Distributed-systems-for-fun-and-profit-2/" class="post-title-link" itemprop="url">袖珍分布式系统（二）</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-01-22 10:35:34" itemprop="dateCreated datePublished" datetime="2017-01-22T10:35:34+08:00">2017-01-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2017/01/22/2017-01-22-Distributed-systems-for-fun-and-profit-2/" class="post-meta-item leancloud_visitors" data-flag-title="袖珍分布式系统（二）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/267b8d3b1c03219824d3ae54eee6b1246f443c1b" alt=""></p>
+<p>本文是<a href="http://book.mixu.net/distsys/single-page.html" target="_blank" rel="noopener">Distributed systems for fun and profit</a>的第二部分，本文是阅读该文后的一些记录。</p>
+<p>分布式编程大多数数时间都是在处理分布式后带来的影响。为什么这么说呢？因为虽然理想情况是：我们在分布式系统上编程跟在单机上编程一样，这种抽象对于程序员来说是最友好的，但是呢？理想很丰满，现实很骨感，我们必须拨开抽象，去处理影藏在单机抽象背后的多机系统带来的问题，才可能很好的解决问题。因此，我们现在不断在寻求一个更好的抽象模型，尽可能的让编程在分布式环境下变的简单。</p>
+<p>那问题来了，怎么定义一个抽象更好呢？</p>
+<blockquote>
+<p>What do we mean when say X is more abstract than Y? First, that X does not introduce anything new or fundamentally diﬀerent from Y. In fact, X may remove some aspects of Y or present them in a way that makes them more manageable. Second, that X is in some sense easier to grasp than Y, assuming that the things that X removed from Y are not important to the matter at hand.</p>
+</blockquote>
+<p>总结起来就是：用尽可能少的假设来描述清楚一个东西。</p>
+<p>抽象非常重要，能够帮我们抓住主要问题，如果我们能抓住本质，那此时想出来的解决方案已定也是最通用的。</p>
+<p>那问题有来了，我们怎么知道哪些东西是只要的，或者说是本质的？</p>
+<p>我们每次在实际问题上，剥离掉系统一个具体的限制的时候（假设这个不是主要问题），都可能给系统埋下隐患，这也是为什么后期系统必须要重新将限制引入系统，因为这些去掉的限制，才是影响到系统工作的真正因素。</p>
+<p>有了这个概念，接着就可以介绍在保持下系统工作的同时，最少的假设条件是多少，这种假设条件演化出来的就是我们经常说的系统模型。</p>
+<h2 id="A-system-model"><a href="#A-system-model" class="headerlink" title="A system model"></a>A system model</h2><p>分布式系统最大的属性就是：分布式，更具体来说，一个分布式系统中的程序具有的属性有：</p>
+<ul>
+<li>run concurrently on independent nodes …【独立节点上并发执行】</li>
+<li>are connected by a network that may introduce nondeterminism and message loss …【通过网络互连】</li>
+<li>and have no shared memory or shared clock.【不共享内存和时钟】</li>
+</ul>
+<p>具体解释是：</p>
+<ul>
+<li>each node executes a program concurrently【每个节点都并发执行】</li>
+<li>knowledge is local: nodes have fast access only to their local state, and any information about global state is potentially out of date 【每个节点只知道自己节点上的信息】</li>
+<li>nodes can fail and recover from failure independently 【每个节点失败和恢复都是独立的】</li>
+<li>messages can be delayed or lost (independent of node failure; it is not easy to distinguish network failure and node failure) 【通信是不可靠的】</li>
+<li>and clocks are not synchronized across nodes (local timestamps do not correspond to the global real time order, which cannot be easily observed)【时钟不同步】</li>
+</ul>
+<p>那什么是系统模型？</p>
+<blockquote>
+<p>System model：a set of assumptions about the environment and facilities on which a distributed system is implemented</p>
+</blockquote>
+<p>系统模型定义了关于 environment and facilities 的假设，这些假设包括：</p>
+<ul>
+<li>what capabilities the nodes have and how they may fail 【每个节点能力和失败方式】</li>
+<li>how communication links operate and how they may fail and 【节点间通信方式和失败方式】</li>
+<li>properties of the overall system, such as assumptions about time and order【整个系统属性：如时序】</li>
+</ul>
+<p>什么是抗造系统，就是系统模型做了最少的假设，由于假设少，基于这种系统设计的算法，都是容错性非常好的，但是同样的，由于假设少，所以算法也很难理解。</p>
+<p>下面是具体介绍：properties of nodes, links and time and order</p>
+<h2 id="Nodes-in-our-system-model"><a href="#Nodes-in-our-system-model" class="headerlink" title="Nodes in our system model"></a>Nodes in our system model</h2><p>节点是系统有计算和存储能力的hosts，它们能：</p>
+<ul>
+<li>the ability to execute a program </li>
+<li>the ability to store data into volatile memory (which can be lost upon failure) and into stable state (which can be read after a failure) </li>
+<li>a clock (which may or may not be assumed to be accurate)</li>
+</ul>
+<p>此处我们假设node的failure models是 <strong>crash-recovery failure model</strong>，而考虑 <strong>Byzantine fault tolerance</strong></p>
+<h2 id="Communication-links-in-our-system-model"><a href="#Communication-links-in-our-system-model" class="headerlink" title="Communication links in our system model"></a>Communication links in our system model</h2><p>分布式系统中最难处理的假设就是通信假设，我们在分布式系统中，一个系统很难知道另一个系统的情况，因为任何的通信都是不可靠的，信息都无法交流，还怎么知道别人的情况，因此分布式系统中，能依赖的只有节点本身的信息。</p>
+<h2 id="Timing-ordering-assumptions"><a href="#Timing-ordering-assumptions" class="headerlink" title="Timing / ordering assumptions"></a>Timing / ordering assumptions</h2><p>在分布式系统中我们必须认识到：每个node看到的世界都是不同的，这个不同来自于一个事实：信息的传输需要时间。对于同一件事情，每个节点看到这个事情的时间都是不一样的，因此每个节点看到的世界，其时间点都是不同的。</p>
+<p>有两个主要的关于时间的模型:</p>
+<blockquote>
+<p>Synchronous system </p>
+<p>​    model Processes execute in lock-step; there is a known upper bound on message transmission delay; each process has an accurate clock </p>
+<p>Asynchronous system </p>
+<p>​    model No timing assumptions - e.g. processes execute at independent rates; there is no bound on message transmission delay; useful clocks do not exist</p>
+</blockquote>
+<h2 id="The-consensus-problem"><a href="#The-consensus-problem" class="headerlink" title="The consensus problem"></a>The consensus problem</h2><p>下面对网络是否分区包含在错误模型中和网络传输是同步还是异步模型两个条件的讨论</p>
+<ul>
+<li>whether or not network partitions are included in the failure model, and</li>
+<li>synchronous vs. asynchronous timing assumptions</li>
+</ul>
+<p>先介绍下什么一致性模型</p>
+<ol>
+<li>Agreement: Every correct process must agree on the same value.</li>
+<li>Integrity: Every correct process decides at most one value, and if it decides some value, then it must have been proposed by some process.</li>
+<li>Termination: All processes eventually reach a decision.</li>
+<li>Validity: If all correct processes propose the same value V, then all correct processes decide V.</li>
+</ol>
+<h2 id="Two-impossibility-results"><a href="#Two-impossibility-results" class="headerlink" title="Two impossibility results"></a>Two impossibility results</h2><p>什么是impossibility results</p>
+<blockquote>
+<p>A proof of impossibility, also known as negative proof, proof of an impossibility theorem, or negative result, is a <a href="http://dict.eudic.net/dicts/en/Mathematical_proof.html" target="_blank" rel="noopener">proof</a> demonstrating that a particular problem cannot be solved, or cannot be solved in general. Often proofs of impossibility have put to rest decades or centuries of work attempting to find a solution. To prove that something is impossible is usually much harder than the opposite task; it is necessary to develop a theory. Impossibility theorems are usually expressible as universal propositions in logic (see <a href="http://dict.eudic.net/dicts/en/Universal_quantification.html" target="_blank" rel="noopener">universal quantification</a>).</p>
+</blockquote>
+<p>说白点就是证明了某项事情是不可能的，这样子人们就不用去朝着这个东西再去白费力气了。</p>
+<p>在分布式中有两个重要的impossibility results，FLP 和 CAP，FLP的重要性在于学术研究，此处不做过多介绍，下面主要介绍下CAP</p>
+<h2 id="The-CAP-theorem"><a href="#The-CAP-theorem" class="headerlink" title="The CAP theorem"></a>The CAP theorem</h2><p>CAP中每个字母代表是：</p>
+<ul>
+<li>Consistency: all nodes see the same data at the same time.（一致性）</li>
+<li>Availability: node failures do not prevent survivors from continuing to operate.（可用性）</li>
+<li>Partition tolerance: the system continues to operate despite message loss due to network and/or node failure（分区容忍性）</li>
+</ul>
+<p>上面3个特性，只有2个能同时满足，因此我们会有3种系统：</p>
+<ul>
+<li>CA (consistency + availability). Examples include full strict quorum protocols, such as two-phase commit.</li>
+<li>CP (consistency + partition tolerance). Examples include majority quorum protocols in which minority partitions are unavailable such as Paxos.</li>
+<li>AP (availability + partition tolerance). Examples include protocols using conﬂict resolution, such as Dynamo.</li>
+</ul>
+<p>CA和CP系统都提供了强一致性模型，不同是CA不可以容忍网络分区，而CP在2f+1个节点中，可以容忍f个节点失败，原因很简单：</p>
+<ul>
+<li>A CA system does not distinguish between node failures and network failures, and hence must stop accepting writes everywhere to avoid introducing divergence (multiple copies). It cannot tell whether a remote node is down, or whether just the network connection is down: so the only safe thing is to stop accepting writes.【不能区分网络分区和节点失败，因此必须停止写入避免引入不一致】</li>
+<li>A CP system prevents divergence (e.g. maintains single-copy consistency) by forcing asymmetric behavior on the two sides of the partition. It only keeps the majority partition around, and requires the minority partition to become unavailable (e.g. stop accepting writes), which retains a degree of availability (the majority partition) and still ensures single-copy consistency.【即使网络分区了，大多数节点的一方还是能够提供服务】</li>
+</ul>
+<p>CP系统因为将网络分区考虑到了failure model中，因此能够通过类似Paxos, Raft 的协议来区分a majority partition and a minority partition</p>
+<p>CA则由于没有考虑网络分区的情况，因此无法知道一个节点不响应式因为节点收不到消息还是节点失败了，因此只能够通过停止服务来防止出现数据一致，在CA中由于不能保证网络可靠性，因此通过使用two-phase commit algorithm来保证数据一致性。</p>
+<p>当分区出现的时候，我们有两个选择：availability 还是 consistency。</p>
+<p>从CAP理论中我们能得到4个结论：</p>
+<ol>
+<li>First, that many system designs used in early distributed relational database systems did not take into account partition tolerance (e.g. they were CA designs). Partition tolerance is an important property for modern systems, since network partitions become much more likely if the system is geographically distributed (as many large systems are).【早期系统大多没有考虑P，因此是CA系统，但是现代系统，特别是出现异地多主后，必须考虑分区了】</li>
+<li>Second, that there is a tension between strong consistency and high availability during network partitions. The CAP theorem is an illustration of the tradeoﬀs that occur between strong guarantees and distributed computation.【P既然无法避免，我们只能在C和A之间做选择，有时候我们可以通过降低数据的一致性模型，不再追求强一致，从而达到”CAP”】</li>
+<li>Third, that there is a tension between strong consistency and performance in normal operation.【当一个操作涉及的消息数和节点的数少的时候，延迟自然就低，但是这也意味着有些节点不会被经常访问，意味着数据会是旧数据】</li>
+<li>Fourth - and somewhat indirectly - that if we do not want to give up availability during a network partition, then we need to explore whether consistency models other than strong consistency are workable for our purposes.【有时候3选2可能是误解，我们如果将自己不限制在强一致性模型，我们会有更多的选择】</li>
+</ol>
+<p>我们要记住：</p>
+<blockquote>
+<p>ACID consistency != CAP consistency != Oatmeal consistency</p>
+</blockquote>
+<p>一致性模型的概念是：</p>
+<blockquote>
+<p>Consistency model </p>
+<p>a contract between programmer and system, wherein the system guarantees that if the programmer follows some speciﬁc rules, the results of operations on the data store will be predictable</p>
+</blockquote>
+<p>一致性模型是编程者和系统之间的契约，只要编程者按照某种规则，那计算机的操作结果就是可预测的。</p>
+<p>下面介绍一些一致性模型：</p>
+<h2 id="Strong-consistency-vs-other-consistency-models"><a href="#Strong-consistency-vs-other-consistency-models" class="headerlink" title="Strong consistency vs. other consistency models"></a>Strong consistency vs. other consistency models</h2><ul>
+<li>Strong consistency models (capable of maintaining a single copy)<ul>
+<li>Linearizable consistency</li>
+<li>Sequential consistency</li>
+</ul>
+</li>
+<li>Weak consistency models (not strong)<ul>
+<li>Client-centric consistency models</li>
+<li>Causal consistency: strongest model available</li>
+<li>Eventual consistency models</li>
+</ul>
+</li>
+</ul>
+<p>一致性模型可以分为两大类：强一致和弱一致。</p>
+<p>强一致模型给编程者提供的是一个和单机系统一样的模型，而弱一致，则让编程者清楚的意识要是在分布式环境下编程，而不是单机环境。</p>
+<h2 id="Strong-consistency-models"><a href="#Strong-consistency-models" class="headerlink" title="Strong consistency models"></a>Strong consistency models</h2><p>强一致性模型可以再细分为两大类：</p>
+<ul>
+<li>Linearizable consistency: Under linearizable consistency, all operations appear to have executed atomically in an order that is consistent with the global real-time ordering of operations. (Herlihy &amp; Wing, 1991)</li>
+<li>Sequential consistency: Under sequential consistency, all operations appear to have executed atomically in some order that is consistent with the order seen at individual nodes and that is equal at all nodes. (Lamport, 1979)</li>
+</ul>
+<p>两者的最大不同是：linearizable consistency要求操作的结果要和操作实际执行的顺序一致，而Sequential consistency则允许操作实际发生的顺序和操作产生结果的顺序不同，只要每个节点看到的顺序是一样的就行。两者之间的差别基本上可以忽略。</p>
+<h2 id="Client-centric-consistency-models"><a href="#Client-centric-consistency-models" class="headerlink" title="Client-centric consistency models"></a>Client-centric consistency models</h2><p>该一致性模型主要是为了解决下面的情况：客户端进行了某个操作，同时也看到了最新的结果，但是由于网络中断，重新连接到server，此时不能因为重新连接而看到一个旧的结果。</p>
+<h2 id="Eventual-consistency"><a href="#Eventual-consistency" class="headerlink" title="Eventual consistency"></a>Eventual consistency</h2><p>最终一致性我们需要知道两点：</p>
+<ol>
+<li>最终一致，这个最终是多久？我们需要有个下限，或者至少是一个平均值</li>
+<li>多个副本怎么达成一致？</li>
+</ol>
+<ul>
+<li>First, how long is “eventually”? It would be useful to have a strict lower bound, or at least some idea of how long it typically takes for the system to converge to the same value.【最终，这个时间是多久】</li>
+<li>Second, how do the replicas agree on a value? how非常重要，因为如果设计的不好，可能会导致数据丢失。</li>
+</ul>
+<p>因此，在谈论最终一致的时候，我们需要知道这可能是：”eventually last- writer-wins, and read-the-latest-observed-value in the meantime”</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/19/2017-01-19-Distributed-systems-for-fun-and-profit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/01/19/2017-01-19-Distributed-systems-for-fun-and-profit/" class="post-title-link" itemprop="url">袖珍分布式系统（一）</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2017-01-19 15:30:39" itemprop="dateCreated datePublished" datetime="2017-01-19T15:30:39+08:00">2017-01-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2017/01/19/2017-01-19-Distributed-systems-for-fun-and-profit/" class="post-meta-item leancloud_visitors" data-flag-title="袖珍分布式系统（一）" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/267b8d3b1c03219824d3ae54eee6b1246f443c1b" alt=""></p>
+<p>本文是<a href="http://book.mixu.net/distsys/single-page.html" target="_blank" rel="noopener">Distributed systems for fun and profit</a>的第一部分，本文是阅读该文后的一些记录。</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>看了好多分布式系统，如Amazon’s Dynamo, Google’s BigTable and MapReduce, Apache’s Hadoop等，那这些系统背后有没有什么共性的东西呢？本文试图去带领大家阐述这些系统背后的思想。</p>
+<p>在作者看来，distributed programming主要是在处理分布式带来的两个主要的影响：</p>
+<ol>
+<li>information travels at the speed of light</li>
+<li>independent things fail independently</li>
+</ol>
+<p>具体怎么理解呢？</p>
+<p>信息的传输速度是光速，虽然已经很快了，但是还是需要时间的，另一个系统要处理的错误不仅一类，而是会很多，而且这些错误之间没有联系，彼此独立。</p>
+<p>作者希望通过本文，让读者能认识对<code>distance, time and consistency models</code>怎么交互有个更好的理解。</p>
+<h2 id="Distributed-systems-at-a-high-level"><a href="#Distributed-systems-at-a-high-level" class="headerlink" title="Distributed systems at a high level"></a>Distributed systems at a high level</h2><blockquote>
+<p>Distributed programming is the art of solving the same problem that you can solve on a single computer using multiple computers.</p>
+</blockquote>
+<p>分布式系统遇到的问题和单机系统是一样的，只是解决同一个问题的时候，其系统的constraints不同了。</p>
+<p>计算机系统主要解决两类问题</p>
+<ol>
+<li>计算</li>
+<li>存储</li>
+</ol>
+<p>市面上各种框架其可以划分为两个领域的战争，一个是偏向底层存储的战争，一个是偏向计算的战争</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/65ed0b4685d5ce8baa779af23ba8622102f022f2" alt=""></p>
+<p>偏向存储的战争有关系型数据库和非关系型数据库(Relational vs NoSQL)的战争，它们两者都有各自的应用特点。</p>
+<ul>
+<li>关系型数据库最大的特点是事务的一致性，读写操作都是事务的，具有ACID的特点，它在银行这样对一致性有要求的系统中应用广泛。</li>
+<li>而非关系型数据库一般对一致性要求不高，但支持高性能并发读写，海量数据访问，在微博、Facebook这类SNS应用中广泛使用。</li>
+</ul>
+<p>另外，非关系型数据库内部也有战争，比如说HBase和Cassandra，前者注重一致性(Consistency)和可用性(Availability)，后者提供可用性(Availability)和分区容错性(Partition tolerance)</p>
+<p>Redis和Memcached，它们都是内存内的Key/Value存储，但Redis还支持哈希表，有序集和链表等多种数据结构。</p>
+<p>MongoDB，CouchDB和Couchbase这三个文档型数据库，MongoDB更适用于需要动态查询的场景，CouchDB偏向于预定义查询，Couchbase比CouchDB有更强的一致性，而且还可以作为Key/Value存储。</p>
+<p>搜索引擎Solr和Elasticsearch的，它们都是基于Lucene，性能上相近，但是前者在Java/C#开发者中大受欢迎，而后者深受Python/PHP开发者喜爱。</p>
+<p>偏向计算的战争有MapReduce和Spark之间的战争，此外还有Spark Streaming和Storm之间的战争等等。</p>
+<p>以上关于计算和存储的讨论来自<a href="https://zhuanlan.zhihu.com/p/21587328?refer=bittiger" target="_blank" rel="noopener">深入浅出Spark(1)什么是Spark</a></p>
+<p>回到本文的内容上：<strong>我们为什么需要分布式</strong>？理论上如果单机系统有无限的内存，极致的计算速度，那我们是没必要将系统设计为分布式的，因为分布式引入了一些列问题，但是呢，我们没有money啊，我们只能妥协了，用平价机器来实现高性能。</p>
+<p>下面回答第二个问题：<strong>我们通过分布式希望得到什么？</strong></p>
+<p>在作者看来所有的问题起源都是：<strong><em>size - scalability</em></strong></p>
+<blockquote>
+<p>everything starts with the need to deal with size</p>
+<p>everything starts with size - scalability</p>
+</blockquote>
+<p>那什么是<strong><em>scalability</em></strong>呢？</p>
+<blockquote>
+<p> Scalability is the ability of a system, network, or process, to handle a growing amount of work in a capable manner or its ability to be enlarged to accommodate that growth.</p>
+</blockquote>
+<p><strong><em>scalability</em></strong>：伸缩性，系统伸缩性好意味着当系统处理<strong>growing amount of work</strong>的时候，即使处理难度不是线性增长的，也应该是可预测的，而不是指数级增长的。</p>
+<p>那什么是<strong>growing amount of work</strong>呢？作者又举了3个具体的例子：</p>
+<ul>
+<li>Size scalability: adding more nodes should make the system linearly faster; growing the dataset should not increase latency </li>
+<li>Geographic scalability: it should be possible to use multiple data centers to reduce the time it takes to respond to user queries, while dealing with cross-data center latency in some sensible manner. </li>
+<li>Administrative scalability: adding more nodes should not increase the administrative costs of the system (e.g. the administrators-to-machines ratio).</li>
+</ul>
+<p>上面的讨论我们可以看到每个例子都试着从存储和计算两方面进行解释，然后每个处理都是在time，distance和consistency的抉择。</p>
+<p>随着系统size的增加，我们的设计需要不断满足实际的需求，而这些需求主要来自于</p>
+<ul>
+<li>performance </li>
+<li>availability</li>
+</ul>
+<h3 id="Performance-and-latency"><a href="#Performance-and-latency" class="headerlink" title="Performance (and latency)"></a>Performance (and latency)</h3><p>而这两方面在实际系统中的测量方式也有很多，先来看performance</p>
+<blockquote>
+<p>Performance is characterized by the amount of useful work accomplished by a computer system compared to the time and resources used.</p>
+</blockquote>
+<p>性能主要是通过计算机系统有效工作占计算时间和资源的比例来衡量的，更具体来说：</p>
+<ul>
+<li>Short response time/low latency for a given piece of work </li>
+<li>High throughput (rate of processing work) </li>
+<li>Low utilization of computing resource(s)</li>
+</ul>
+<p>低延迟，高吞吐，低利用率</p>
+<p>先看延迟</p>
+<blockquote>
+<p>Latency：The state of being <strong>latent</strong>; delay, a period between the initiation of something and the occurrence.</p>
+<p>Latent：From Latin latens, latentis, present participle of lateo (“lie hidden”). Existing or present but concealed or inactive.</p>
+</blockquote>
+<p>延迟：一件事情发生到真正产生影响</p>
+<p>举个例子：假设一个数据中心，有一个功能是通过计算所有数据，然后返回一个结果</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = query(all data in the system)</span><br></pre></td></tr></table></figure>
+
+<p>对于上面这个请求，影响延迟的因素是什么呢？</p>
+<ol>
+<li>the amount of old data</li>
+<li>the speed at which new data “takes eﬀect” in the system</li>
+</ol>
+<p>是1还是2呢？</p>
+<p>我们可以知道如果系统处理query的速度和新数据在系统中生效的速度一样，那么我们会发现query将永远不会返回，因此真正决定延迟的是2.</p>
+<p>另外一点我们需要注意的是：延迟是因为有新数据的产生，那如果系统没有产生数据，那就没有延迟一说。</p>
+<p>最后一点我们无法忽略的延迟是：</p>
+<ul>
+<li>the speed of light limits how fast information can travel, and </li>
+<li>hardware components have a minimum latency cost incurred per operation (think RAM and hard drives but also CPUs).</li>
+</ul>
+<p>信息传输产生的延迟以及硬件本身产生的延迟。</p>
+<p>因此决定延迟的因素有：</p>
+<ol>
+<li>操作本身的耗时</li>
+<li>信息传输延迟</li>
+</ol>
+<p>看完性能后，我们看下一个分布式系统的主需求：可用性</p>
+<h3 id="Availability-and-fault-tolerance"><a href="#Availability-and-fault-tolerance" class="headerlink" title="Availability (and fault tolerance)"></a>Availability (and fault tolerance)</h3><blockquote>
+<p> Availability the proportion of time a system is in a functioning condition. If a user cannot access the system, it is said to be unavailable.</p>
+</blockquote>
+<p>单机系统相比较于分布式系统永远无法达到的一点是：<strong>高可用</strong>或者说<strong>容错</strong></p>
+<p>分布式系统可以通过一群不可靠的组件，最后达到一个高可用的系统，这就是分布式的魅力。</p>
+<p>那我们来看下什么是容错（fault tolerance）</p>
+<blockquote>
+<p>Fault tolerance：ability of a system to behave in a well-deﬁned manner once faults occur</p>
+</blockquote>
+<p>从定义我们可以看到，首先我们要规定问题边界：要处理的错误，基于定义好的错误我们去开发算法去解决它。如果系统发生了我们从未考虑的错误，那何来谈容错一说。</p>
+<h3 id="What-prevents-us-from-achieving-good-things"><a href="#What-prevents-us-from-achieving-good-things" class="headerlink" title="What prevents us from achieving good things?"></a>What prevents us from achieving good things?</h3><p>分布式系统受限于两个物理约束：</p>
+<ul>
+<li>the number of nodes (which increases with the required storage and computation capacity)</li>
+<li>the distance between nodes (information travels, at best, at the speed of light)</li>
+</ul>
+<p>简单来说就是数量和距离，上面的物理限制在增加节点的时候会带来：</p>
+<ul>
+<li>an increase in the number of independent nodes increases the probability of failure in a system (reducing availability and increasing administrative costs)【降低可用性和管理成本】</li>
+<li>an increase in the number of independent nodes may increase the need for communication between nodes (reducing performance as scale increases)【通信成本增加降低系统性能】</li>
+<li>an increase in geographic distance increases the minimum latency for communication between distant nodes (reducing performance for certain operations)【多数据中心增加通信成本】</li>
+</ul>
+<p>上面说了这么多限制，那怎么定义系统好不好呢？总的来说是从 performance 和 availability 来看，具体衡量则是我们经常说的SLA(service level agreement)。</p>
+<p>除了 performance 和 availability 外，还有一个很重要的点是： intelligibility，即系统好不好理解，如果系统设计的非常好，但是只有设计的人懂，那这种系统价值也是不大的。</p>
+<h3 id="Abstractions-and-models"><a href="#Abstractions-and-models" class="headerlink" title="Abstractions and models"></a>Abstractions and models</h3><p>抽象帮我们做减法，只剩下本质的东西，而模型则将抽象具现化，让我们能更精确的定义抽象的东西。</p>
+<p>我们来举一些具体的模型的例子，这些也是之后章节会讲的东西：</p>
+<ul>
+<li>System model (asynchronous / synchronous)</li>
+<li>Failure model (crash-fail, partitions, Byzantine)</li>
+<li>Consistency model (strong, eventual)</li>
+</ul>
+<p>我们设计分布式系统的目标是：<strong>work like a single system</strong>，但是现实中我们有很多的节点需要处理，我们很难让使用者在无感知的情况下使用分布式系统，模型越是简单，意味着提供给用户的功能越是抽象，如果用户想要获得更好的性能，更高级的功能，只能穿过给用户提供的抽象，去看系统的实现细节。</p>
+<h3 id="Design-techniques-partition-and-replicate"><a href="#Design-techniques-partition-and-replicate" class="headerlink" title="Design techniques: partition and replicate"></a>Design techniques: partition and replicate</h3><p>为了存储更多的数据，我们将数据保存到不同的节点上，为了让运算更快，我们将同一份数据copy多份，让多个实例进行计算，一个很好的总结是：</p>
+<blockquote>
+<p>Divide and conquer - I mean, partition and replicate.</p>
+</blockquote>
+<p><strong>Partitioning</strong></p>
+<ul>
+<li>Partitioning improves performance by limiting the amount of data to be examined and by locating related data in the same partition【数据分片后减少数据大小从而提高性能】</li>
+<li>Partitioning improves availability by allowing partitions to fail independently, increasing the number of nodes that need to fail before availability is sacriﬁced【每个数据片失败都是独立的，提供了可用性】</li>
+</ul>
+<p><strong>Replication</strong></p>
+<blockquote>
+<p>To replication! The cause of, and solution to all of life’s problems.</p>
+</blockquote>
+<p>复制是应对延迟的有效手段</p>
+<ul>
+<li>Replication improves performance by making additional computing power and bandwidth applicable to a new copy of the data</li>
+<li>Replication improves availability by creating additional copies of the data, increasing the number of nodes that need to fail before availability is sacriﬁced</li>
+</ul>
+<p>复制来到好处的同时，也带来了很多问题，最大的就是数据一致性问题，只有当模型是 strong consistency 的时候，我们才会得到一个简单的编程模型（和单机系统一致），其他模型我们都好去理解系统内部是怎么做的，这样子才能很好的满足我们的需求。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/22/2016-12-22-build-apis-you-wont-hate-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/12/22/2016-12-22-build-apis-you-wont-hate-1/" class="post-title-link" itemprop="url">build-apis-you-wont-hate-1</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-12-22 22:04:22" itemprop="dateCreated datePublished" datetime="2016-12-22T22:04:22+08:00">2016-12-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/12/22/2016-12-22-build-apis-you-wont-hate-1/" class="post-meta-item leancloud_visitors" data-flag-title="build-apis-you-wont-hate-1" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="Useful-Database-Seeding"><a href="#Useful-Database-Seeding" class="headerlink" title="Useful Database Seeding"></a>Useful Database Seeding</h2><p>一般应用都是以数据库设计为核心的，设计完数据库后，下一步就是导入数据进行测试了，这种填充数据库的行为称为“seeding”。</p>
+<p>那有什么库能做这种dummy data导入的工作呢？很幸运的有<a href="https://github.com/fzaninotto/Faker" target="_blank" rel="noopener">Faker</a>这个库。</p>
+<p>那我们什么执行<code>seeding</code>操作呢？</p>
+<ul>
+<li>当其他团队成员拉取最新的代码，然后执行seeding操作，初始化好数据库，然后开始开发；</li>
+<li>当有新同事加入的时候，执行seeding操作，能快速的开始开发</li>
+<li>当在测试的时候，执行seeding操作，方便测试case运行</li>
+</ul>
+<h2 id="Planning-and-Creating-Endpoints"><a href="#Planning-and-Creating-Endpoints" class="headerlink" title="Planning and Creating Endpoints"></a>Planning and Creating Endpoints</h2><p>什么是一个endpoint？</p>
+<blockquote>
+<p> An endpoint is simply a URL</p>
+</blockquote>
+<h3 id="Functional-Requirements"><a href="#Functional-Requirements" class="headerlink" title="Functional Requirements"></a>Functional Requirements</h3><p>一般最开始的功能都是对于resources的CRUD操作，以Place为例，最开始的功能如下：</p>
+<p>Places </p>
+<ul>
+<li>Create </li>
+<li>Read </li>
+<li>Update </li>
+<li>Delete</li>
+</ul>
+<p>随着功能的深入，我们还需要list操作，于是有了：</p>
+<p>Places </p>
+<ul>
+<li>Create </li>
+<li>Read </li>
+<li>Update </li>
+<li>Delete</li>
+<li><strong>List</strong></li>
+</ul>
+<p>接着我们可能希望能够根据location来查询，这个时候，我们可能需要一个类似于<em>getPlacesByLatAndLon</em>的方法，但是在我们这种方式下，我们只需要增加几个参数：</p>
+<p>Places </p>
+<ul>
+<li>Create </li>
+<li>Read </li>
+<li>Update </li>
+<li>Delete</li>
+<li>List <strong>(lat, lon, distance or box)</strong></li>
+</ul>
+<p>在目前这个阶段，通过简单的增加参数来完成功能是完全ok的，不用过多的去担心参数太多带来的复杂性。</p>
+<h3 id="Endpoint-Theory"><a href="#Endpoint-Theory" class="headerlink" title="Endpoint Theory"></a>Endpoint Theory</h3><p>在将上面列举的endpoints转换为RESTful APIs的时候，有一些指导性的原则，遵循这些原则能更好的避免一些问题的出现。</p>
+<h4 id="GET-Resources"><a href="#GET-Resources" class="headerlink" title="GET Resources"></a>GET Resources</h4><ul>
+<li>GET /resources - Some paginated list of stuff, in some logical default order for that specific data.</li>
+<li>GET /resources/X - Just entity X. That can be an ID, hash, slug, username, etc as long as it unique to one “resource”.</li>
+<li>GET /resources/X,Y,Z - The client wants multiple things, so give them multiple things.</li>
+</ul>
+<p>对于一些sub-resources的建议：</p>
+<ul>
+<li>GET /places/X/checkins - Find all the checkins for a specific place. </li>
+<li>GET /users/X/checkins - Find all the checkins for a specific user.</li>
+<li>GET /users/X/checkins/Y - Find a specific checkin for a specific user.</li>
+</ul>
+<p>此处id的建议是使用uuid，php库是：<a href="https://github.com/ramsey/uuid" target="_blank" rel="noopener">ramsey\uuid for PHP</a></p>
+<h4 id="DELETE-Resources"><a href="#DELETE-Resources" class="headerlink" title="DELETE Resources"></a>DELETE Resources</h4><ul>
+<li>DELETE /places/X - Delete a single place. </li>
+<li>DELETE /places/X,Y,Z - Delete a bunch of places.</li>
+<li>DELETE /places - This is a potentially dangerous endpoint that could be skipped, as it should delete all places. </li>
+<li>DELETE /places/X/image - Delete the image for a place, or: </li>
+<li>DELETE /places/X/images - If you chose to have multiple images this would remove all of them.</li>
+</ul>
+<h4 id="POST-vs-PUT-FIGHT"><a href="#POST-vs-PUT-FIGHT" class="headerlink" title="POST vs PUT: FIGHT!"></a>POST vs PUT: FIGHT!</h4><p>什么时候使用Post，什么时候Put？</p>
+<p>PUT方法一般是幂等的，而Post则不是，举两个例子：</p>
+<p>PUT /places/1/image：每次上传都是有覆盖作用的，每个place只有一张照片</p>
+<p>POST /places/1/image：每次上传都是给place新一张照片</p>
+<p>另一个列子：</p>
+<ul>
+<li>POST /me/settings - I would expect this to allow me to POST specific fields one at a time, not force me to send the entire body of settings. </li>
+<li>PUT /me/settings - Send me ALL the settings.</li>
+</ul>
+<h4 id="Plural-Singular-or-Both"><a href="#Plural-Singular-or-Both" class="headerlink" title="Plural, Singular or Both?"></a>Plural, Singular or Both?</h4><p>建议都使用复数，一致性的复数有助于我们理解：</p>
+<ul>
+<li>/places - “If I run a GET on that I will get a collection of places” </li>
+<li>/places/45 - “Pretty sure I am just talking about places 45” </li>
+<li>/places/45,28 - “Ahh, places 45 and 28, got it”</li>
+</ul>
+<h3 id="Planning-Endpoints"><a href="#Planning-Endpoints" class="headerlink" title="Planning Endpoints"></a>Planning Endpoints</h3><p>列举出资源和功能后，下一步就是将其分配给不同的Controllers，然后写路由，将其路由到具体的<code>Controller@method</code>。</p>
+<h2 id="Input-and-Output-Theory"><a href="#Input-and-Output-Theory" class="headerlink" title="Input and Output Theory"></a>Input and Output Theory</h2><p>一个建议的组织方式</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/4793e3b1d15c5e02e4f9df75157ed10d4d3f85a1" alt=""></p>
+<h2 id="Status-Codes-Errors-and-Messages"><a href="#Status-Codes-Errors-and-Messages" class="headerlink" title="Status Codes, Errors and Messages"></a>Status Codes, Errors and Messages</h2><p>怎么让别人知道有错误，两种方式：</p>
+<ol>
+<li>HTTP status codes </li>
+<li>Custom error codes and messages</li>
+</ol>
+<p>最佳实践是status codes和error codes配合</p>
+<h2 id="Endpoint-Testing"><a href="#Endpoint-Testing" class="headerlink" title="Endpoint Testing"></a>Endpoint Testing</h2><p>BDD策略，软件<a href="http://behat.org/en/latest/" target="_blank" rel="noopener">http://behat.org/en/latest/</a></p>
+<h2 id="Outputting-Data"><a href="#Outputting-Data" class="headerlink" title="Outputting Data"></a>Outputting Data</h2><p>介绍了个component<a href="https://github.com/thephpleague/fractal，当我们在public方法中，不应该直接返回数据库中select的数据，因为php" target="_blank" rel="noopener">https://github.com/thephpleague/fractal，当我们在public方法中，不应该直接返回数据库中select的数据，因为php</a> sql默认返回的都是string类型，我们应该做一个类型转换后再返回。</p>
+<p>而类型转换中，最难的就是：embedding/nesting resources, or making “relationships”.</p>
+<h2 id="Data-Relationships"><a href="#Data-Relationships" class="headerlink" title="Data Relationships"></a>Data Relationships</h2><blockquote>
+<p>​    REST components communicate by transferring a representation of a resource in a format matching one of an evolving set of standard data types, selected dynamically based on the capabilities or desires of the recipient and the nature of the resource. Whether the representation is in the same format as the raw source, or is derived from the source, remains hidden behind the interface. – Roy Fielding¹</p>
+</blockquote>
+<p>对于Sub-Resources的处理</p>
+<p>方案一：</p>
+<ul>
+<li>downloading enough data to avoid making the user wait for subsequent loads</li>
+<li>downloading too much data to make them wait for the initial load</li>
+</ul>
+<p>在上面两种方案中的一个折中，要么一次性下载所有的数据，要么分批次下载，避免一次加载太多数据</p>
+<p>方案二：Foreign Key Arrays</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/469366ee5089fb0a1f526baedca6da2e69602abc" alt=""></p>
+<p>先给id，然后通过id再去获取数据，但是这样做的一个成本是，你必须要在获取到数据后，再去拼接。</p>
+<p>方案三：Compound Documents</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/3991843138ab67ed4f57db75060d71d02dd6b3d8" alt=""></p>
+<p>适合于comments有50个，但是都是2，3个作者的，这样子就没必要重复去获取作者了，直接通过Foreign Key Arrays方式，但是<strong><em>REST Side-Loading</em></strong></p>
+<p>方案四：Embedded Documents(a.k.a Nesting)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;places?embed&#x3D;checkins,merchant</span><br></pre></td></tr></table></figure>
+
+<p>另一种方式是可以支持dot</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">E.g: &#x2F;places?embed&#x3D;checkins,merchant,current_opp.images</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Debugging"><a href="#Debugging" class="headerlink" title="Debugging"></a>Debugging</h2><p>3种debug方法</p>
+<ul>
+<li>Command-line Debugging </li>
+<li>Browser Debugging </li>
+<li>Network Debugging</li>
+</ul>
+<p>推荐使用PostMan客户端调试</p>
+<p>Debug Panel</p>
+<p><a href="https://github.com/itsgoingd/clockwork-chrome" target="_blank" rel="noopener">Clockwork</a> - Chrome DevTool panel and standalone web app with logging and profiling for PHP. </p>
+<p><a href="http://craig.is/writing/chrome-logger" target="_blank" rel="noopener">Chrome Logger</a> - Chrome Logger only for Python, PHP, Ruby, Node, .NET, CF and Go.</p>
+<h2 id="Authentication"><a href="#Authentication" class="headerlink" title="Authentication"></a>Authentication</h2><p>什么时候权限有用？</p>
+<ul>
+<li>可以提供额外的用户信息</li>
+<li>当遇到ddos攻击的时候</li>
+</ul>
+<h3 id="Different-Approaches-to-Authentication"><a href="#Different-Approaches-to-Authentication" class="headerlink" title="Different Approaches to Authentication"></a>Different Approaches to Authentication</h3><p>方法一：Basic Authentication</p>
+<p>通过http header的方式，不安全</p>
+<p>方法二：Digest Authentication</p>
+<p>和方法一类似，但是通过md5后再传传递敏感信息</p>
+<p>方法三：OAuth 1.0a</p>
+<p>方法四：OAuth 2.0</p>
+<h2 id="Pagination"><a href="#Pagination" class="headerlink" title="Pagination"></a>Pagination</h2><p>这么做的原因</p>
+<ol>
+<li>Downloading more stuff takes longer </li>
+<li>Your database might not be happy about trying to return 100,000 records in one go </li>
+<li>Presentation logic iterating over 100,000 records is also no fun</li>
+</ol>
+<h3 id="Paginators"><a href="#Paginators" class="headerlink" title="Paginators"></a>Paginators</h3><p>问题是count</p>
+<h3 id="Obscuring-Cursors"><a href="#Obscuring-Cursors" class="headerlink" title="Obscuring Cursors"></a>Obscuring Cursors</h3><p>使用游标的方式，不用count，性能好，当没有数据的时候，返回empty result</p>
+<h2 id="Documentation"><a href="#Documentation" class="headerlink" title="Documentation"></a>Documentation</h2><p>文档很重要</p>
+<h3 id="Types-of-Documentation"><a href="#Types-of-Documentation" class="headerlink" title="Types of Documentation"></a>Types of Documentation</h3><ol>
+<li>API Reference</li>
+<li>Sample Code：<a href="http://phpdoc.org/" target="_blank" rel="noopener">phpDocumentor</a></li>
+<li>Guides or Tutorials：<a href="https://sculpin.io/" target="_blank" rel="noopener">Sculpin</a></li>
+</ol>
+<h3 id="Picking-a-Tool"><a href="#Picking-a-Tool" class="headerlink" title="Picking a Tool"></a>Picking a Tool</h3><p><a href="">Swagger</a></p>
+<p><a href="">API Blueprint</a></p>
+<h2 id="HATEOAS"><a href="#HATEOAS" class="headerlink" title="HATEOAS"></a>HATEOAS</h2><p>It stands for “Hypermedia as the Engine of Application State”, and is pronounced as either “hat-ee-os”, “hate O-A-S” or “hate-ee-ohs” - which sounds a little like a cereal for API developers.</p>
+<p>代表两方面</p>
+<ol>
+<li>Content negotiation </li>
+<li>Hypermedia controls</li>
+</ol>
+<p>第一部分内容转换上，可以通过headers的’Accept’ =&gt; ‘application/x-yaml’参数来标明</p>
+<p><a href="http://blog.csdn.net/dm_vincent/article/details/51341037" target="_blank" rel="noopener">Richardson成熟度模型(Richardson Maturity Model) - 通往真正REST的步骤</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/19/2016-12-19-doctrine2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/12/19/2016-12-19-doctrine2/" class="post-title-link" itemprop="url">doctrine 缘来 之 初次使用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-12-19 14:42:01" itemprop="dateCreated datePublished" datetime="2016-12-19T14:42:01+08:00">2016-12-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/12/19/2016-12-19-doctrine2/" class="post-meta-item leancloud_visitors" data-flag-title="doctrine 缘来 之 初次使用" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/fa3266866e3cb4c02ea0481a49e044df9a557240" alt=""></p>
+<p>本系列是读<strong><em>php data persistence with doctrine2 orm</em></strong>的笔记，本文是第二篇：doctrine的使用</p>
+<p>接着上篇我们自己造了个轮子，本篇开始我们还是实现上篇的功能，不过是用Doctrine来实现一遍。</p>
+<h2 id="doctrine使用"><a href="#doctrine使用" class="headerlink" title="doctrine使用"></a>doctrine使用</h2><p>我们采用yaml的方式来配置Entity的信息，先来个User的配置，文件<code>config/yaml/App.Entity.User.dcm.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">App\Entity\User:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">entity</span></span><br><span class="line">  <span class="attr">table:</span> <span class="string">users</span></span><br><span class="line">  <span class="attr">id:</span></span><br><span class="line">    <span class="attr">id:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">integer</span></span><br><span class="line">      <span class="attr">generator:</span></span><br><span class="line">        <span class="attr">strategy:</span> <span class="string">AUTO</span></span><br><span class="line">  <span class="attr">fields:</span></span><br><span class="line">    <span class="attr">firstName:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">string</span></span><br><span class="line">      <span class="attr">column:</span> <span class="string">first_name</span></span><br><span class="line">    <span class="attr">lastName:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">string</span></span><br><span class="line">      <span class="attr">column:</span> <span class="string">last_name</span></span><br><span class="line">    <span class="attr">gender:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">smallint</span></span><br><span class="line">    <span class="attr">namePrefix:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">string</span></span><br><span class="line">      <span class="attr">column:</span> <span class="string">name_prefix</span></span><br><span class="line">  <span class="attr">oneToMany:</span></span><br><span class="line">    <span class="attr">posts:</span></span><br><span class="line">      <span class="attr">targetEntity:</span> <span class="string">App\Entity\Post</span></span><br><span class="line">      <span class="attr">mappedBy:</span> <span class="string">user</span></span><br></pre></td></tr></table></figure>
+
+<p>此处为了使用doctrine，我们要做一些配置，先来一个初始化文件config/bootstrap.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">use Doctrine\ORM\Tools\Setup;</span><br><span class="line">use Doctrine\ORM\EntityManager;</span><br><span class="line"></span><br><span class="line">require_once __DIR__ . &#39;&#x2F;..&#x2F;vendor&#x2F;autoload.php&#39;;</span><br><span class="line">$isDevMode &#x3D; true;</span><br><span class="line">$config    &#x3D; Setup::createYAMLMetadataConfiguration( [ __DIR__ . &quot;&#x2F;..&#x2F;config&#x2F;yaml&quot; ], $isDevMode );</span><br><span class="line">$dbParams &#x3D; [</span><br><span class="line">    &#39;driver&#39; &#x3D;&gt; &#39;pdo_mysql&#39;,</span><br><span class="line">    &#39;user&#39; &#x3D;&gt; &#39;root&#39;,</span><br><span class="line">    &#39;password&#39; &#x3D;&gt; &#39;root&#39;,</span><br><span class="line">    &#39;dbname&#39; &#x3D;&gt; &#39;app&#39;,</span><br><span class="line">    &#39;port&#39; &#x3D;&gt; 33060,</span><br><span class="line">    &#39;host&#39; &#x3D;&gt; &#39;127.0.0.1&#39;,</span><br><span class="line">];</span><br><span class="line">$em &#x3D; EntityManager::create($dbParams, $config);</span><br></pre></td></tr></table></figure>
+
+<p>然后再是一个使用命令行的配置文件cli-config.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">require_once &quot;.&#x2F;scripts&#x2F;bootstrap.php&quot;;</span><br><span class="line"></span><br><span class="line">return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($em);</span><br></pre></td></tr></table></figure>
+
+<p>到这我们就可以通过命令行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;vendor&#x2F;bin&#x2F;doctrine orm:create</span><br></pre></td></tr></table></figure>
+
+<p>来创建我们的数据库了，而Entity的文件还是上一篇的，此处不再写了，到这，我们就可以创建一些脚本来完成我们的基本操作了。</p>
+<h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><p>我们先来完成user的创建工作，脚本如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F; create_user.php</span><br><span class="line">require_once __DIR__ . &#39;&#x2F;bootstrap.php&#39;;</span><br><span class="line"></span><br><span class="line">if ($argc !&#x3D; 4)&#123;</span><br><span class="line">    echo &quot;php &quot; . $argv[0] . &#39; firstName lastName gender&#39; . PHP_EOL;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$firstName &#x3D; $argv[1];</span><br><span class="line">$lastName  &#x3D; $argv[2];</span><br><span class="line">$gender &#x3D; $argv[3];</span><br><span class="line"></span><br><span class="line">$newUser &#x3D; new \App\Entity\User();</span><br><span class="line">$newUser-&gt;setFirstName($firstName);</span><br><span class="line">$newUser-&gt;setLastName($lastName);</span><br><span class="line">$newUser-&gt;setGender($gender);</span><br><span class="line"></span><br><span class="line">$em-&gt;persist($newUser);</span><br><span class="line">$em-&gt;flush();</span><br><span class="line">echo &quot;Created User with ID &quot; . $newUser-&gt;getId() . &quot;\n&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>通过命令行<code>php scripts/create_user.php zhuan xu 1</code>来完成用户的创建。</p>
+<h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F; list_users.php</span><br><span class="line">use Illuminate\Support\Collection;</span><br><span class="line"></span><br><span class="line">require_once __DIR__ . &#39;&#x2F;bootstrap.php&#39;;</span><br><span class="line"></span><br><span class="line">$userRepository &#x3D; $em-&gt;getRepository(\App\Entity\User::class);</span><br><span class="line">$users &#x3D; $userRepository-&gt;findAll();</span><br><span class="line"></span><br><span class="line">$users &#x3D; new Collection($users);</span><br><span class="line">$users-&gt;each(function( \App\Entity\User $user)&#123;</span><br><span class="line">    echo sprintf(&quot;- %s\n&quot;,$user-&gt;assembleDisplayName());</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>上面的操作完成用户的list</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; show_user.php &lt;id&gt;</span><br><span class="line">require_once __DIR__ . &#39;&#x2F;bootstrap.php&#39;;</span><br><span class="line"></span><br><span class="line">if ($argc !&#x3D; 2)&#123;</span><br><span class="line">    echo &quot;php &quot; . $argv[0] . &#39; id&#39; . PHP_EOL;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$id &#x3D; $argv[1];</span><br><span class="line">$userRepository &#x3D; $em-&gt;getRepository(\App\Entity\User::class);</span><br><span class="line"></span><br><span class="line">&#x2F;** @var \App\Entity\User $user *&#x2F;</span><br><span class="line">$user &#x3D; $userRepository-&gt;find($id);</span><br><span class="line"></span><br><span class="line">if ($user &#x3D;&#x3D;&#x3D; null) &#123;</span><br><span class="line">    echo &quot;No user found.\n&quot;;</span><br><span class="line">    exit(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">echo sprintf(&quot;- %s\n&quot;, $user-&gt;assembleDisplayName());</span><br></pre></td></tr></table></figure>
+
+<p>上面完成用户的查询</p>
+<h3 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F; update_user.php &lt;id&gt; &lt;firstName&gt;</span><br><span class="line">require_once __DIR__ . &#39;&#x2F;bootstrap.php&#39;;</span><br><span class="line"></span><br><span class="line">if ($argc !&#x3D; 3)&#123;</span><br><span class="line">    echo &quot;php &quot; . $argv[0] . &#39; id firstName&#39; . PHP_EOL;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$id &#x3D; $argv[1];</span><br><span class="line">$firstName &#x3D; $argv[2];</span><br><span class="line">$userRepository &#x3D; $em-&gt;getRepository(\App\Entity\User::class);</span><br><span class="line"></span><br><span class="line">&#x2F;** @var \App\Entity\User $user *&#x2F;</span><br><span class="line">$user &#x3D; $userRepository-&gt;find($id);</span><br><span class="line"></span><br><span class="line">if ($user &#x3D;&#x3D;&#x3D; null) &#123;</span><br><span class="line">    echo &quot;No user found.\n&quot;;</span><br><span class="line">    exit(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$user-&gt;setFirstName($firstName);</span><br><span class="line">$em-&gt;flush();</span><br></pre></td></tr></table></figure>
+
+<p>通过上面的脚本完成更新操作</p>
+<h3 id="关联"><a href="#关联" class="headerlink" title="关联"></a>关联</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">App\Entity\Post:</span><br><span class="line">  type: entity</span><br><span class="line">  table: posts</span><br><span class="line">  id:</span><br><span class="line">      id:</span><br><span class="line">        type: integer</span><br><span class="line">        generator:</span><br><span class="line">          strategy: AUTO</span><br><span class="line">  fields:</span><br><span class="line">    title:</span><br><span class="line">      type: string</span><br><span class="line">    content:</span><br><span class="line">      type: string</span><br><span class="line">  manyToOne:</span><br><span class="line">    user:</span><br><span class="line">      targetEntity: App\Entity\User</span><br><span class="line">      inversedBy: posts</span><br><span class="line">      joinColumn:</span><br><span class="line">        name: user_id</span><br><span class="line">        referencedColumnName: id</span><br></pre></td></tr></table></figure>
+
+<p>上面定义了User和Post的关联关系，此时通过命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;vendor&#x2F;bin&#x2F;doctrine  orm:validate-schema</span><br></pre></td></tr></table></figure>
+
+<p>可以检查我们定义的yaml文件是否正确</p>
+<p>通过上面的定义，我们来看下怎么创建一个Post</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F; create_post.php &lt;user_id&gt;</span><br><span class="line">require_once __DIR__ . &#39;&#x2F;bootstrap.php&#39;;</span><br><span class="line"></span><br><span class="line">if ($argc !&#x3D; 2)&#123;</span><br><span class="line">    echo &quot;php &quot; . $argv[0] . &#39; &lt;user_id&gt;&#39; . PHP_EOL;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$user_id &#x3D; $argv[1];</span><br><span class="line">$userRepository &#x3D; $em-&gt;getRepository(\App\Entity\User::class);</span><br><span class="line"></span><br><span class="line">&#x2F;** @var \App\Entity\User $user *&#x2F;</span><br><span class="line">$user &#x3D; $userRepository-&gt;find($user_id);</span><br><span class="line"></span><br><span class="line">if ($user &#x3D;&#x3D;&#x3D; null) &#123;</span><br><span class="line">    echo &quot;No user found.\n&quot;;</span><br><span class="line">    exit(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$post &#x3D; new \App\Entity\Post();</span><br><span class="line">$post-&gt;setContent(&quot;some thing good&quot;);</span><br><span class="line">$post-&gt;setTitle(&quot;good post&quot;);</span><br><span class="line">$post-&gt;setUser($user);</span><br><span class="line"></span><br><span class="line">$em-&gt;persist($post);</span><br><span class="line">$em-&gt;flush();</span><br><span class="line"></span><br><span class="line">echo &quot;Your new Post Id: &quot;.$post-&gt;getId().&quot;\n&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>至此我们就完成了上一篇介绍的功能。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>在深入Doctrine之前，我们先来看下目前为止我们所了解的。Doctrine通过entity manager管理着Entity，所有的查询，更新操作都是通过entity manager完成的，通过entity manager我们获取到某一特定Entity的Repository，通过Repository提供的各种finders来查询Entity。</p>
+<p>DBAL（Doctrine’s database access layer）是Doctrine ORM的基础，DBAL通过封装PDO来提供一个更方便的操作接口，而Doctrine ORM则是基于DBAL提供了一个比DBAL更方便的接口，具体Doctrine的实现由机会再深入讲解的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+  </div>
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+</body>
+</html>

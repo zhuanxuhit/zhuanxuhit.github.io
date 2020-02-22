@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文介绍php开源库BooBoo，是一个处理php异常和错误的开源库，通过简单的分析代码，我们知道了实际项目中怎么正确的设置错误和异常。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php异常处理 之 BooBoo库介绍">
+<meta property="og:url" content="http://yoursite.com/2016/11/10/php-booboo/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="本文介绍php开源库BooBoo，是一个处理php异常和错误的开源库，通过简单的分析代码，我们知道了实际项目中怎么正确的设置错误和异常。">
+<meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/362d6d8354ce7473583017f34635649110478f8b">
+<meta property="article:published_time" content="2016-11-10T02:19:29.000Z">
+<meta property="article:modified_time" content="2020-02-22T12:18:44.409Z">
+<meta property="article:author" content="颛顼">
+<meta property="article:tag" content="php exception">
+<meta property="article:tag" content="php开源库介绍">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/362d6d8354ce7473583017f34635649110478f8b">
+
+<link rel="canonical" href="http://yoursite.com/2016/11/10/php-booboo/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>php异常处理 之 BooBoo库介绍 | 程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/10/php-booboo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          php异常处理 之 BooBoo库介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-11-10 10:19:29" itemprop="dateCreated datePublished" datetime="2016-11-10T10:19:29+08:00">2016-11-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/11/10/php-booboo/" class="post-meta-item leancloud_visitors" data-flag-title="php异常处理 之 BooBoo库介绍" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/362d6d8354ce7473583017f34635649110478f8b" alt=""></p>
+<p>本文介绍php开源库BooBoo，是一个处理php异常和错误的开源库，通过简单的分析代码，我们知道了实际项目中怎么正确的设置错误和异常。</p>
+<a id="more"></a>
+
+<p>这是php异常系列的第二篇，第一篇地址是：</p>
+<p><a href="http://blog.zhuanxuhit.top/2016-11-08-Structuring-PHP-Exceptions.html" target="_blank" rel="noopener">如何组织PHP中的异常</a></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>php中的异常和错误是不一样的，错误英文单词是error，异常英文单词是exception。异常一般指出现正常逻辑之外的情况，而错误是指运行时发生了不可恢复的故障，比如使用了未定义的变量，或者语法错误等。异常我们通过<code>throw</code>抛出，<code>catch</code>进行捕获，而错误一般发生程序就会终止，我们可以通过<code>trigger_error</code>触发用户级错误，然后通过<code>set_error_handler</code>设置处理函数，下面看段代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set_error_handler(<span class="string">'errorHandler'</span>);</span><br><span class="line">trigger_error(<span class="string">"这里描述错误"</span>,E_USER_ERROR);</span><br><span class="line"><span class="comment">//E_USER_ERROR：该error 所特定的错误类型，默认是E_USER_NOTICE</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">errorHandler</span><span class="params">($errno,$errstr)</span></span>&#123;</span><br><span class="line">    <span class="comment">//用户的函数需要接受两个参数：错误码和描述错误的 string</span></span><br><span class="line">    <span class="keyword">if</span>($errno==E_USER_ERROR)&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"错误为:"</span>,$errstr.<span class="string">'&lt;br&gt;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行后就会通过我们设定的<code>errorHandler</code>输出错误。</p>
+<p>如果我们没有设定errorHandler，而且我们是在控制台中运行的脚本，那就会出现错误信息，</p>
+<p><code>PHP Fatal error:  这里描述错误 in /Users/zhuanxu/workspace/php-exceptions/error.php on line 4</code></p>
+<p>那我们怎么能够在生产环境中去除这些信息呢？</p>
+<p>在<a href="http://php.net/manual/en/ini.list.php" target="_blank" rel="noopener">php.ini</a>中有两个参数与错误有关，一个是display_errors，另一个是error_reporting，其中display_errors控制着是否将错误信息输出到控制台，而error_reporting则控制着错误报告级别。</p>
+<p>讲完这些，我们下面将开始分析BooBoo，来看看实际项目中怎么处理错误和异常。</p>
+<h2 id="BooBoo介绍"><a href="#BooBoo介绍" class="headerlink" title="BooBoo介绍"></a>BooBoo介绍</h2><p>此处我们通过库<a href="http://booboo.thephpleague.com/" target="_blank" rel="noopener">BooBoo</a>来进行学习。</p>
+<p>BooBoo的设计原则是：如果Errors是fatal的，那就按fatal处理，如果Errors不是Fatal的，则让程序继续执行。</p>
+<p>在错误的处理上，我们希望能够在实际生产中处理错误，但是只在开发环境中才展示出这些错误信息，因此BooBoo在设计上有两个重要的概念：Handler，Formatter。</p>
+<ul>
+<li>Handler做的事情就是针对错误执行一个操作，可能是记录日志，可能是发送错误给报警器。</li>
+<li>Formatter则是将错误变为可阅读的错误信息。</li>
+</ul>
+<p>另外当设置display_errors关闭的时候，不会执行Formatter操作，当然BooBoo也支持你自己针对错误自己制定Formatter。</p>
+<p>代码结构：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">├── Exception</span><br><span class="line">│   └── NoFormattersRegisteredException.php</span><br><span class="line">├── Formatter</span><br><span class="line">│   ├── AbstractFormatter.php</span><br><span class="line">│   ├── CommandLineFormatter.php</span><br><span class="line">│   ├── FormatterInterface.php</span><br><span class="line">│   ├── HtmlFormatter.php</span><br><span class="line">│   ├── HtmlTableFormatter.php</span><br><span class="line">│   ├── JsonFormatter.php</span><br><span class="line">│   └── NullFormatter.php</span><br><span class="line">├── Handler</span><br><span class="line">│   ├── HandlerInterface.php</span><br><span class="line">│   ├── LogHandler.php</span><br><span class="line">│   └── RavenHandler.php</span><br><span class="line">├── Runner.php</span><br><span class="line">└── Util</span><br><span class="line">    ├── Frame.php</span><br><span class="line">    ├── FrameCollection.php</span><br><span class="line">    └── Inspector.php</span><br></pre></td></tr></table></figure>
+
+
+
+<p>顶层是Runner.php，下面是重要的两个目录：Formatter和Handler，还有辅助函数Util，以及异常Exception。</p>
+<p>我们先看使用方式</p>
+<p>安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> composer require league/booboo</span></span><br></pre></td></tr></table></figure>
+
+<p>新建booboo.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">League</span>\<span class="title">BooBoo</span>\<span class="title">Formatter</span>\<span class="title">CommandLineFormatter</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">League</span>\<span class="title">BooBoo</span>\<span class="title">Runner</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">require_once</span> <span class="keyword">__DIR__</span> . <span class="string">"/vendor/autoload.php"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$runner = <span class="keyword">new</span> Runner();</span><br><span class="line">$runner-&gt;pushFormatter(<span class="keyword">new</span> CommandLineFormatter());</span><br><span class="line">$runner-&gt;register(); <span class="comment">// Registers the handlers</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> $cc;</span><br></pre></td></tr></table></figure>
+
+<p>执行后输出：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+--------+</span><br><span class="line">| NOTICE |</span><br><span class="line">+--------+</span><br><span class="line">Undefined variable: cc in /Users/zhuanxu/workspace/php-exceptions/booboo.php on line 12</span><br></pre></td></tr></table></figure>
+
+<p>有了使用的感性认识后，我们看看究竟发生了什么。</p>
+<p>在<code>League\BooBoo\Runner</code>的构造函数中：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(array $formatters = [], array $handlers = [])</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>可以设置formatters和handlers，然后在register函数中，</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//==&gt; 关闭错误展示，设置3个处理函数</span></span><br><span class="line"><span class="comment">// We want the formaters we register to handle the errors.</span></span><br><span class="line">ini_set(<span class="string">'display_errors'</span>, <span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">set_error_handler(<span class="keyword">array</span>(<span class="keyword">$this</span>, <span class="keyword">self</span>::ERROR_HANDLER));</span><br><span class="line">set_exception_handler(<span class="keyword">array</span>(<span class="keyword">$this</span>, <span class="keyword">self</span>::EXCEPTION_HANDLER));</span><br><span class="line">register_shutdown_function(<span class="keyword">array</span>(<span class="keyword">$this</span>, <span class="keyword">self</span>::SHUTDOWN_HANDLER));</span><br></pre></td></tr></table></figure>
+
+<p>通过3个注册函数注册了处理的函数。当异常发生的时候，调用<code>exceptionHandler</code>函数</p>
+<p>里面会挨个调用用户注册的handlers，如果用户没有关闭错误显示，会通过formatters处理后直接打印出来，但是如果关闭了错误显示，则会返回给浏览器。</p>
+<p>此处看下register_shutdown_function函数，其注册的函数调用条件是：</p>
+<p>1、当页面被用户强制停止时</p>
+<p>2、当程序代码运行超时时</p>
+<p>3、当ＰＨＰ代码执行完成时，代码执行存在异常和错误、警告</p>
+<p>在函数shutdownHandler中：我们关闭了抛出异常，然后判断是否有错误发生，有则进行错误处理。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">shutdownHandler</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// We can't throw exceptions in the shutdown handler.</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;treatErrorsAsExceptions(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">        $error = error_get_last();</span><br><span class="line">        <span class="keyword">if</span> ($error &amp;&amp; $error[<span class="string">'type'</span>] &amp; <span class="keyword">$this</span>-&gt;fatalErrors) &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;errorHandler(</span><br><span class="line">                $error[<span class="string">'type'</span>],</span><br><span class="line">                $error[<span class="string">'message'</span>],</span><br><span class="line">                $error[<span class="string">'file'</span>],</span><br><span class="line">                $error[<span class="string">'line'</span>]</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后我们看下错误处理函数，在里面我们会判断错误是否是致命错误，如果是则进行处理，否则按照异常处理。</p>
+<p>BooBoo库的介绍就到这了，通过BooBoo我们能很方便的对异常和错误进行统一处理，非常方便我们平常的开发，下一篇我们将再看看<a href="https://filp.github.io/whoops/" target="_blank" rel="noopener">Whoops</a>库，也是一个错误处理的函数，再平时开发中用到的很多。</p>
+<p>这是 <em>php异常系列</em> 的第二篇，你的鼓励是我继续写下去的动力，期待我们共同进步。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.jianshu.com/p/dc7927431017" target="_blank" rel="noopener">PHP异常、错误处理机制笔记</a></p>
+<p><a href="http://www.brandonsavage.net/introducing-a-new-error-handler-for-php-projects/" target="_blank" rel="noopener">Introducing a new error handler for PHP projects</a></p>
+<p><a href="http://yanue.net/post-99.html" target="_blank" rel="noopener"><a href="http://yanue.net/post-99.html" target="_blank" rel="noopener">register_shutdown_function 函数详解</a></a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/php-exception/" rel="tag"># php exception</a>
+              <a href="/tags/php%E5%BC%80%E6%BA%90%E5%BA%93%E4%BB%8B%E7%BB%8D/" rel="tag"># php开源库介绍</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/08/2016-11-08-Structuring-PHP-Exceptions/" rel="prev" title="如何组织PHP中的异常">
+      <i class="fa fa-chevron-left"></i> 如何组织PHP中的异常
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/11/2016-11-11-The-Clean-Architecture-in-PHP-%E4%B8%83/" rel="next" title="The Clean Architecture in PHP 读书笔记(七)">
+      The Clean Architecture in PHP 读书笔记(七) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+  <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+        <div style="text-align:center;color: #555;font-size:14px;">你的鼓励是我继续创作的动力！</div>
+    
+</div>
+  
+  </div>
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80ODc1Ny8yNTI1MQ"></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BooBoo介绍"><span class="nav-number">2.</span> <span class="nav-text">BooBoo介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="从小白到大神，一路走来，你我相伴">
+<meta property="og:type" content="website">
+<meta property="og:title" content="程序猿的进击之路">
+<meta property="og:url" content="http://yoursite.com/page/5/index.html">
+<meta property="og:site_name" content="程序猿的进击之路">
+<meta property="og:description" content="从小白到大神，一路走来，你我相伴">
+<meta property="article:author" content="颛顼">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/page/5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: true,
+    isPost: false
+  };
+</script>
+
+  <title>程序猿的进击之路</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6df67afdfc9b547082e81ea60ea510dc";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+  <a href="https://github.com/zhuanxuhit" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">程序猿的进击之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right"></div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/19/2016-10-19-6-824-2016-Lecture-6-Raft-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/10/19/2016-10-19-6-824-2016-Lecture-6-Raft-2/" class="post-title-link" itemprop="url">6.824 2016 Lecture 6: Raft (2)</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-19 09:48:16" itemprop="dateCreated datePublished" datetime="2016-10-19T09:48:16+08:00">2016-10-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/10/19/2016-10-19-6-824-2016-Lecture-6-Raft-2/" class="post-meta-item leancloud_visitors" data-flag-title="6.824 2016 Lecture 6: Raft (2)" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>注意：新的leader会强制让所有的follower的日志和自己保持一致，方法是通过AppendEntries prevLogTerm机制</p>
+<h1 id="一个新的leader能够回滚之前任期内已经执行的条目嘛？"><a href="#一个新的leader能够回滚之前任期内已经执行的条目嘛？" class="headerlink" title="一个新的leader能够回滚之前任期内已经执行的条目嘛？"></a>一个新的leader能够回滚之前任期内已经执行的条目嘛？</h1><p>例如：一个之前已经执行过的entry在新的leader的日志中丢失了</p>
+<p>这会是一个灾难：违反了State Machine Safety</p>
+<p>解决方法：Raft不会选举一个server为leader，如果它没有之前执行的entry</p>
+<h1 id="如何进行leader的选举？"><a href="#如何进行leader的选举？" class="headerlink" title="如何进行leader的选举？"></a>如何进行leader的选举？</h1><p><strong>我们能简单的选择拥有最长日志的server嘛？</strong></p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S1: 5 6 7</span><br><span class="line">   S2: 5 8</span><br><span class="line">   S3: 5 8</span><br></pre></td></tr></table></figure>
+
+<p>首先，我们看下上面的场景怎么发生的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">S1在term 6成为leader</span><br><span class="line">crash+reboot</span><br><span class="line">S1在term 7又成为leader</span><br><span class="line">crash，stay down</span><br><span class="line">S2在term 8成为leader，只有S2和S3 live</span><br><span class="line">S2 crash</span><br></pre></td></tr></table></figure>
+
+<p>那谁会成为leader呢？</p>
+<p>S1有最长的日志，但是entry 8已经执行了！！！</p>
+<p>所以新的leader只能是S2或者S3</p>
+<p>回答上面的问题：谁成为leader不能只判断谁的日志长？（日志长的考虑是尽可能持有最多的日志，信息最多）</p>
+<p>在论文5.4.1中说选举规则是：<strong>“at least as up to date”</strong>，那怎么定义日志新呢？</p>
+<ol>
+<li>比较最后的entry，谁的term大谁赢，term大意味着在时间轴上靠后</li>
+<li>term相同，比较谁的日志长</li>
+</ol>
+<p>通过上面两点：<strong>“at least as up to date”</strong>保证了新的leader包含了所有可能已经执行的entry</p>
+<h1 id="怎么快速回滚？"><a href="#怎么快速回滚？" class="headerlink" title="怎么快速回滚？"></a>怎么快速回滚？</h1><p>图2规则中每个rpc都退一个entry太慢了！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S1: 4 4 4 4</span><br><span class="line">S2: 4 4 5 5 6 6</span><br><span class="line">S3: 4 4 5 5</span><br></pre></td></tr></table></figure>
+
+<p>S3当选了term7的leader，如果follower拒绝了，那回复中包含：</p>
+<p>不一致entry的任期（term）</p>
+<p>不一致任期的第一个entry的下标</p>
+<p>如果leader知道不一致的任期：</p>
+<p>​    将nextIndex[i]设置为不一致任期的最后一个entry</p>
+<p>否则：</p>
+<p>​    将nextIndex[i]设置为follower返回的index</p>
+<h1 id="在图2规则中为什么要保证leader提交的entry要满足log-N-term-currentTerm？"><a href="#在图2规则中为什么要保证leader提交的entry要满足log-N-term-currentTerm？" class="headerlink" title="在图2规则中为什么要保证leader提交的entry要满足log[N].term == currentTerm？"></a>在图2规则中为什么要保证leader提交的entry要满足log[N].term == currentTerm？</h1><p>为什么我们不能提交任意的entry只要满足大多数都有这个entry了？</p>
+<p>​    这种情况下提交的entry怎么会有可能被丢弃？</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/08b43293b3d71a530c4b6e55c4ab3218d9d9b1f4" alt="提交日志覆盖"></p>
+<ul>
+<li>(a) S1 是领导者，部分的复制了索引位置 2 的日志条目</li>
+<li>(b) S1 崩溃了，然后 S5 在任期 3 里通过 S3、S4 和自己的选票赢得选举，然后从客户端接收了一条不一样的日志条目放在了索引2 处</li>
+<li>(c) S5 又崩溃了；S1 重新启动，选举成功，开始复制日志。在这时，来自任期 2 的那条日志已经被复制到了集群中的大多数机器上，但是还没有被提交</li>
+<li>(d)  S1 又崩溃了，S5 可以重新被选举成功（通过来自 S2，S3 和 S4 的选票），然后覆盖了他们在索引 2 处的日志。但是，在崩溃之前，如果 S1 在自己的任期里复制了日志条目到大多数机器上</li>
+<li>(e) 然后这个条目就会被提交（S5 就不可能选举成功）。 在这个时候，之前的所有日志就会被正常提交处理</li>
+</ul>
+<p>该问题是因为：当一个新Leader当选时，由于所有成员的日志进度不同，很可能需要继续复制前面纪元的日志条目，因为即使为前面纪元的日志复制到多数服务器并且提交,如步骤C，但是在D中还是可能被覆盖，这就产生了不一致。解决的方法就是通过规则6：如果存在以个N满足 N&gt;commitIndex,多数的matchIndex[i] &gt;= N,并且 log[N].term == currentTerm:设置commitIndex = N，具体就是在c阶段，S1成为Leader，此时的纪元是4。S1一样向其他服务器发送日志2，当发送到多数服务器S1,S2,S3时，此时并不提交该日志，而是继续复制日志4,直到日志4到达多数服务器后，提交日志4，即leader只会提交当前纪元的日志。如果提交了4之后宕机，S5就不会被选举为新的 Leader，如果在提交4之前宕机，那么日志2,日志4还是可能被覆盖，但是由于没有提交，也就没有执行日志中的命令，即使被覆盖也无关系。</p>
+<p>所以一个entry变为commited如果：</p>
+<p>1）在他发送出去的term内达到了大多数的同意</p>
+<p>2）如果后续的entry变为committed</p>
+<p>这是因为：</p>
+<p>“more up to date”的投票规则倾向于大的任期</p>
+<p>leader会将日志同步给followers</p>
+<h1 id="持久化和性能"><a href="#持久化和性能" class="headerlink" title="持久化和性能"></a>持久化和性能</h1><p>如果一个server挂了又重启，它必须要记住什么？</p>
+<p>图2列出了”persistent state”：</p>
+<ul>
+<li>currentTerm</li>
+<li>votedFor</li>
+<li>log[]</li>
+</ul>
+<p>一个Raft的server在重启后只有他们是完整的才能再次加入</p>
+<p>因此必须要将状态存储到非易失性存储上如果改变了上面的变量</p>
+<p>​    在发送rpc或者回复rpc的时候</p>
+<p>non-volatile = disk, SSD</p>
+<h2 id="为什么要存储log-？"><a href="#为什么要存储log-？" class="headerlink" title="为什么要存储log[]？"></a>为什么要存储log[]？</h2><p>如果重启的server之前回复了leader说我收到entry了，但是重启后，丢失了，那这条已经确认的日志可能就会在将来丢失了</p>
+<h2 id="为什么currentTerm-votedFor"><a href="#为什么currentTerm-votedFor" class="headerlink" title="为什么currentTerm/votedFor?"></a>为什么currentTerm/votedFor?</h2><p>防止在一个term多次投票，导致多个leader的产生</p>
+<h2 id="那状态机的状态呢？需要存储嘛"><a href="#那状态机的状态呢？需要存储嘛" class="headerlink" title="那状态机的状态呢？需要存储嘛"></a>那状态机的状态呢？需要存储嘛</h2><p>不必要存储，因为存储了log，可以通过log重建出来</p>
+<p>server重启后lastApplied会变为0，这个时候所有的log会重新应用到状态机</p>
+<h2 id="持久化存储一般是性能的瓶颈"><a href="#持久化存储一般是性能的瓶颈" class="headerlink" title="持久化存储一般是性能的瓶颈"></a>持久化存储一般是性能的瓶颈</h2><p>一个硬盘操作消耗10ms，ssd消耗0.1ms</p>
+<p>rpc消耗低于1ms</p>
+<p>因此我们预期能有100到10,000操作/每秒</p>
+<h2 id="我们怎么提高性能？"><a href="#我们怎么提高性能？" class="headerlink" title="我们怎么提高性能？"></a>我们怎么提高性能？</h2><p>在每个rpc和每个disk写中我们批量操作并发客户端的操作</p>
+<p>使用更快的non-volatile存储</p>
+<h2 id="怎么获取更高的吞吐？"><a href="#怎么获取更高的吞吐？" class="headerlink" title="怎么获取更高的吞吐？"></a>怎么获取更高的吞吐？</h2><p>how to get even higher throughput?<br>  not by adding servers to a single Raft cluster!<br>​    more servers -&gt; tolerate more simultaneous server failures<br>​    more servers <em>decrease</em> throughput: more leader work / operation<br>  to get more throughput, “shard” or split the data across<br>​    many separate Raft clusters, each with 3 or 5 servers<br>​    different clusters can work in parallel, since they don’t interact<br>​    lab 4<br>  or use Raft for fault-tolerant master and something else<br>​    that replicates data more efficiently than Raft, e.g. GFS chunkservers</p>
+<h2 id="Raft放弃了性能来获取简洁？"><a href="#Raft放弃了性能来获取简洁？" class="headerlink" title="Raft放弃了性能来获取简洁？"></a>Raft放弃了性能来获取简洁？</h2><p>大多数复制系统都有类似的性能问题：</p>
+<p>​    每次协商都涉及一次rpc交互和一次磁盘操作</p>
+<p>一些Raft的设计选举可能影响性能：</p>
+<p>​    Raft follower拒绝乱序的AppendEntries RPCs</p>
+<p>​        而不是将请求存储起来，等待之前的AppendEntries到来后在处理</p>
+<p>​        如果网络的原因导致乱序的包特别多，那可能上述的问题会特别重要</p>
+<p>​    一个慢的leader可能会影响Raft：例如异地备份</p>
+<h2 id="在实际中什么对于性能特别重要呢？"><a href="#在实际中什么对于性能特别重要呢？" class="headerlink" title="在实际中什么对于性能特别重要呢？"></a>在实际中什么对于性能特别重要呢？</h2><p>你用它来做什么</p>
+<p>批量处理rpc和硬盘操作</p>
+<p>只读请求快速路由</p>
+<p>高效的rpc库</p>
+<p>Raft可能兼容大多数的这种技术</p>
+<p>更多关于性能的论文：</p>
+<p>  Zookeeper/ZAB; Paxos Made Live; Harp</p>
+<h1 id="主题：client-behavior-duplicate-operations-read-operations"><a href="#主题：client-behavior-duplicate-operations-read-operations" class="headerlink" title="主题：client behavior, duplicate operations, read operations"></a>主题：client behavior, duplicate operations, read operations</h1><h2 id="实验3的key-value客户端怎么工作？"><a href="#实验3的key-value客户端怎么工作？" class="headerlink" title="实验3的key/value客户端怎么工作？"></a>实验3的key/value客户端怎么工作？</h2><p>client发送Put/Append/Get RPCs到servers</p>
+<p>怎么找到leader？</p>
+<p>如果leader挂了怎么办？</p>
+<h2 id="client-RPC-loop"><a href="#client-RPC-loop" class="headerlink" title="client RPC loop"></a>client RPC loop</h2><p>发送RPC给server</p>
+<p>RPC将会返回：可能是错误（超时）或者收到响应</p>
+<p>如果收到响应，server说是leader，返回</p>
+<p>如果没有回复，或者server说不是leader，尝试发送给另一个server</p>
+<p>client应该缓存最后一次知道的leader</p>
+<h2 id="问题：这会产生重复的客户端请求"><a href="#问题：这会产生重复的客户端请求" class="headerlink" title="问题：这会产生重复的客户端请求"></a>问题：这会产生重复的客户端请求</h2><p>client发送请求给leader S1，S1发送日志给力大多数，然后S1在给client回复的前crash了</p>
+<p>客户端看到RPC错误，等待新的leader产生，然后重新发送请求</p>
+<p>新的leader将请求又再次放入log</p>
+<p>解决办法：我们需要一些<strong>at-most-once</strong>的机制</p>
+<p>每个server应该记录已经执行过的客户端请求</p>
+<p>如果一个请求再次出现在log中，不执行这个log，然后回复给client上次执行的结果</p>
+<p>服务做了上面的事情，而不是Raft</p>
+<p>lecture 2说明了怎么有效的检测重复请求</p>
+<p>所有的副本都应该保存一份已执行请求的表，而不仅仅是leader，因为任意一个server都可能变为leader，客户端可能会重新发送请求</p>
+<h2 id="如果保存的返回结果不是最新的ok吗？"><a href="#如果保存的返回结果不是最新的ok吗？" class="headerlink" title="如果保存的返回结果不是最新的ok吗？"></a>如果保存的返回结果不是最新的ok吗？</h2><p>C1发送get(x)，servers执行后得到结果1，leader在回复前crash</p>
+<p>C2发送put(x, 2)</p>
+<p>C2重新发送get(x)给新的leader，如果从缓存的结果中得到回复，则是1</p>
+<p>对回答正确结果的直觉是：应用从非副本的sever上能看到结果1吗？</p>
+<p>是的！</p>
+<p>C1发送了get(x)，执行非常快，但是由于网络的原因回复的非常慢，所以在C1收到结果1之前C2已经执行了put(x,2)</p>
+<p>这种语义的正式名称是：<strong>线性化（linearizable）</strong></p>
+<p>每个操作在某个时间点执行，反应了该操作在执行时间点之前所有操作的结果</p>
+<p>一个操作的时间是介于发送和收到之间</p>
+<h2 id="一个重要的问题，leader可以本地执行只读操作吗？"><a href="#一个重要的问题，leader可以本地执行只读操作吗？" class="headerlink" title="一个重要的问题，leader可以本地执行只读操作吗？"></a>一个重要的问题，leader可以本地执行只读操作吗？</h2><p>leader本地执行只读操作，而不会发送给所有的followers，并且等待commit？</p>
+<p>很诱人的一个想法，因为r/o操作可能会占大多数，并且也不会改变状态</p>
+<p>这为什么会是一个坏主意？</p>
+<p>我们怎么做才能让这个想法实现呢？</p>
+<p>只读的请求可以不写log就能执行，但是它有可能返回过期的数据，有如下场景：</p>
+<ul>
+<li>老的leader挂掉了，但它自身还认为自己是leader，于是client发读请求到该server时，可能获得的是老数据</li>
+</ul>
+<p>Raft通过如下方法避免上述问题：</p>
+<ul>
+<li>Leader必须有被提交条目的最新信息，这个指leader肯定是拥有最的log的机器，但是在前一个任期的log不知道是否已经提交了，是否已经应用到状态机了，因此无法保证数据是最新的，Raft采用,每个Leader在开始时提交一个空操作条目到他的日志中，此时通过提交本纪元的条目，自然而然就保证了之前纪元的条目被应用到状态机，从而获取最新的状态</li>
+<li>leader在执行只读请求时，需要确定自己是否还是leader，通过和大多数的server发送heartbeat消息，来确定自己是leader，然后再决定是否执行该请求</li>
+</ul>
+<h1 id="主题：日志合并和快照"><a href="#主题：日志合并和快照" class="headerlink" title="主题：日志合并和快照"></a>主题：日志合并和快照</h1><p>问题：</p>
+<ul>
+<li>日志会变的越来越大：远比状态机的状态大</li>
+<li>会使用大量的内存</li>
+<li>将会耗费大量时间：在重启后读取并且应用日志，同步日志给新加入的server</li>
+</ul>
+<h2 id="什么限制了服务器如何抛弃老旧的部分日志"><a href="#什么限制了服务器如何抛弃老旧的部分日志" class="headerlink" title="什么限制了服务器如何抛弃老旧的部分日志?"></a>什么限制了服务器如何抛弃老旧的部分日志?</h2><p>不能忘记un-committed的操作</p>
+<p>在crash和restart需要回放</p>
+<p>需要将最新的状态同步给其他server</p>
+<h2 id="解决方案：service周期性的创建持久的快照（snapshot）"><a href="#解决方案：service周期性的创建持久的快照（snapshot）" class="headerlink" title="解决方案：service周期性的创建持久的快照（snapshot）"></a>解决方案：service周期性的创建持久的快照（snapshot）</h2><p>复制整个状态机的状态通过一个特殊的日志条目</p>
+<p>​    例如：k/v表，客户端状态</p>
+<p>service将快照写到持久化存储</p>
+<p>service通过一些条目告诉Raft这是快照</p>
+<p>一个server能够在任何时候创建一个快照然后丢弃日志</p>
+<h2 id="snapshot和logs的关系"><a href="#snapshot和logs的关系" class="headerlink" title="snapshot和logs的关系"></a>snapshot和logs的关系</h2><p>快照（snapshot）只包含committed的日志</p>
+<p>所以server只会丢弃committed之前的日志，任何未被确认为committed的日志都会留下</p>
+<p>所以一个server的持久化的状态包括：</p>
+<ul>
+<li>service的一个快照，通过一个特定的日志条目</li>
+<li>Raft的持久化日志跟随着快照条目</li>
+</ul>
+<p>以上两者等同于全量日志</p>
+<h2 id="当crash-restart的时候发生了什么？"><a href="#当crash-restart的时候发生了什么？" class="headerlink" title="当crash+restart的时候发生了什么？"></a>当crash+restart的时候发生了什么？</h2><p>service从磁盘读取快照</p>
+<p>Raft从磁盘读取持久化日志</p>
+<p>发送已经committed的条目但是不在快照中的</p>
+<h2 id="如果leader丢失了不在follower日志中的条目"><a href="#如果leader丢失了不在follower日志中的条目" class="headerlink" title="如果leader丢失了不在follower日志中的条目"></a>如果leader丢失了不在follower日志中的条目</h2><p>nextIndex[i]将会回到leader日志开始地方</p>
+<p>所以leader不能通过AppendEntries RPCs修复follower</p>
+<p>那为什么leader不丢失只有所有server都有的日志？</p>
+<h2 id="什么是-InstallSnapshot-RPC？"><a href="#什么是-InstallSnapshot-RPC？" class="headerlink" title="什么是 InstallSnapshot RPC？"></a>什么是 InstallSnapshot RPC？</h2><p>  term<br>  lastIncludedIndex<br>  lastIncludedTerm<br>  snapshot data</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> what if leader discards a log entry that&#39;s not in follower i&#39;s log?</span><br><span class="line">  nextIndex[i] will back up to start of leader&#39;s log</span><br><span class="line">  so leader can&#39;t repair that follower with AppendEntries RPCs</span><br><span class="line">  (Q: why not have leader discard only entries that *all* servers have?)</span><br><span class="line"></span><br><span class="line">what&#39;s in an InstallSnapshot RPC? Figures 12, 13</span><br><span class="line">  term</span><br><span class="line">  lastIncludedIndex</span><br><span class="line">  lastIncludedTerm</span><br><span class="line">  snapshot data</span><br><span class="line"></span><br><span class="line">what does a follower do w&#x2F; InstallSnapshot?</span><br><span class="line">  reject if term is old (not the current leader)</span><br><span class="line">  reject (ignore) if we already have last included index&#x2F;term,</span><br><span class="line">    or if we&#39;ve already executed last included index</span><br><span class="line">    it&#39;s an old&#x2F;delayed RPC</span><br><span class="line">  empty the log, replace with fake &quot;prev&quot; entry</span><br><span class="line">  set lastApplied to lastIncludedIndex</span><br><span class="line">  send snapshot in applyCh to service</span><br><span class="line">  service *replaces* its lastApplied, k&#x2F;v table, client dup table</span><br><span class="line"></span><br><span class="line">The Question:</span><br><span class="line">  Could a received InstallSnapshot RPC cause the state machine to go</span><br><span class="line">  backwards in time? That is, could step 8 in Figure 13 cause the state</span><br><span class="line">  machine to be reset so that it reflects fewer executed operations? If</span><br><span class="line">  yes, explain how this could happen. If no, explain why it can&#39;t</span><br><span class="line">  happen.</span><br><span class="line"></span><br><span class="line">*** topic: configuration change</span><br><span class="line"></span><br><span class="line">configuration change (Section 6)</span><br><span class="line">  configuration &#x3D; servers集合</span><br><span class="line">  configuration &#x3D; set of servers</span><br><span class="line">  每隔一段时间你可能都想</span><br><span class="line">  	变更为一个新的servers集合</span><br><span class="line">  	增加&#x2F;减少servers</span><br><span class="line">  人进行配置的修改，Raft来操作</span><br><span class="line">  我们希望Raft在配置更改期间也能正确执行</span><br><span class="line">  every once in a while you might want to</span><br><span class="line">    move to an new set of servers, or</span><br><span class="line">    increase&#x2F;decrease the number of servers</span><br><span class="line">  human initiates configuration change, Raft manages it</span><br><span class="line">  we&#39;d like Raft to execute correctly across configuration changes</span><br><span class="line"></span><br><span class="line">why doesn&#39;t a straightforward approach work?</span><br><span class="line">  suppose each server has the list of servers in the current config</span><br><span class="line">  change configuration by telling each server the new list</span><br><span class="line">    using some mechanism outside of Raft</span><br><span class="line">  problem: they will learn new configuration at different times</span><br><span class="line">  example: want to replace S3 with S4</span><br><span class="line">    S1: 1,2,3  1,2,4</span><br><span class="line">    S2: 1,2,3  1,2,3</span><br><span class="line">    S3: 1,2,3  1,2,3</span><br><span class="line">    S4:        1,2,4</span><br><span class="line">  OOPS! now *two* leaders could be elected!</span><br><span class="line">    S2 and S3 could elect S2</span><br><span class="line">    S1 and S4 could elect S1</span><br><span class="line"></span><br><span class="line">Raft configuration change</span><br><span class="line">Raft配置的更改</span><br><span class="line">  idea: &quot;joint consensus&quot; stage that includes *both* old and new configuration</span><br><span class="line">  leader of old group logs entry that switches to joint consensus</span><br><span class="line">    Cold,new -- contains both configurations</span><br><span class="line">  during joint consensus, leader gets AppendEntries majority in both old and new</span><br><span class="line">  after Cold,new commits, leader sends out Cnew</span><br><span class="line">  S1: 1,2,3  1,2,3+1,2,4</span><br><span class="line">  S2: 1,2,3</span><br><span class="line">  S3: 1,2,3</span><br><span class="line">  S4:        1,2,3+1,2,4</span><br><span class="line">  no leader will use Cnew until Cold,new commits in *both* old and new.</span><br><span class="line">    so there&#39;s no time at which one leader could be using Cold</span><br><span class="line">    and another could be using Cnew</span><br><span class="line">  if crash but new leader didn&#39;t see Cold,new</span><br><span class="line">    then old group will continue, no switch, but that&#39;s OK</span><br><span class="line">  if crash and new leader did see Cold,new,</span><br><span class="line">    it will complete the configuration change</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/18/2016-10-18-2016-Lecture-5-Raft1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/10/18/2016-10-18-2016-Lecture-5-Raft1/" class="post-title-link" itemprop="url">6.824 2016 Lecture 5: Raft (1)</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-18 19:43:56" itemprop="dateCreated datePublished" datetime="2016-10-18T19:43:56+08:00">2016-10-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/10/18/2016-10-18-2016-Lecture-5-Raft1/" class="post-meta-item leancloud_visitors" data-flag-title="6.824 2016 Lecture 5: Raft (1)" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="6-824-2016-Lecture-5-Raft-1"><a href="#6-824-2016-Lecture-5-Raft-1" class="headerlink" title="6.824 2016 Lecture 5: Raft (1)"></a>6.824 2016 Lecture 5: Raft (1)</h1><h2 id="概要：使用状态机-SRM-来实现容错服务"><a href="#概要：使用状态机-SRM-来实现容错服务" class="headerlink" title="概要：使用状态机(SRM)来实现容错服务"></a>概要：使用状态机(SRM)来实现容错服务</h2><p>[clients, replica servers]</p>
+<p>每个副本以相同的顺序执行相同的操作</p>
+<p>结果：每个副本随着执行都保持一致</p>
+<p>如果其中一个挂了，任意一个副本都能够取代，例如：客户端能连接任意一个副本</p>
+<p>GFS和VMware FT都通过SRM来实现容错</p>
+<h2 id="典型的”state-machine”"><a href="#典型的”state-machine”" class="headerlink" title="典型的”state machine”"></a>典型的”state machine”</h2><p>可能是一个应用或者服务，他们都需要被复制</p>
+<p>内部状态，输入指令序列，输出</p>
+<p>​    序列意味着没有并行</p>
+<p>​    必须是确定性的</p>
+<p>​    只能通过(输入和输出)和状态机通信</p>
+<p>从现在开始我们会讨论一些比较具体的服务</p>
+<p>例子：配置服务器，如MapReduce和GFS master</p>
+<p>例子：key/value存储服务，put()/get()</p>
+<h2 id="一个关键问题：怎么避免出现多主"><a href="#一个关键问题：怎么避免出现多主" class="headerlink" title="一个关键问题：怎么避免出现多主"></a>一个关键问题：怎么避免出现多主</h2><p>假设client和副本A通信，不和副本B，那client能只和A通信嘛？</p>
+<p>如果B真的crashed，我们应该要能继续处理，否则系统就不是容错得了</p>
+<p>如果B恢复了，但是由于网络原因，我们不能和B进行通信，此时我们的系统不应该继续工作，因为B此时可能是正常工作的，正服务着其他的客户端，这就是所谓的<strong>“network partition”</strong>问题</p>
+<p>通常情况下，我们一般无法区分故障和分区</p>
+<h2 id="通过单主来避免集群分裂（split-brain）"><a href="#通过单主来避免集群分裂（split-brain）" class="headerlink" title="通过单主来避免集群分裂（split brain）"></a>通过单主来避免集群分裂（split brain）</h2><p>master来决定A和B中哪个是主要的（primary），因为只有一个master，不会存在意见不一致</p>
+<p>客户端和master通信</p>
+<p>但是如果master故障了呢？有单点的问题</p>
+<h2 id="理想的状态机模型"><a href="#理想的状态机模型" class="headerlink" title="理想的状态机模型"></a>理想的状态机模型</h2><p>没有单点问题，即使一个server故障也能继续工作</p>
+<p>可以处理分区问题</p>
+<h2 id="处理分区问题的方法：大多数投票"><a href="#处理分区问题的方法：大多数投票" class="headerlink" title="处理分区问题的方法：大多数投票"></a>处理分区问题的方法：大多数投票</h2><p>有2f+1个服务器</p>
+<p>需要得到大多数（f+1）票才能继续（成为主primary），因此可以在即使故障f个server的情况下也能工作，没有单点故障</p>
+<p>为什么没有集群分裂的问题？因为最多只有一个server能获得大多数投票</p>
+<p>注意：大多数意味着2f+1的大多数，而不是存活着的server的</p>
+<p>大多数需要考虑的关键点事：任意两个都需要交互。交互的server只会其中一个投票，而且交互中还会携带其他信息</p>
+<h2 id="两个主要的复制协议是在1990年左右发明的"><a href="#两个主要的复制协议是在1990年左右发明的" class="headerlink" title="两个主要的复制协议是在1990年左右发明的"></a>两个主要的复制协议是在1990年左右发明的</h2><p> Paxos 和 View-Stamped协议</p>
+<p>在过去10年终这项技术在实践中大量运用</p>
+<p>Raft是一个特别优雅的想法</p>
+<h2 id="MapReduce-GFS-和-VMware-FT都从SRM中受益"><a href="#MapReduce-GFS-和-VMware-FT都从SRM中受益" class="headerlink" title="MapReduce, GFS, 和 VMware FT都从SRM中受益"></a>MapReduce, GFS, 和 VMware FT都从SRM中受益</h2><p>MapReduce master没有备份</p>
+<p>GFS master有备份，但是没有自动切换到备的策略</p>
+<p>VMware FT共享硬盘，test-and-set显然不是备份</p>
+<h2 id="Raft的状态机复制"><a href="#Raft的状态机复制" class="headerlink" title="Raft的状态机复制"></a>Raft的状态机复制</h2><p>大于等于3个servers</p>
+<p>Raft选出一个为leader</p>
+<p>client发送rpc到leader的k/v层</p>
+<p>leader发送每个客户端的命令给所有的备份</p>
+<p>​    每个follower新增日志</p>
+<p>​    目标是所有servers都有相同的日志</p>
+<p>​    将并发的客户端请求Put(a,1) Put(a,2)排序得到相同的顺序</p>
+<p>日志条目被提交如果大多数都存储了该条目：大多数意味着即使少量的servers故障了也能继续服务</p>
+<p>servers执行日志条目一旦leader说条目已经提交：k/v 应用put到DB，或者得到Get的结果</p>
+<p>leader回复给client结果</p>
+<h2 id="为什么需要日志？"><a href="#为什么需要日志？" class="headerlink" title="为什么需要日志？"></a>为什么需要日志？</h2><p>service保存着状态机的状态，除此之外为什么还不够？</p>
+<p>如果一个follower丢失了leader的部分命令呢？</p>
+<p>​    怎么能有效的将同步到最新？</p>
+<p>​    答案：leader重新发送丢失的命令给他</p>
+<p>log是命令的序列化存储</p>
+<p>​    starting state + log = final state</p>
+<p>log同样提供了一个方便的编号方案：能够给操作排序</p>
+<p>同时log也是一个命令暂存的地方：直到我们确认命令已经提交了</p>
+<h2 id="Raft的日志总会有确定的副本嘛？"><a href="#Raft的日志总会有确定的副本嘛？" class="headerlink" title="Raft的日志总会有确定的副本嘛？"></a>Raft的日志总会有确定的副本嘛？</h2><p>不会：一些副本可能会落后</p>
+<p>不会：可能会有不同的日志</p>
+<p>但是好消息是：</p>
+<p>​    如果一个server已经在指定的序列号上执行了一个命令，那不会有其他server在同样的序列号上执行不同的命令</p>
+<h2 id="lab-2-Raft-interface"><a href="#lab-2-Raft-interface" class="headerlink" title="lab 2 Raft interface"></a>lab 2 Raft interface</h2><p>rf.Start(command) (index, term, isleader)</p>
+<p>​    提交一个新的日志条目</p>
+<p>​    马上返回，稍后可能成功或者失败</p>
+<p>​    如果server在提交命令前失去了领导权会失败</p>
+<p>​    返回的index表示如果日志提交成功，将会返回的序号</p>
+<p>ApplyMsg，传递下标和命令</p>
+<p>​    Raft在channel上产生一个消息当service应该执行一个新的命令的时候，这同时也告知leader可以给客户端返回响应了</p>
+<p>注意：leader不应该等待每个follower对AppendEntries的响应，如果等待leader会被阻塞，因此开启新的goroutine来发送消息，带来的问题是：rpc会乱序，后发的AppendEntries可能会先到</p>
+<h2 id="Raft设计主要包含两部分"><a href="#Raft设计主要包含两部分" class="headerlink" title="Raft设计主要包含两部分"></a>Raft设计主要包含两部分</h2><ul>
+<li>选举一个新的leader</li>
+<li>失败后保证日志相同</li>
+</ul>
+<h2 id="Raft对leader进行编号"><a href="#Raft对leader进行编号" class="headerlink" title="Raft对leader进行编号"></a>Raft对leader进行编号</h2><p>新的leader -&gt; 新的任期（term）</p>
+<p>一个任期最多只有一个leader，可能会没有</p>
+<p>编号可以帮助servers跟随最新的leader，而不是过时的</p>
+<h2 id="Raft什么时候开始一个leader的选举"><a href="#Raft什么时候开始一个leader的选举" class="headerlink" title="Raft什么时候开始一个leader的选举"></a>Raft什么时候开始一个leader的选举</h2><p>当servers没有听到leader的通知，于是增加本地的任期，变为候选人，开始选举</p>
+<h2 id="怎么保证在一个任期至多只有一个leader"><a href="#怎么保证在一个任期至多只有一个leader" class="headerlink" title="怎么保证在一个任期至多只有一个leader"></a>怎么保证在一个任期至多只有一个leader</h2><p>leader必须要获得多数票</p>
+<p>每个server在每个任期只能投出一票：投给第一个请求的候选人</p>
+<p>对于一个给定的任期，至多只有一个server能获取到大多数票</p>
+<p>​    即使网络分区也最多一个</p>
+<p>​    即使少量的server故障了，选举也能胜出</p>
+<h2 id="一个server怎么知道选举胜出了？"><a href="#一个server怎么知道选举胜出了？" class="headerlink" title="一个server怎么知道选举胜出了？"></a>一个server怎么知道选举胜出了？</h2><p>胜利者得到了大多投票</p>
+<p>其他人会收到leader的AppendEntries心跳</p>
+<h2 id="什么时候选举会没有结果？"><a href="#什么时候选举会没有结果？" class="headerlink" title="什么时候选举会没有结果？"></a>什么时候选举会没有结果？</h2><p>当出现split vote，即没有一个server得到了大多数投票</p>
+<p>少于大多数的server可以收到投票请求</p>
+<h2 id="选举失败后会发生什么？"><a href="#选举失败后会发生什么？" class="headerlink" title="选举失败后会发生什么？"></a>选举失败后会发生什么？</h2><p>重新开始选举</p>
+<h2 id="raft怎么减少由于split-vote造成的选举失败"><a href="#raft怎么减少由于split-vote造成的选举失败" class="headerlink" title="raft怎么减少由于split vote造成的选举失败"></a>raft怎么减少由于split vote造成的选举失败</h2><p>每个server开始选举前延迟一个随机时间</p>
+<h2 id="怎么选择随机延迟？"><a href="#怎么选择随机延迟？" class="headerlink" title="怎么选择随机延迟？"></a>怎么选择随机延迟？</h2><p>太短：第二个选举在第一个没结束的时候就开始了</p>
+<p>太长：当leader故障后，系统等待选举太长</p>
+<p>一个粗略的指导：</p>
+<p>​    假设完成一个选举需要10ms并且有5个servers，我们希望延迟以20ms相隔，那随机延迟从0到100ms</p>
+<h2 id="Raft的选举遵循一个通用的原则：分离安全和进程"><a href="#Raft的选举遵循一个通用的原则：分离安全和进程" class="headerlink" title="Raft的选举遵循一个通用的原则：分离安全和进程"></a>Raft的选举遵循一个通用的原则：分离安全和进程</h2><p>硬排除机制：排除大于1个leader的情况，避免集群分裂，但是可能会没有leader</p>
+<p>软机制保证发展：开始一个新的选举总是安全的</p>
+<p>软机制尽量避免不必要的选举</p>
+<p>​    来自leader的心跳（告诉follower不要开始新的选举）</p>
+<p>​    超时周期（不用太快开始选举）</p>
+<p>​    随机延迟（给leader足够的时间来选举出来）</p>
+<h2 id="如果旧的leader没有意识到新的leader产生会怎么样？"><a href="#如果旧的leader没有意识到新的leader产生会怎么样？" class="headerlink" title="如果旧的leader没有意识到新的leader产生会怎么样？"></a>如果旧的leader没有意识到新的leader产生会怎么样？</h2><p>也许旧的leader没有看到选举消息</p>
+<p>新的leader意味着大多数servers已经新增了任期（currentTerm）</p>
+<p>​    所以旧的leader的操作不会得到大多数人支持</p>
+<p>​    所以旧的leader不会提交或执行新的log</p>
+<p>​    因此即使发生了分区也不会出现split brain</p>
+<p>​    但是一小部分server可能会收到旧leader的AppendEntries</p>
+<p>​        所以日志在旧的任期的尾部会出现不一致</p>
+<p>接着讨论系统故障后，日志怎么同步</p>
+<h2 id="我们需要保证什么？"><a href="#我们需要保证什么？" class="headerlink" title="我们需要保证什么？"></a>我们需要保证什么？</h2><p>也许：每个sever以相同的顺序执行相同的命令</p>
+<p>因此：如果任意一个server执行了，那么不会执行其他的命令了</p>
+<p>只要leader存在，很容易防止日志的不一致</p>
+<p>leader强制每个follower都需要和自己保持一致</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/18/2016-10-18-raft-etcd-learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/10/18/2016-10-18-raft-etcd-learning/" class="post-title-link" itemprop="url">raft 系列解读(4) 之 etcd-raft学习</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-18 16:24:56" itemprop="dateCreated datePublished" datetime="2016-10-18T16:24:56+08:00">2016-10-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/10/18/2016-10-18-raft-etcd-learning/" class="post-meta-item leancloud_visitors" data-flag-title="raft 系列解读(4) 之 etcd-raft学习" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>好的实现，看看别人怎么写的，<a href="https://github.com/coreos/etcd/tree/master/raft" target="_blank" rel="noopener">github</a></p>
+<p>大多数Raft的实现都是整体设计，包括存储处理，消息序列化和网络传输，但是本raft库在实现的时候只实现了最核心的算法，换来了灵活性和性能，网络和disk IO部分都由使用者实现，使用者需要实现自己的消息传送层，同时，需要自己实现持久化部分来存储Raft  log和state。<br>为了实现Raft库的可测性，库在实现的时候将Raft建模为一个状态机，输入是消息，可能是本地时间的更新或者网络消息，状态机的输出是一个3元组：{[]Messages, []LogEntries, NextState}。</p>
+<p>第一步是使用，怎么使用raft来搭建自己的key-value系统</p>
+<p>etcd-raft代码走读</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/23ac976a3ac2dcc8f37356cbff405231539ce294" alt="node-run"><br>上面是raft中一个node做的事，Node代表raft集群中的一个节点，刚开始node是follower，然后随着<code>tickc</code>的进行，开始进入选举，raft在变为follower的时候做了下面几件事：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/cf5c7109c839ccf592c281ae95bbb6665c847565" alt="becomeFollower"><br>初始化了tick函数<code>tickElection</code>，用来开始选举，做判断后，调用<code>Step</code><br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/cb8fb7f94d118737eec4cab8546349af32e9de21" alt="选举函数"><br>判断消息类型为<code>MsgHup</code>，于是进入<code>campaign</code><br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/b6067e144500e0b8f46f77d260a29bc2df493bdc" alt="进行选举"><br>选举函数中做的事情<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/64fd3e6d78b0f55354483185357b42c9981e2cd8" alt="选举"><br>转换成candidate时,开始一个选举:</p>
+<ol>
+<li>递增currentTerm;投票给自己;</li>
+<li>重置election timer;</li>
+<li>向所有的服务器发送 RequestVote RPC请求</li>
+</ol>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/34a4541ecf7f44431c92fcd231e5dc0d61ae1ec5" alt="成为candidate"><br>接着看下send函数<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/99266c93544149377affcf533d7195119734b244" alt="raft.send"><br>send函数中将消息存储了<code>msgs</code>中，在哪儿消费呢？通过读取newReady来返回Ready<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/725198328fc246f308a7304e75eedb37fb8b8923" alt="图片"><br>此时又返回到<code>node.run</code>中，此时因为会进入<code>case readyc &lt;- rd</code>分支<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/adbd0a88311a7cd647478e6f6c1629db1baefaf5" alt="图片"><br>在里面做的事情<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/d5b8b626927a5965dae6d15032184265b4196462" alt="图片"><br><code>msgs</code>因为已经读取过了，设置为空，并且会赋值<code>advancec</code>，进行到这<code>readyc</code>中已经有一个数据， 而此channel会在函数<code>Ready</code>中返回给外面，下面接着看谁会去读<code>Ready</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">func (n *node) Ready() &lt;-chan Ready &#123; return n.readyc &#125;</span><br></pre></td></tr></table></figure>
+<p>读取Ready的是应用程序，看下<code>Ready()</code>函数的说明</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x3D;&gt; 读取到当前状态，当从Ready()取出状态后，需要调用 Advance</span><br><span class="line">&#x2F;&#x2F;&#x3D;&gt; 注意：只有当所有提交的entries都应用后，才会调用下一个 Ready 的状态</span><br></pre></td></tr></table></figure>
+
+<p>我们回到之前的选举上，读取到的Ready里面包含了Vote消息，我们会调用网络层发送消息出去，并且调用<code>Advance()</code>，而此时其他Node接收到网络层消息后，会调用<code>Step()</code>函数，在成为candidate的时候，我们设置了step函数为<code>stepCandidate</code>，<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/4d4eb1f5dd4260be5c8ccbda0debdb0b96ab1c2d" alt="stepCandidate"><br>自后调用了node的send函数，此时是拒绝的，因为已经是candidate状态了，而如果是follower，其处理函数是<code>stepFollower</code>,<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/25891db240c11af16b0a9194d1bbcd799b4b1eaa" alt="stepFollower"><br>其规则就是之前说到的:</p>
+<blockquote>
+<p>如果本地的voteFor为空或者为candidateId,并且候选者的日志至少与接受者的日志一样新,则投给其选票</p>
+</blockquote>
+<p>进行到这，我们看到了follower在收到vote rpc后的处理，下面是candidate的处理了。</p>
+<p>回到之前调用<code>Ready()</code>，接着应该调用<code>Advance</code>,<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/9ef8aa4316f2cfbfd4a3a85e266caacbbbcd21b8" alt="Advance"><br>里面会设置<code>advancec</code>，好了，运行到这，我们又要回到<code>node.run</code>中了</p>
+<p>此时的状态是：candidate，<code>advancec</code>中有数据，接着来看candidate在发送出vote rpc，接收到响应的处理，网络层的<code>Send</code>函数是：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/862749f5a50fb071dadb5064b79ee0b4bb50f94d" alt="Transport.Send"><br>Send会调用<code>Peer.send</code>，函数注释说：此函数是非阻塞的，不保证请求一定能被peer收到<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/62b4c85111f2476775085b617cf3f848d2090803" alt="Peer.send"><br>一般常理我们发送后，等待响应后再处理，但是找了很久也没找到常理函数，这个时候，我们再去看下follower对于投票的处理<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/a5d0e47e19b71820ced76447f4ca8e8bcb39c38f" alt="send.MsgVoteResp"><br>发现在响应上也是通过发送一个消息来响应的，因此我们此时可以看到peer之间的交互不是传统意义上的request-response模型了。</p>
+<p>我们去看对于<code>MsgVoteResp</code>的处理，其入口都是通过调用<code>node.Step</code>函数，此时如果得到大多数票选，则成为leader<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/f1d983a52f898ee8d20219e76aaefff2ea35f08c" alt="MsgVoteResp处理"><br>看becomeLeader函数<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/a7ce0bf3a9170ed350a7acb5d3e8a51271641892" alt="becomeLeader"><br>在leader函数中，最重要的就是发送命令了，我们看看这个过程</p>
+<p>这是通过<code>node.Propose</code>函数实现的<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/8780bc44e46ed8aa45c97dad52fb3df1b7739e7f" alt="node.Propose"><br>到最后又是通过step函数<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/f7de684075d494540d18a578c8c0d36238fb6215" alt="stepLeader"><br>里面挨个调用send函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">func (r *raft) bcastAppend() &#123;</span><br><span class="line">	for id :&#x3D; range r.prs &#123;</span><br><span class="line">		if id &#x3D;&#x3D; r.id &#123;</span><br><span class="line">			continue</span><br><span class="line">		&#125;</span><br><span class="line">		r.sendAppend(id)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/aa994754f4b1dd39e98ffedbe8db0bd8c1be90a7" alt="sendAppend"><br>看完发送端，接着看follower的接收端处理<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/ead521facd87b53c8bc302a28af66115292bbf90" alt="handleAppendEntries"><br>细看handleAppendEntries函数，就是去做raft协议中规定的操作了<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/8c5dcdb9c8f21a46f0f822ec2554f625ff8cbc2a" alt="图片"><br>在<code>maybeAppend</code>中，会去尝试更新<code>committed index</code>，然后接着看AppendResp的处理<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/1a3ae664534945a3f89274b209bde444f1e23590" alt="AppendResp"><br>去检查各个peer的matchIndex，然后尝试更新commitIndex</p>
+<p>下一个问题，接着去看commitIndex &gt; lastAppied后，在哪儿去应用log到状态机的<br>这是通过<code>node.run</code>中<code>readyc</code>和<code>advancec</code>来实现的<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/f20538a16aef89ca7ddaedc10afd25e3a7063ca1" alt="node.run"></p>
+<p>上面就是etcd中raft的大致流程，有一个机遇raft实现的简单key-value系统，github地址：<a href="https://github.com/zhuanxuhit/distributed-system/tree/master/etcd-raft" target="_blank" rel="noopener">https://github.com/zhuanxuhit/distributed-system/tree/master/etcd-raft</a></p>
+<p>读完代码后，最大的一个感受是整个node在实现的时候都是无锁的，其技巧是通过go的<code>channel</code>将所有请求串行化，然后另一个特点是根据不同的状态，设置不同的处理函数，整个实现非常的清晰，因为每个状态针对每个请求的处理都是非常明确的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/14/2016-10-14-raft3-code-and-rule/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/10/14/2016-10-14-raft3-code-and-rule/" class="post-title-link" itemprop="url">raft 系列解读(3) 之 代码实现</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-14 19:23:25" itemprop="dateCreated datePublished" datetime="2016-10-14T19:23:25+08:00">2016-10-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/10/14/2016-10-14-raft3-code-and-rule/" class="post-meta-item leancloud_visitors" data-flag-title="raft 系列解读(3) 之 代码实现" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>首先，其实raft如果你不去看理论正确性的证明，光实现的话，只要按照raft里面给出的原则写代码就ok！如果代码写出来不正确，只能是你自己实现的问题。囧</p>
+<h1 id="最小规则"><a href="#最小规则" class="headerlink" title="最小规则"></a>最小规则</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> raft</span><br><span class="line"></span><br><span class="line"><span class="comment">// 所有server的原则 Rules for Servers</span></span><br><span class="line"><span class="comment">// 1. 如果commitIndex &gt; lastApplied:则递增lastApplied,应用 log[lastApplied] 到状态机之中</span></span><br><span class="line"><span class="comment">// 2. 如果Rpc请求或回复包括纪元T &gt; currentTerm: 设置currentTerm = T,转换成 follower, 并且设置 votedFor=-1，表示未投票</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// rules for Followers</span></span><br><span class="line"><span class="comment">// 回复 candidates与leaders的RPC请求</span></span><br><span class="line"><span class="comment">// 如果选举超时时间达到,并且没有收到来自当前leader或者要求投票的候选者的 AppendEnties RPC调 :转换角色为candidate</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// rules for Candidates</span></span><br><span class="line"><span class="comment">// 转换成candidate时,开始一个选举:</span></span><br><span class="line"><span class="comment">// 1. 递增currentTerm;投票给自己;</span></span><br><span class="line"><span class="comment">// 2. 重置election timer;</span></span><br><span class="line"><span class="comment">// 3. 向所有的服务器发送 RequestVote RPC请求</span></span><br><span class="line"><span class="comment">// 如果获取服务器中多数投票:转换成Leader</span></span><br><span class="line"><span class="comment">// 如果收到从新Leader发送的AppendEnties RPC请求:转换成follower</span></span><br><span class="line"><span class="comment">// 如果选举超时时间达到:开始一次新的选举</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// rules for Leaders</span></span><br><span class="line"><span class="comment">// 给每个服务器发送初始空的AppendEntires RPCs(heartbeat);指定空闲时间之 后重复该操作以防 election timeouts</span></span><br><span class="line"><span class="comment">// 如果收到来自客户端的命令:将条目插入到本地日志,在条目应用到状态机后回复给客户端</span></span><br><span class="line"><span class="comment">// 如果last log index &gt;= nextIndex for a follower:发送包含开始于nextIndex的日志条目的AppendEnties RPC</span></span><br><span class="line"><span class="comment">// 如果成功:为follower更新nextIndex与matchIndex</span></span><br><span class="line"><span class="comment">// 如果失败是由于日志不一致:递减nextIndex然后重试</span></span><br><span class="line"><span class="comment">// 如果存在以个N满足 N&gt;commitIndex,多数的matchIndex[i] &gt;= N,并且 log[N].term == currentTerm:设置commitIndex = N</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AppendEntries RPC的实现：在回复给RPCs之前需要更新到持久化存储之上</span></span><br><span class="line"><span class="comment">// 有3类用途</span></span><br><span class="line"><span class="comment">// 1. candidate赢得选举的后，宣誓主权</span></span><br><span class="line"><span class="comment">// 2. 保持心跳</span></span><br><span class="line"><span class="comment">// 3. 让follower的日志和自己保持一致</span></span><br><span class="line"><span class="comment">// 接收者的处理逻辑：</span></span><br><span class="line"><span class="comment">// 1. 如果term &lt; currentTerm 则返回false</span></span><br><span class="line"><span class="comment">// 2. 如果日志不包含一个在preLogIndex位置纪元为prevLogTerm的条目,则返回 false</span></span><br><span class="line"><span class="comment">//		该规则是需要保证follower已经包含了leader在PrevLogIndex之前所有的日志了</span></span><br><span class="line"><span class="comment">// 3. 如果一个已存在的条目与新条目冲突(同样的索引但是不同的纪元),则删除现存的该条目与其后的所有条</span></span><br><span class="line"><span class="comment">// 4. 将不在log中的新条目添加到日志之中</span></span><br><span class="line"><span class="comment">// 5. 如果leaderCommit &gt; commitIndex,那么设置 commitIndex = min(leaderCommit,index of last new entry)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// RequestVote RPC 的实现: 由候选者发起用于收集选票</span></span><br><span class="line"><span class="comment">// 1. 如果term &lt; currentTerm 则返回false</span></span><br><span class="line"><span class="comment">// 2. 如果本地的voteFor为空或者为candidateId,</span></span><br><span class="line"><span class="comment">// 		并且候选者的日志至少与接受者的日志一样新,则投给其选票</span></span><br><span class="line"><span class="comment">// 怎么定义日志新</span></span><br><span class="line"><span class="comment">// 比较两份日志中最后一条日志条目的索引值和任期号定义谁的日志比较新</span></span><br><span class="line"><span class="comment">// 如果两份日志最后的条目的任期号不同，那么任期号大的日志更加新</span></span><br><span class="line"><span class="comment">// 如果两份日志最后的条目任期号相同，那么日志比较长的那个就更加新。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 以上所有的规则保证的下面的几个点：</span></span><br><span class="line"><span class="comment">// 1. Election Safety 在一个特定的纪元中最多只有一个Leader会被选举出来</span></span><br><span class="line"><span class="comment">// 2. Leader Append-Only Leader不会在他的日志中覆盖或删除条 ,他只执行添加新的条</span></span><br><span class="line"><span class="comment">// 3. Log Matching:如果两个日志包含了同样index和term的条 ,那么在该index之前的所有条目都是相同的</span></span><br><span class="line"><span class="comment">// 4. Leader Completeness:如果在一个特定的term上提交了一个日志条目,那么该条目将显示在编号较大的纪元的Leader的日志里</span></span><br><span class="line"><span class="comment">// 5. State Machine Safety:如果一个服务器在一个给定的index下应用一个日志条目到他的状态机上,没有其他服务器会在相同index上应用不同的日志条目</span></span><br></pre></td></tr></table></figure>
+<p>以上就是全部，我们接下去挨个来看看这些规则在代码中是怎么体现的</p>
+<h1 id="follower"><a href="#follower" class="headerlink" title="follower"></a>follower</h1><p>规则有两条</p>
+<ol>
+<li>回复 candidates与leaders的RPC请求</li>
+<li>如果选举超时时间达到,并且没有收到来自当前leader或者要求投票的候选者的 AppendEnties RPC调 :转换角色为candidate</li>
+</ol>
+<p>对于第一条follower处理来自candidate的<code>RequestVote RPC</code>和来自leader的<code>AppendEntries RPC</code>两种请求<br>对于第二条则是说follower在规定的选举时间内没有收到来自leader的心跳，则认为leader已经不存在了，自己开始竞选leader，因此此处选举的超时时间要大于心跳时间<br>看下代码实现<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/9fd1591b117cedfaa1f97f9f6d0bd84231ad2fc1" alt="follower逻辑"></p>
+<h1 id="candidate"><a href="#candidate" class="headerlink" title="candidate"></a>candidate</h1><p>候选者的规则有</p>
+<ul>
+<li>转换成candidate时,开始一个选举<ul>
+<li>递增currentTerm;投票给自己;</li>
+<li>重置election timer;</li>
+<li>向所有的服务器发送 RequestVote RPC请求</li>
+</ul>
+</li>
+<li>如果获取服务器中多数投票:转换成Leader</li>
+<li>如果收到从新Leader发送的AppendEnties RPC请求:转换成follower</li>
+<li>如果选举超时时间达到:开始一次新的选举</li>
+</ul>
+<p>根据这些规则，代码即：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/57e091147f0a560b0fc7ad8914674a966d85ad51" alt="candidate规则"><br>其中广播后的结果是通过<code>voteResultChan</code>来传递的，而心跳则是通过<code>heartbeatChan</code>来传递，在这基础上，需要有个注意的地方，candidate在具体开始这些任务的时候，需要去读<code>voteResultChan</code>和<code>heartbeatChan</code>，因为可能里面已经有通知了，对于<code>voteResultChan</code>的需要忽略它，而对于<code>heartbeatChan</code>则说明已经有leader产生了<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/354c01e4edf78425a333a5ed3733ed294d4855bd" alt="candidate前置"></p>
+<h1 id="leader规则"><a href="#leader规则" class="headerlink" title="leader规则"></a>leader规则</h1><ol>
+<li>给每个服务器发送初始空的AppendEntires RPCs(heartbeat);指定空闲时间之后重复该操作以防 election timeouts</li>
+<li>如果收到来自客户端的命令:将条目插入到本地日志,在条目应用到状态机后回复给客户端</li>
+<li>如果last log index &gt;= nextIndex for a follower:发送包含开始于nextIndex的日志条目的AppendEnties RPC</li>
+<li>如果成功:为follower更新nextIndex与matchIndex</li>
+<li>如果失败是由于日志不一致:递减nextIndex然后重试</li>
+<li>如果存在以个N满足 N&gt;commitIndex,多数的matchIndex[i] &gt;= N,并且 log[N].term == currentTerm:设置commitIndex = N</li>
+</ol>
+<p>其中最重要的一点是6，这个第六点主要是解决如下问题：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/08b43293b3d71a530c4b6e55c4ab3218d9d9b1f4" alt="提交日志覆盖"></p>
+<ul>
+<li>(a) S1 是领导者，部分的复制了索引位置 2 的日志条目</li>
+<li>(b) S1 崩溃了，然后 S5 在任期 3 里通过 S3、S4 和自己的选票赢得选举，然后从客户端接收了一条不一样的日志条目放在了索引2 处</li>
+<li>(c) S5 又崩溃了；S1 重新启动，选举成功，开始复制日志。在这时，来自任期 2 的那条日志已经被复制到了集群中的大多数机器上，但是还没有被提交</li>
+<li>(d)  S1 又崩溃了，S5 可以重新被选举成功（通过来自 S2，S3 和 S4 的选票），然后覆盖了他们在索引 2 处的日志。但是，在崩溃之前，如果 S1 在自己的任期里复制了日志条目到大多数机器上</li>
+<li>(e) 然后这个条目就会被提交（S5 就不可能选举成功）。 在这个时候，之前的所有日志就会被正常提交处理</li>
+</ul>
+<p>该问题是因为：当一个新Leader当选时，由于所有成员的日志进度不同，很可能需要继续复制前面纪元的日志条目，因为即使为前面纪元的日志复制到多数服务器并且提交,如步骤C，但是在D中还是可能被覆盖，这就产生了不一致。解决的方法就是通过规则6：如果存在以个N满足 N&gt;commitIndex,多数的matchIndex[i] &gt;= N,并且 log[N].term == currentTerm:设置commitIndex = N，具体就是在c阶段，S1成为Leader，此时的纪元是4。S1一样向其他服务器发送日志2，当发送到多数服务器S1,S2,S3时，此时并不提交该日志，而是继续复制日志4,直到日志4到达多数服务器后，提交日志4，即leader只会提交当前纪元的日志。如果提交了4之后宕机，S5就不会被选举为新的 Leader，如果在提交4之前宕机，那么日志2,日志4还是可能被覆盖，但是由于没有提交，也就没有执行日志中的命令，即使被覆盖也无关系。</p>
+<p>代码上就是：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/29e8a791cb858ef94625394d2248a5b3324b6130" alt="leader规则"><br>不间断的发送心跳</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/62d8da9e7f93e9a1d563314f394dce15ba0b64d8" alt="状态机的应用"></p>
+<h1 id="RequestVote-RPC"><a href="#RequestVote-RPC" class="headerlink" title="RequestVote RPC"></a>RequestVote RPC</h1><p>投票rpc的规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 1. 如果term &lt; currentTerm 则返回false</span><br><span class="line">&#x2F;&#x2F; 2. 如果本地的voteFor为空或者为candidateId,</span><br><span class="line">&#x2F;&#x2F; 		并且候选者的日志至少与接受者的日志一样新,则投给其选票</span><br><span class="line">&#x2F;&#x2F; 怎么定义日志新</span><br><span class="line">&#x2F;&#x2F; 比较两份日志中最后一条日志条目的索引值和任期号定义谁的日志比较新</span><br><span class="line">&#x2F;&#x2F; 如果两份日志最后的条目的任期号不同，那么任期号大的日志更加新</span><br><span class="line">&#x2F;&#x2F; 如果两份日志最后的条目任期号相同，那么日志比较长的那个就更加新。</span><br></pre></td></tr></table></figure>
+<p>需要注意的是日志新的处理，实现<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/4013b78bd55533501904a1747e24e26d24446417" alt="图片"><br>其中红色是通用规则</p>
+<blockquote>
+<p>如果Rpc请求或回复包括纪元T &gt; currentTerm: 设置currentTerm = T,转换成 follower, 并且设置 votedFor=-1，表示未投票</p>
+</blockquote>
+<p>这个通用规则的保证了有新纪元开始的时候，所有server都转变为follower，开始新一轮选举</p>
+<h1 id="AppendEntries-RPC"><a href="#AppendEntries-RPC" class="headerlink" title="AppendEntries RPC"></a>AppendEntries RPC</h1><p>有3类用途</p>
+<ol>
+<li>candidate赢得选举的后，宣誓主权</li>
+<li>保持心跳</li>
+<li>让follower的日志和自己保持一致</li>
+</ol>
+<p>接收者的处理逻辑：</p>
+<ol>
+<li>如果term &lt; currentTerm 则返回false</li>
+<li>如果日志不包含一个在preLogIndex位置纪元为prevLogTerm的条目,则返回 false，该规则是需要保证follower已经包含了leader在PrevLogIndex之前所有的日志了</li>
+<li>如果一个已存在的条目与新条目冲突(同样的索引但是不同的纪元),则删除现存的该条目与其后的所有条</li>
+<li>将不在log中的新条目添加到日志之中</li>
+<li>如果leaderCommit &gt; commitIndex,那么设置 commitIndex =min(leaderCommit,index of last new entry)</li>
+</ol>
+<p>在实现上也是完全按照上面的规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">func (rf *Raft) AppendEnties(args AppendEntiesArgs, reply *AppendEntiesReply) &#123;</span><br><span class="line">	if args.Term &lt; rf.currentTerm &#123;</span><br><span class="line">		reply.Term &#x3D; rf.currentTerm</span><br><span class="line">		reply.Success &#x3D; false</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">	&#x2F;&#x2F; 本身自己是leader，有可能收到别人的请求吗，实验中是可能的,会收到的一个大的term</span><br><span class="line">	&#x2F;&#x2F;if rf.status &#x3D;&#x3D; STATUS_LEADER &#123;</span><br><span class="line">	&#x2F;&#x2F;	log.Println(&quot;I am leader, but get AppendEnties&quot;,rf.Detail())</span><br><span class="line">	&#x2F;&#x2F;	log.Println(&quot;args.term&quot;,args.Term,&quot;currentTerm&quot;,rf.currentTerm)</span><br><span class="line">	&#x2F;&#x2F;&#125;</span><br><span class="line">	&#x2F;&#x2F; 心跳一定来自leader</span><br><span class="line">	rf.heartbeatChan &lt;- true</span><br><span class="line"></span><br><span class="line">	rf.mu.Lock()</span><br><span class="line">	defer rf.mu.Unlock()</span><br><span class="line">	rf.rpcRuleForAllServer(args.Term)</span><br><span class="line">	&#x2F;&#x2F; 如果日志在 prevLogIndex 位置处的日志条目的任期号和 prevLogTerm 不匹配，则返回 false</span><br><span class="line">	&#x2F;&#x2F; len(rf.log) &gt;&#x3D; args.PrevLogIndex + 1，说明本地日志长度 &gt;&#x3D; leader日志长度</span><br><span class="line">	if len(rf.log) &gt;&#x3D; args.PrevLogIndex + 1 &amp;&amp; rf.log[args.PrevLogIndex].Term &#x3D;&#x3D; args.PrevLogTerm &#123;</span><br><span class="line">		&#x2F;&#x2F; 该规则是需要保证follower已经包含了leader在PrevLogIndex之前所有的日志了</span><br><span class="line">		for i:&#x3D;0;i&lt;len(args.Entries);i++ &#123;</span><br><span class="line">			if args.PrevLogIndex+1+i &lt; len(rf.log)&#123;</span><br><span class="line">				if rf.log[args.PrevLogIndex+1+i] !&#x3D; args.Entries[i]&#123;</span><br><span class="line">					&#x2F;&#x2F; index相同，但是纪元不同</span><br><span class="line">					rf.log &#x3D; rf.log[:args.PrevLogIndex+1+i]&#x2F;&#x2F; 之前的还是相同的，再加上本条之后的</span><br><span class="line">					rf.log &#x3D; append(rf.log,args.Entries[i:]...)</span><br><span class="line">					break</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;else &#123;</span><br><span class="line">				&#x2F;&#x2F; 本条目不存在</span><br><span class="line">				rf.log &#x3D; append(rf.log,args.Entries[i:]...)</span><br><span class="line">				break</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		if args.LeaderCommit &gt; rf.commitIndex &#123;</span><br><span class="line">			rf.commitIndex &#x3D; min(args.LeaderCommit,len(rf.log)-1)</span><br><span class="line">		&#125;</span><br><span class="line">		&#x2F;&#x2F; !!为了查明为什么日志错了</span><br><span class="line">		rf.checkLog(args)</span><br><span class="line">		&#x2F;&#x2F;在回复给RPCs之前需要更新到持久化存储之上</span><br><span class="line">		rf.persist()</span><br><span class="line">		reply.Term &#x3D; rf.currentTerm</span><br><span class="line">		reply.Success &#x3D; true</span><br><span class="line">		reply.NextIndex &#x3D; len(rf.log)</span><br><span class="line">		return</span><br><span class="line">	&#125;else &#123;</span><br><span class="line">		reply.Term &#x3D; rf.currentTerm</span><br><span class="line">		reply.Success &#x3D; false</span><br><span class="line">		reply.NextIndex &#x3D; min(rf.commitIndex+1,args.PrevLogIndex-1)&#x2F;&#x2F;</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上就是所有规则和代码对应的实现了，<a href="https://github.com/zhuanxuhit/distributed-system/blob/master/mit/src/raft/raft.go" target="_blank" rel="noopener">github地址</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/14/2016-10-14-lab2-raft/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/10/14/2016-10-14-lab2-raft/" class="post-title-link" itemprop="url">raft 系列解读(2) 之 测试用例</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-14 16:39:00" itemprop="dateCreated datePublished" datetime="2016-10-14T16:39:00+08:00">2016-10-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/10/14/2016-10-14-lab2-raft/" class="post-meta-item leancloud_visitors" data-flag-title="raft 系列解读(2) 之 测试用例" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="raft-系列解读-2-之-测试用例"><a href="#raft-系列解读-2-之-测试用例" class="headerlink" title="raft 系列解读(2) 之 测试用例"></a>raft 系列解读(2) 之 测试用例</h1><p>基于mit的6.824课程，github代码地址：<a href="https://github.com/zhuanxuhit/distributed-system" target="_blank" rel="noopener">https://github.com/zhuanxuhit/distributed-system</a></p>
+<h2 id="case1：TestInitialElection"><a href="#case1：TestInitialElection" class="headerlink" title="case1：TestInitialElection"></a>case1：TestInitialElection</h2><p>测试中3个server，然后启动，验证在同一个任期（term）内是否只有一个leader，并且在<code>2 * RaftElectionTimeout</code>后，由于心跳的存在，不会发生重选。</p>
+<p>在代码实现中，主要有以下几点：</p>
+<ul>
+<li>实现<code>AppendEnties</code>和<code>RequestVote</code>两个rpc部分功能</li>
+<li>实现<code>Make</code>新建Raft</li>
+</ul>
+<p>我们来看下其中主要的关键点：</p>
+<p>程序整体组织上是在<code>Make</code>中启动了一个goroutine，是一个无限循环，根据不同的状态进行不同的处理，结构如下：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/dfb5dfe2636d558fadf13b3d0c45a2938dbc64c7" alt="图片"></p>
+<h3 id="follower"><a href="#follower" class="headerlink" title="follower"></a>follower</h3><p>先讲第一个状态<code>follower</code>的处理<br>所有的server重启后第一个状态都是<code>follower</code>，如果在<code>election timeout</code>时间内，既没有收到leader的<code>heartbeat</code>，也没有收到<code>RequestVote</code>请求，那么开启选举过程，此时状态将转换为<code>candidate</code>，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">rf.resetElectionTimeout()</span><br><span class="line"><span class="comment">// 等待心跳，如果心跳未到，但是选举超时了，则开始新一轮选举</span></span><br><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> &lt;-rf.heartbeatChan:</span><br><span class="line"><span class="keyword">case</span> &lt;-time.After(rf.randomizedElectionTimeout):</span><br><span class="line"><span class="comment">// 开始重新选举</span></span><br><span class="line">	log.Println(<span class="string">"election timeout:"</span>, rf.randomizedElectionTimeout)</span><br><span class="line">	<span class="keyword">if</span> rf.status != STATUS_FOLLOWER &#123;</span><br><span class="line">		<span class="comment">// panic</span></span><br><span class="line">		log.Fatal(<span class="string">"status not right when in follower and after randomizedElectionTimeout:"</span>, rf.randomizedElectionTimeout)</span><br><span class="line">	&#125;</span><br><span class="line">	rf.convertToCandidate()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="candidate"><a href="#candidate" class="headerlink" title="candidate"></a>candidate</h3><p>接着开始第二个状态<code>candidate</code>的处理：</p>
+<ul>
+<li>第一步，新增本地任期和投票</li>
+<li>第二步，重置 election timer 并开始广播</li>
+<li>第三步等待结果<ul>
+<li>1)他自己赢得了选举;</li>
+<li>2)收到AppendEntries得知另外一个服务器确立他为Leader，转变为follower</li>
+<li>3) 一个周期时间过去但是没有任何人赢得选举，开始新的选举</li>
+</ul>
+</li>
+</ul>
+<p>结构大致如下：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/43e4d96943a1158c68f52201605d57109c5e090d" alt="图片"></p>
+<h3 id="leader"><a href="#leader" class="headerlink" title="leader"></a>leader</h3><p>如果此时赢得了选举，则进入第3个状态<code>leader</code>的处理：目前leader只实现了一个功能，周期性的发送心跳，功能非常简单，此处不再贴代码了。</p>
+<h3 id="rpc"><a href="#rpc" class="headerlink" title="rpc"></a>rpc</h3><p>剩下就是两个rpc的发送和接收处理了，其中需要特别注意的点如下：</p>
+<ul>
+<li>所有rpc处理中：如果收到的<strong>请求或者响应</strong>中，包含的term大于当前的currentTerm，设置currentTerm=term，然后变为follower</li>
+<li>所有rpc处理中：判断任期是否小于currentTerm，小于的都丢弃</li>
+</ul>
+<p>在完成第一个测试的过程中：AppendEnties只需要处理心跳请求即可。</p>
+<p>最后给出代码的地址：<a href="https://github.com/zhuanxuhit/distributed-system，tag是：lab3-raft-case1" target="_blank" rel="noopener">https://github.com/zhuanxuhit/distributed-system，tag是：lab3-raft-case1</a></p>
+<h2 id="case2：TestReElection"><a href="#case2：TestReElection" class="headerlink" title="case2：TestReElection"></a>case2：TestReElection</h2><p>有3个server，选举出来一个leader后，模拟leader故障，重新选举出一个leader，然后再模拟older leader故障恢复重新加入，此时也只会有一个leader，再模拟3个2个都故障了，那理论上就不会有leader出现了，此时再逐个加入故障的server，都只会有一个leader</p>
+<p>直接运行测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go <span class="built_in">test</span> -v -run ReElection</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>leader故障，新的leader选出来</li>
+<li>老的leader加入，不影响只有一个leader</li>
+<li>两个server故障，不会有新的leader</li>
+<li>恢复一个server，出现leader</li>
+<li>再次恢复一个server，出现leader</li>
+</ol>
+<p>先看第1个，出现的调试信息:</p>
+<pre><code>2016/10/10 18:44:46 follower: 0 election timeout: 1.287113937s
+2016/10/10 18:44:46 now I begin to candidate,index: 0
+2016/10/10 18:44:47 follower: 2 election timeout: 1.54916732s
+2016/10/10 18:44:47 now I begin to candidate,index: 2</code></pre><p>可以看到0开始选举后，不知道为什么2没有投票，去看代码，发现问题是：</p>
+<ul>
+<li>当发现远端term大于本地term后，直接转换为follower，并更新当前的currentTerm和<strong>voteFor</strong></li>
+</ul>
+<p>修改后即可通过测试，接着马上又出现另一个问题：</p>
+<pre><code>2016/10/10 18:54:50 candidate: 0 &apos;slog is not at least as up-to-date as receiver’s log</code></pre><p>但是我们现在做的是没有日志的，查看代码发现问题是：</p>
+<ul>
+<li>(args.LastLogIndex &lt; rf.commitIndex || args.LastLogTerm &lt; currentTerm)，因为currentTerm增加了，但是LastLogTerm是0，所以要考虑<code>rf.commitIndex == 0</code>表示还没有日志，则没必要检查</li>
+</ul>
+<p>修改完后，再次运行case，这次是<strong>两个server故障，不会有新的leader</strong>出问题了，选举不出来，接着查原因：</p>
+<p>在处理投票的时候，往<code>heartbeatChan</code>写的时候阻塞了，<code>rf.heartbeatChan = make(chan bool, 1)</code>是有一个缓冲的channel，那为什么会阻塞呢，我们看下有几个地方会写，几个地方会去读</p>
+<p>有两个地方会去写：</p>
+<ol>
+<li>AppendEnties中收到心跳会去写，当去写的时候，说明是已经有leader了，自己会转变为follower</li>
+<li>RequestVote中收到投票也会去写</li>
+</ol>
+<p>读的地方也有两个</p>
+<ol>
+<li>在状态follower中，去读<code>heartbeatChan</code>，如果选举超时内没收到心跳，则开始candidate</li>
+<li>在candidate状态，去读去读<code>heartbeatChan</code>，表示已经有新的leader产生了</li>
+</ol>
+<p>于是就发现了问题：</p>
+<ul>
+<li>在实现leader任务的时候，没有一个点去触发退出心跳</li>
+<li>选举失败，应该等待超时，然后重新开始新一轮选举，而不是马上开始新一轮选举，这样子造成彼此都不成功</li>
+</ul>
+<p>修改代码后，通过case2</p>
+<h2 id="case3：TestBasicAgree"><a href="#case3：TestBasicAgree" class="headerlink" title="case3：TestBasicAgree"></a>case3：TestBasicAgree</h2><p>这个case开始要做提交了，实现<code>Start()</code>函数了，这个case主要测试是：有5个server，没提交前检查没有提交的log，然后提交后，测试该log是否已经被每个server都存储了。</p>
+<p>在实现start中，其做的步骤是：</p>
+<pre><code>// 客户端的一次日志请求操作触发
+// 1)Leader将该请求记录到自己的日志之中;
+// 2)Leader将请求的日志以并发的形式,发送AppendEntries RCPs给所有的服务器;
+// 3)Leader等待获取多数服务器的成功回应之后(如果总共5台,那么只要收到另外两台回应),
+// 将该请求的命令应用到状态机(也就是提交),更新自己的commitIndex 和 lastApplied值;
+// 4)Leader在与Follower的下一个AppendEntries RPCs通讯中,
+// 就会使用更新后的commitIndex,Follower使用该值更新自己的commitIndex;
+// 5)Follower发现自己的 commitIndex &gt; lastApplied
+// 则将日志commitIndex的条目应用到自己的状态机(这里就是Follower提交条目的时机)</code></pre><p>实现的关键点：在Start函数中，一旦判断出当前server是leader，马上开启一个goroutine，开始异步进行agree工作，然后立即返回，代码如下：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/c33e9f67e5195256abc5c20c89d7ab765c73d06c" alt="图片"></p>
+<p>此处第4步和第5步需要在另外的地方完成，一个是heartbeat中，另一个是follower在处理AppendEntries过程中</p>
+<p>还有就是在成为leader的时候，需要初始化<code>nextIndex,matchIndex</code><br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/78fb169056b2c6161fa176df54eb94cd13fe0b3d" alt="图片"><br>而在发送heartbeat中，判断log的最大index ≥ nextIndex,如果大于，需要发送从nextIndex开始的log，在发送完后需要判断成功与否，成功则更新<code>nextIndex,matchIndex</code>，失败则减少<code>nextIndex</code>，并重试<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/707b81e3b252e9872a29c6e1e747e8d134fa1566" alt="图片"></p>
+<p>还有最重要的一点：为了通过测试，记住要在日志提交后，发送消息<code>ApplyMsg</code>给<code>applymsg</code>，这样才能通过测试</p>
+<p>好了到此为止，写的代码刚好通过第三个测试，继续下一关的！</p>
+<h2 id="case4：TestFailAgree"><a href="#case4：TestFailAgree" class="headerlink" title="case4：TestFailAgree"></a>case4：TestFailAgree</h2><p>测试的内容是：有3个server，其中一个follower故障，发的命令只有2个能收到，当恢复故障后，发的命令都能收到</p>
+<p>出现的问题：由于每个command真正提交都是通过goroutine来执行的，因此每个goroutine之间并发执行，怎么保证前一个agree了，下一个才能agree成功呢？<br>现在出现的问题是：<br>map[3:103 5:104 1:101 2:102]，乱序，即4还没有提交了，5就提交成功了</p>
+<p>现在的问题是：谁也不服谁，当follower恢复后，大家都竞选，但是没有一个成功，查明原因后发现是因为没有处理一个概念：<br>    &gt;如果候选人的日志至少和大多数的服务器节点一样新</p>
+<p>这个一样新通过：比较两份日志中最后一条日志条目的索引值和任期号定义谁的日志比较新。如果两份日志最后的条目的任期号不同，那么任期号大的日志更加新。如果两份日志最后的条目任期号相同，那么日志比较长的那个就更加新。</p>
+<p>进行到这，发现已经很难调试了，代码太乱，逻辑混乱，于是准备开始重构</p>
+<p>现有代码的问题：</p>
+<ul>
+<li>临界区的混乱，到底哪里加锁，哪里不加</li>
+<li>各个goroutine之间交互的混乱</li>
+<li>代码功能组织的问题</li>
+</ul>
+<p>重构的代码最重要的一点是：抽象出了状态机，在里面去更新</p>
+<h2 id="case5：FailNoAgree"><a href="#case5：FailNoAgree" class="headerlink" title="case5：FailNoAgree"></a>case5：FailNoAgree</h2><p>测试内容是：5个server，3个follow故障，此时提交的命令将不会Committed，然后恢复3个follower，此时发送第3个命令，会忘记第2个没有确认的命令，此时第3个命令的index应该还是2</p>
+<p>现在出现的问题是：<br>follow的日志没更新，但是leader的nextIndex确更新了！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">2016&#x2F;10&#x2F;13 10:44:20 leader is 4</span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 server:0,currentTerm:3,role:candidate</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 server:1,currentTerm:3,role:candidate</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 server:2,currentTerm:3,role:candidate</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 server:3,currentTerm:2,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125; &#123;2 20 2&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 server:4,currentTerm:2,role:leader</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125; &#123;2 20 2&#125;]</span><br><span class="line">nextIndex is:[2 2 2 3 3]</span><br><span class="line">matchIndex is:[1 1 1 2 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:22 恢复3个server</span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:25 LeaderId: 4 has big term: 5 than follower: 3 currentTerm: 4</span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:25 server 3 len(rf.log) 3 args.PrevLogIndex 1</span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 重新选举后leader is 4</span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 server:0,currentTerm:5,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 server:1,currentTerm:5,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 server:2,currentTerm:5,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 server:3,currentTerm:5,role:follower</span><br><span class="line">commitIndex:2,lastApplied:2</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125; &#123;2 20 2&#125;]</span><br><span class="line">nextIndex is:[0 0 0 0 0]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 10:44:26 server:4,currentTerm:5,role:leader</span><br><span class="line">commitIndex:2,lastApplied:2</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;2 10 1&#125; &#123;2 20 2&#125;]</span><br><span class="line">nextIndex is:[3 3 3 3 3]</span><br><span class="line">matchIndex is:[2 2 2 2 0]</span><br></pre></td></tr></table></figure>
+<p>看重新选举后，leader4：matchIndex is:[2 2 2 2 0]，但是其他的follower确没有收到新的日志，怎么回事呢？看代码什么情况下回去更新matchIndex呢？</p>
+<p>问题在于发送心跳的时候返回了reply=true了，确没有去检查日志是否是最新的</p>
+<p>此处记住appendEntries如果返回true，则一定表示是日志一样新了！</p>
+<blockquote>
+<p>true  if follower contained entry matching prevLogIndex and prevLogTerm</p>
+</blockquote>
+<h2 id="case6：ConcurrentStarts"><a href="#case6：ConcurrentStarts" class="headerlink" title="case6：ConcurrentStarts"></a>case6：ConcurrentStarts</h2><p>这个case测试的是：<br>同时发送5个命令，然后测试5个命令能够被顺序的提交<br>测试中的修改是：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/865abdc247ed5f85ebcc5638377b351745f8a2b1" alt="图片"><br>将红色框中的内容移动到了锁里面，为了防止并发访问的时候，index得到相同。</p>
+<h2 id="case7：Rejoin"><a href="#case7：Rejoin" class="headerlink" title="case7：Rejoin"></a>case7：Rejoin</h2><p>测试重新加入直接通过了，之前的代码就能实现<br>测试内容是：3个server，leader故障，然后向故障的leader发送命令，同时向新选举出来的leader发送命令,大致如下图，最后能统一<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/bcbdd9928a74df4adc3b9b683545fe94ceae4657" alt="图片"></p>
+<h2 id="case8：Backup"><a href="#case8：Backup" class="headerlink" title="case8：Backup"></a>case8：Backup</h2><p>类似case7：不同在于此处有5个server，然后命令更多，测试也是网络分区后出现多leader，然后恢复网络后，再重新同步数据<br>不用修改，直接通过</p>
+<h2 id="case9：Count"><a href="#case9：Count" class="headerlink" title="case9：Count"></a>case9：Count</h2><p>case9主要是性能测试，测试rpc的次数不能太多</p>
+<h2 id="case10-12：Persist1-3"><a href="#case10-12：Persist1-3" class="headerlink" title="case10-12：Persist1-3"></a>case10-12：Persist1-3</h2><p>持久化的逻辑一直没有加上，此处加上的</p>
+<p>先看需要持久化哪些数据，然后持久化的时机是什么时候？</p>
+<p>需要持久化哪些日志？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">e.Encode(rf.currentTerm) &#x2F;&#x2F; 当前任期</span><br><span class="line">e.Encode(rf.log) &#x2F;&#x2F; 收到的日志</span><br><span class="line">e.Encode(rf.votedFor) &#x2F;&#x2F; 投票的</span><br><span class="line">e.Encode(rf.commitIndex) &#x2F;&#x2F; 已经确认的一致性日志，之后的日志表示还没有确认是否可以同步，一旦确认的日志都不会改变了</span><br></pre></td></tr></table></figure>
+<p>既然这几个需要同步，那就是发生改变的时候把数据持久化下来就可以了</p>
+<p>需要调用<code>persist()</code>函数的地方有：</p>
+<ul>
+<li>leader向各个follower发送完日志，确认提交的时候</li>
+<li>follower处理AppendEnties有新日志或者commiIndex更新的时候</li>
+</ul>
+<h2 id="case13：Figure8"><a href="#case13：Figure8" class="headerlink" title="case13：Figure8"></a>case13：Figure8</h2><p>测试主要测试的是下面的这张图：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/08b43293b3d71a530c4b6e55c4ab3218d9d9b1f4" alt="图片"><br>描述的问题是：为什么领导人无法通过老的日志的任期号来判断其提交状态。</p>
+<ul>
+<li>(a) S1 是领导者，部分的复制了索引位置 2 的日志条目</li>
+<li>(b) S1 崩溃了，然后 S5 在任期 3 里通过 S3、S4 和自己的选票赢得选举，然后从客户端接收了一条不一样的日志条目放在了索引2 处</li>
+<li>(c) S5 又崩溃了；S1 重新启动，选举成功，开始复制日志。在这时，来自任期 2 的那条日志已经被复制到了集群中的大多数机器上，但是还没有被提交</li>
+<li>(d)  S1 又崩溃了，S5 可以重新被选举成功（通过来自 S2，S3 和 S4 的选票），然后覆盖了他们在索引 2 处的日志。但是，在崩溃之前，如果 S1 在自己的任期里复制了日志条目到大多数机器上</li>
+<li>(e) 然后这个条目就会被提交（S5 就不可能选举成功）。 在这个时候，之前的所有日志就会被正常提交处理</li>
+</ul>
+<p>Raft采用计算副本数的方式,使得永远不会提交前前 面纪元的日志条目，</p>
+<p>现在出现的问题是commit了不同的值？<br>即在没有达成一致的情况下就就行了提交！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Test: Figure 8 ...</span><br><span class="line">2016&#x2F;10&#x2F;13 20:38:35 server:0,currentTerm:2,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;1 1752890841475247006 1&#125;]</span><br><span class="line">nextIndex is:[1 1 1 1 1]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 20:38:35 server:2,currentTerm:2,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;1 1752890841475247006 1&#125;]</span><br><span class="line">nextIndex is:[1 1 1 1 1]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 20:38:35 server:4,currentTerm:2,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;1 1752890841475247006 1&#125;]</span><br><span class="line">nextIndex is:[1 1 1 1 1]</span><br><span class="line">matchIndex is:[0 0 0 0 0]</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;13 20:38:35 apply error: commit index&#x3D;2 server&#x3D;1 4541014630978635374 !&#x3D; server&#x3D;3 8558661384468427932</span><br></pre></td></tr></table></figure>
+
+
+
+<p>到这就得加上之前忘记的一个策略</p>
+<blockquote>
+<p>如果存在以个N满足 N&gt;commitIndex,多数的matchIndex[i] &gt;= N,并且 log[N].term == currentTerm:设置commitIndex = N</p>
+</blockquote>
+<p>主要是指：leader只会提交本纪元的日志</p>
+<h2 id="case14：UnreliableAgree"><a href="#case14：UnreliableAgree" class="headerlink" title="case14：UnreliableAgree"></a>case14：UnreliableAgree</h2><p>模拟网络不可靠，在不可靠的情况下<code>cfg.setunreliable(false)</code>，则有概率还是丢弃请求，在这种情况下测试协议最后还能达成一致</p>
+<h2 id="case15：Figure8Unreliable"><a href="#case15：Figure8Unreliable" class="headerlink" title="case15：Figure8Unreliable"></a>case15：Figure8Unreliable</h2><p>通过设置<code>cfg.setlongreordering(true)</code>，在labrpc中会直接睡眠一段时间，模拟这次情况下协议还是达成一致</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ms :&#x3D; 200 + rand.Intn(1 + rand.Intn(2000))</span><br><span class="line">time.Sleep(time.Duration(ms) * time.Millisecond)</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">2016&#x2F;10&#x2F;14 14:51:11 server:4,currentTerm:31,role:follower</span><br><span class="line">commitIndex:3,lastApplied:3</span><br><span class="line">2016&#x2F;10&#x2F;14 14:51:11 server:3,currentTerm:31,role:follower</span><br><span class="line">commitIndex:3,lastApplied:3</span><br><span class="line">2016&#x2F;10&#x2F;14 14:51:11 server:2,currentTerm:31,role:follower</span><br><span class="line">commitIndex:3,lastApplied:3</span><br><span class="line">2016&#x2F;10&#x2F;14 14:51:11 server:1,currentTerm:31,role:follower</span><br><span class="line">commitIndex:3,lastApplied:3</span><br><span class="line">2016&#x2F;10&#x2F;14 14:51:11 server:0,currentTerm:31,role:leader</span><br><span class="line">commitIndex:3,lastApplied:3</span><br><span class="line">nextIndex is:[186 53 58 51 62]</span><br><span class="line">matchIndex is:[185 0 0 0 0]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2016&#x2F;10&#x2F;14 16:09:45 check log type: raft.AppendEntiesArgs value: &#123;6 1 1 1 1 [&#123;1 4411 2&#125; &#123;2 9540 3&#125; &#123;4 3863 4&#125; &#123;6 2769 5&#125;]&#125;</span><br><span class="line">2016&#x2F;10&#x2F;14 16:09:45 error log indexserver:0,currentTerm:6,role:follower</span><br><span class="line">commitIndex:1,lastApplied:1</span><br><span class="line">log is:[&#123;0 &lt;nil&gt; 0&#125; &#123;1 606 1&#125; &#123;1 4411 2&#125; &#123;4 3863 4&#125; &#123;6 2769 5&#125;]</span><br><span class="line">nextIndex is:[84 0 0 3 2]</span><br><span class="line">matchIndex is:[83 1 1 2 1]</span><br></pre></td></tr></table></figure>
+<p>错误日志，由于没有很好的传递日志，代码bug</p>
+<h2 id="case16-17：TestReliableChurn，UnreliableChurn"><a href="#case16-17：TestReliableChurn，UnreliableChurn" class="headerlink" title="case16-17：TestReliableChurn，UnreliableChurn"></a>case16-17：TestReliableChurn，UnreliableChurn</h2><p>测试通过</p>
+<p>下一篇的计划是结合代码再次看下关键实现</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/08/raft1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/10/08/raft1/" class="post-title-link" itemprop="url">raft 系列解读(1) 之 原理</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-08 00:00:00" itemprop="dateCreated datePublished" datetime="2016-10-08T00:00:00+08:00">2016-10-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/10/08/raft1/" class="post-meta-item leancloud_visitors" data-flag-title="raft 系列解读(1) 之 原理" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="一致性的来龙去脉"><a href="#一致性的来龙去脉" class="headerlink" title="一致性的来龙去脉"></a>一致性的来龙去脉</h1><p>先回答一个问题：为什么分布式系统中一致性问题那么难？</p>
+<hr>
+<p>首先我们知道在单机系统中不存在数据的一致性问题，在分布式系统中，由于采用多机器进行分布式部署，必然带来数据的复制，那为什么引入数据的复制呢？主要试图解决的两个问题：</p>
+<ul>
+<li>可用性：避免单点故障</li>
+<li>性能：多机器提供相同服务</li>
+</ul>
+<p>既然数据的复制不可避免，那么就勇敢的直面它，不过在此之前，让我们先认清下一致性的到底试图解决什么？</p>
+<p>一致性问题最早出现在Reaching Agreement in the Presence of Faults中，简单来说一致性就是系统中各个独立的部分就某件事达成一致，但就是让大家都达成统一意见就是这么难，出现了Paxos, Zab , Raft等算法。本文重点介绍raft算法，因此下面会就raft具体展开。</p>
+<p>raft中为了保证一致性，都有哪些方法呢？</p>
+<ul>
+<li>Leader Election</li>
+<li>Log Replication</li>
+</ul>
+<p>先讲第一个，Leader Election，顾名思义就是领袖选举，先来搞清楚为什么会有领袖选举？因为在分布式环境下，多个机器之间要进行数据的复制，如果没有一个leader，所有的机器都能够提供读/写服务，那就需要保证(NXN)个数据复制都要一直成功，但是如果有了一个leader后，所有的读写都由leader来协调，那只要保证N个数据的复制成功，一下子就减轻了复杂度。</p>
+<p>下面我们就开始正式的学习Leader Election了。</p>
+<h1 id="Leader-Election"><a href="#Leader-Election" class="headerlink" title="Leader Election"></a>Leader Election</h1><p>在raft中每个节点都属于3种角色中的一个</p>
+<ol>
+<li>Leader（领袖）</li>
+<li>Follower（群众）</li>
+<li>Candidate（候选人）</li>
+</ol>
+<p>这3种角色的转换关系如下：</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/8250378fe54738185ec207b1213ed2ffc8e2c111" alt="角色转换图"><br>图中有个新的概念叫：term（任期），每个领导人都有自己的任期，任期到了就需要开始新的一轮选举，在每个任期内，可以没有leader，但是不能出现大于两个的leader。<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/edfbfe7a51df6cdcc7f59160c33c686cf92c0eee" alt="任期图"><br>raft将整个时间轴按照任期来划分，每个任期都起始于选举，即出现有Candidate开始竞选leader的时候。</p>
+<p>我们对照着状态图来说下正常的选举过程。</p>
+<ol>
+<li>系统刚启动的时候，每个节点都是follower状态，如果节点在follower状态期间，在一个<strong>election timeout</strong>时间内没有收到来自Leader的消息，则可以假设没有leader，于是启动选举过程，新增自己本地的任期</li>
+<li>此时节点转换到了Candidate状态，首先当然是投票给自己，并且发送<strong>RequestVote RPCs</strong>给其他follower，让他们支持自己当leader，此时在收到投票结果后，可能会出现3种结果<br>2.1 获得了大多数的认可，赢得了投票，成为leader<br>2.2 发现了别人已经成为leader了或者自己的任期落后于别人的任期，自动转换为follower<br>2.3 一个选举周期过去了，也没有赢得竞选，开始新一轮竞选</li>
+</ol>
+<p>画个图说明下：<br><img src="http://bos.nj.bpc.baidu.com/v1/agroup/147e5b43f2af98716ea8840710b1170220cc0909" alt="选举"></p>
+<p>问题：</p>
+<ol>
+<li>怎么知道大多数人？Candidate要知道人有多少，人在哪，才能去邀请他们投票</li>
+</ol>
+<p>当选举出了leader后，我们就可以正式开始对外服务了，提供读写请求，也正是我们要介绍个第二个保证一致性的方法：Log Replication</p>
+<h1 id="Log-Replication"><a href="#Log-Replication" class="headerlink" title="Log Replication"></a>Log Replication</h1><p>日志复制，自然而然的问题是：为什么通过日子复制的方式来解决数据一致性问题？使用日志的方式相比较其他有什么好处？</p>
+<p>采用日志的方式，究其原因还是为了提高可靠性，像2PC一样，我们先将要做出的改变写到本地日志，然后再将其复制到其他follower，当一切就续后，最后再执行真正的写操作，将失败的可能性降到了最低，因此一步操作总比多步出错的可能性低。</p>
+<p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/47b026ce5d06fbc66b748e3b19530027eb32e48e" alt="写过程"></p>
+<p>针对上面的每一个步骤leader都可能故障的讨论，可以参考<a href="http://www.cnblogs.com/mindwind/p/5231986.html" target="_blank" rel="noopener">Raft 为什么是更易理解的分布式一致性算法</a></p>
+<p>关于代码的实现，会在后续的文章中给出，敬请期待</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://blog.ivanyang.me/distributedsystem/2016/03/06/whatwetalkaboutwhenwetalkaboutds" target="_blank" rel="noopener">当我们在谈论分布式系统的时候我们在谈论什么译</a></p>
+<p><a href="http://www.hollischuang.com/archives/663" target="_blank" rel="noopener">关于分布式一致性的探究</a></p>
+<p><a href="http://www.cnblogs.com/mindwind/p/5231986.html" target="_blank" rel="noopener">Raft 为什么是更易理解的分布式一致性算法</a></p>
+<p><a href="http://daizuozhuo.github.io/consensus-algorithm/" target="_blank" rel="noopener">一致性问题和Raft一致性算法</a></p>
+<p><a href="http://www.jasongj.com/2015/04/24/KafkaColumn2/" target="_blank" rel="noopener">Kafka设计解析（二）- Kafka High Availability （上）</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/29/2016-09-29-RPC-and-threads/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/09/29/2016-09-29-RPC-and-threads/" class="post-title-link" itemprop="url">RPC and threads</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-09-29 20:31:49" itemprop="dateCreated datePublished" datetime="2016-09-29T20:31:49+08:00">2016-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/09/29/2016-09-29-RPC-and-threads/" class="post-meta-item leancloud_visitors" data-flag-title="RPC and threads" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="RPC目标"><a href="#RPC目标" class="headerlink" title="RPC目标"></a>RPC目标</h1><p>rpc是分布式系统的基础，rpc的目标是：</p>
+<ul>
+<li>简单的网络通信</li>
+<li>将客户端/服务端的通信细节隐藏起来</li>
+<li>客户端调用就像普通的过程调用</li>
+<li>服务器处理程序就像普通程序</li>
+</ul>
+<p>使用rpc后，网络通信就像下面这样子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Client:</span><br><span class="line">    z &#x3D; fn(x, y)</span><br><span class="line">Server:</span><br><span class="line">    fn(x, y) &#123;</span><br><span class="line">      compute</span><br><span class="line">      return z</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>目标就是做到网络通信对应用透明</p>
+<p>rpc消息的流程图</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Client             Server</span><br><span class="line">    request---&gt;</span><br><span class="line">       &lt;---response</span><br></pre></td></tr></table></figure>
+
+<p>软件架构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">client app         handlers</span><br><span class="line">  	stubs           dispatcher</span><br><span class="line"> 		RPC lib           RPC lib</span><br><span class="line">   　　net  ------------ net</span><br></pre></td></tr></table></figure>
+
+<p>细节</p>
+<p>客户端怎么知道应该跟谁通信？</p>
+<p>​    客户端提供服务端的地址</p>
+<p>​    由命名服务来提供服务端名字到服务器地址的映射</p>
+<p>怎么处理rpc失败？</p>
+<p>​    失败的原因可能是：丢包，网络断线，服务器运行缓慢，服务器崩溃</p>
+<p>交互失败对rpc的client端意味着什么？</p>
+<p>​    client端收不到server端的响应</p>
+<p>​    client端不知道请求是否发送到了server端，server端是否执行了</p>
+<p>那怎么处理失败的情况呢？简单的方案是使用“至少一次”语义</p>
+<p>​    rpc等待一段时间的响应，如果没有响应到达，重新发送请求，重复该过程一定次数直到请求返回，如果这个时候，还是没收到响应，则返回应用一个错误</p>
+<p>“至少一次”的语义应用在处理上是否简单呢？</p>
+<p>​    在写请求上，以”deduct $10 from bank account”为例，可能会多次扣款</p>
+<p>​    从客户端角度，先后发送两个请求：Put(“k”, 10)，Put(“k”, 20)，但是由于网络的原因，第一个请求比第二个请求慢到达server端，出现数据和我们预期的不一样的问题</p>
+<p>那“至少一次”的语义有什么场景下是合适的呢？</p>
+<p>​    如果操作是可重复的，譬如：读请求</p>
+<p>​    如果像GFS那样自己能处理多副本的</p>
+<p>那除了“至少一次”的语义外，还有没有更好的处理方式？”at most once”至多一次</p>
+<p>​    理想情况是server端能识别重复请求，对于重复请求返回之前的处理结果，那怎么察觉是重复请求呢？</p>
+<p>​    client端可以对每个请求都带上唯一的ID，server端根据ID来处理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if seen[xid]:</span><br><span class="line">     r &#x3D; old[xid]</span><br><span class="line">   else</span><br><span class="line">     r &#x3D; handler()</span><br><span class="line">     old[xid] &#x3D; r</span><br><span class="line">     seen[xid] &#x3D; true</span><br></pre></td></tr></table></figure>
+
+<p>那至多一次的语义会带来什么样的复杂性呢？</p>
+<p>第一个怎么保证ID是全局唯一的？</p>
+<p>server端保存old[xid]信息和seen[xid]信息保存到什么时候？</p>
+<p>​    理想情况下：每个客户端都有唯一的id，每个客户端rpc请求都有seq号，客户端发送请求的时候，会带着我已经看到所有的&lt;=X的请求了，类似于TCP的sequ和ack机制</p>
+<p>​    或者只允许客户端一次发一个请求，当seq+1的请求到达客户端，小于seq的信息就可以丢弃了</p>
+<p>​    或者客户端和服务器端达成共识：只重试<strong>&lt;5</strong>分钟的请求，那服务器端就丢弃大于5分钟之前的信息</p>
+<p>考虑另一个问题：如果重复请求过来的时候，之前的请求还在处理中怎么办？这个时候不能重复执行，好的办法是在rpc中加入“pending”标志或者等待或者忽略</p>
+<p>如果一个最多一次语义的服务端挂了或者重启了怎么办？</p>
+<p>如果用于至多一次的语义的信息是存储在内存中的，那重启后信息就丢失了，会接受重复的请求，因此至多一次的语义的信息保存在硬盘上会比较好，或者做冗余存储，多副本。</p>
+<p>第三种方案：精确执行一次”exactly once”</p>
+<p>实现上就是最多一次的方案+无限重试+容错服务</p>
+<p>Go RPC实现的”最多一次“</p>
+<ul>
+<li>打开TCP连接</li>
+<li>向TCP连接写入请求</li>
+<li>TCP可能会重传，但是服务器的TCP协议栈会过滤重复的信息</li>
+<li>在Go代码里面不会有重试（即：不会创建第二个TCP连接）</li>
+<li>Go RPC代码当没有获取到响应之后将返回错误<ul>
+<li>也许是TCP连接的超时</li>
+<li>也许是服务器没有看到请求</li>
+<li>也许服务器处理了请求，但是在返回回复之前服务器的网络故障</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/29/2016-09-29-mapreduce-detail/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/09/29/2016-09-29-mapreduce-detail/" class="post-title-link" itemprop="url">mapreduce-detail</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-09-29 16:25:08" itemprop="dateCreated datePublished" datetime="2016-09-29T16:25:08+08:00">2016-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/09/29/2016-09-29-mapreduce-detail/" class="post-meta-item leancloud_visitors" data-flag-title="mapreduce-detail" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MapReduce概要"><a href="#MapReduce概要" class="headerlink" title="MapReduce概要"></a>MapReduce概要</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>几个小时要处理完TB的数据，但是这些程序一般都不是分布式系统人员开发的，使用起来因为一些分布式的系统问题，会非常的痛苦</p>
+<h2 id="总体目标"><a href="#总体目标" class="headerlink" title="总体目标"></a>总体目标</h2><p>非专业的分布式系统开发人员可以轻松的开发高效的处理大数据的程序，开发人员只需要定义好map和reduce函数，然后就可以在成千上万的机器上运行了，完全可以不去关心分布式系统的细节。</p>
+<h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><p>模型容易编程，将一些分布式系统中的头痛问题隐藏起来：</p>
+<ul>
+<li>并发：和顺序执行一样的结果</li>
+<li>如何在服务器上启动worker和sever</li>
+<li>在不同机器之间移动数据</li>
+<li>容错</li>
+</ul>
+<p>模型的扩展性好，map和reduce函数彼此之间不需要等待，数据获取上彼此也不干扰，因此可以并行执行，因此可以通过简单的加机器就提升系统性能</p>
+<h2 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h2><p>那什么会是限制性能的因素呢？CPU?内存？硬盘？网络？一般来说会是网络带宽，要处理的数据传输会远大于网络带宽，因此MR在设计会尽量减少网络上的数据传输。</p>
+<h2 id="容错"><a href="#容错" class="headerlink" title="容错"></a>容错</h2><p>如果一个server在执行MR job的时候挂了怎么办？</p>
+<p>我们可以简单的重新执行一遍任务，这是基于一个基本的假设：map和reduce函数都是纯函数，不会改变输入的数据、不会保持状态、不共享内存、不存在map和map，或者reduce和reduce之间的联系。</p>
+<p>所以重新执行也会产生相同的输出。纯函数的这个特点是MR相对于其他并行编程方案的主要不同，然后也是因为这个特性使得MR非常简单。</p>
+<h2 id="更多的一些细节"><a href="#更多的一些细节" class="headerlink" title="更多的一些细节"></a>更多的一些细节</h2><ul>
+<li>master分配任务给worker，对于map函数会记录住中间输出位置</li>
+<li>每个输入都存储在GFS中，一共存3份</li>
+<li>所有的server同时运行GFS和MR workers，让map worker从本机的GFS中读取数据，减少网络传输</li>
+<li>输入的分片会远远大于workers的数量，master在每台机器上面执行Map任务，当原来的任务完成之后map会处理新的任务</li>
+<li>worker将输出按key散列映射输出到R分区保存在本地磁盘上</li>
+<li>当全部没有Map执行的时候Reduce将会执行</li>
+<li>master告诉Reducers去获取Map workers产生的中间数据分区，Reduce worker将最终的结果输出到GFS</li>
+</ul>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><p>怎么让任务均衡的在worker上运行？因为每个分片处理的时间都是不同的，不同的内容和大小，机器性能也不同，因此分片的个数要大于worker，不会因为某个分片处理的特别慢和影响整个的完成时间，早完成的worker会接着处理下一个分片，最后所有worker一起完成任务。</p>
+<h2 id="容错-1"><a href="#容错-1" class="headerlink" title="容错"></a>容错</h2><p>mr怎么处理worker崩溃？</p>
+<ul>
+<li><p>map worker崩溃</p>
+<p>master重新执行，将task重新分配给GFS上的其他副本的的机器上去，即使workers可能实际上已经完成了任务，但是reducer需要中间文件，因此需要重新执行map任务。这个时候，可能有些reducer可能已经读取了crashed worker产生的中间文件，这个时候也没有关系，因为map和reduce函数都是无副作用的，因此重新执行就可</p>
+</li>
+</ul>
+<ul>
+<li>reduce worker在产生output之前崩溃：master将任务分配给其他worker执行即可</li>
+<li>reduce worker在产生output的时候崩溃：GFS的atomic rename能够保证在完成之前临时文件都是不可见的，因此master重新分配任务即可</li>
+</ul>
+<h2 id="其他的一些问题"><a href="#其他的一些问题" class="headerlink" title="其他的一些问题"></a>其他的一些问题</h2><ul>
+<li>假如master意外的开启两个Ｍap worker处理同一个输入会怎么样？ 它只会告诉Reduce worker其中的一个。</li>
+<li>假如两个Reduce worker处理中间数据的同一个分区会怎么样？ 它们都会将同一份数据写到GFS上面，GFS的原子重命名操作会触发，先完成的获胜将结果写到GFS.</li>
+<li>假如一个ｗorker非常慢怎么办 — 一个掉队者？ 产生原因可能是非常糟糕的硬件设施。 master会对这些最后的任务创建第二份副本任务执行。</li>
+<li>假如一个worker因为软件或者硬件的问题导致计算结果错误怎么办？ 太糟糕了！MR假设是建立在”fail-stop”的cpu和软件之上。</li>
+<li>假如master崩溃怎么办？</li>
+</ul>
+<h2 id="不适合哪些应用"><a href="#不适合哪些应用" class="headerlink" title="不适合哪些应用"></a>不适合哪些应用</h2><p>首先必须明确并不是所以应用都适合map/shuffle/reduce这种模式</p>
+<ul>
+<li>小数据不适合，因为成本太高</li>
+<li>对于大数据的更新，例如：在大索引中增加些新的文件</li>
+<li>不确定的读（Map 和 Reduce都不能确定输入）</li>
+<li>多次shuffles，例如：page-rank</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>MapReduce的出现使得集群计算变的流行，但是MapReduce也有优缺点：</p>
+<p>缺点：不是最有效或者灵活的</p>
+<p>有点：扩展性好，容易编程，错误处理和数据移动都被隐藏了</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/29/2016-09-29-6-824-Lab-1-MapReduce-2016/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/09/29/2016-09-29-6-824-Lab-1-MapReduce-2016/" class="post-title-link" itemprop="url">6.824 Lab 1: MapReduce(2016)</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-09-29 13:51:13" itemprop="dateCreated datePublished" datetime="2016-09-29T13:51:13+08:00">2016-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/09/29/2016-09-29-6-824-Lab-1-MapReduce-2016/" class="post-meta-item leancloud_visitors" data-flag-title="6.824 Lab 1: MapReduce(2016)" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MapReduce出现的原因"><a href="#MapReduce出现的原因" class="headerlink" title="MapReduce出现的原因"></a>MapReduce出现的原因</h1><p>MapReduce 的优势在于对大规模数据进行切分（split），并在分布式集群上分别运行 map/reduce 并行加工，而用户只需要针对数据处理逻辑编写简单的 map/reduce 函数，MapReduce 则负责保证分布式运行和容错机制。主要就是解决了分布式系统中任务的运行和容错机制，用户不必关心并行计算、容错、 数据分布、负载均衡。</p>
+<h1 id="MapReduce的原理"><a href="#MapReduce的原理" class="headerlink" title="MapReduce的原理"></a>MapReduce的原理</h1><p>先看下MapReduce的架构图：</p>
+<p><img src="/images/mapreduce-arch.png" alt=""></p>
+<p>从图中可以看出，工作流程是：第一步将数据进行切分，然后每个work去取自己的数据，然后work处理完后写入到local write中，然后reduce 的worker从local 读取后，最后写入到final output中。此处final output的个数和reduce worker的个数相同。</p>
+<p>以生活中的例子说明：</p>
+<h2 id="用一个生活中的例子来举例说明：炒菜"><a href="#用一个生活中的例子来举例说明：炒菜" class="headerlink" title="用一个生活中的例子来举例说明：炒菜"></a>用一个生活中的例子来举例说明：炒菜</h2><p><img src="/images/mapreduce-cooker.png" alt=""></p>
+<p>假如你是一个酒店的行政总厨(Master)，你不负责做菜，只负责指挥下面的厨师Worker。每天都进行着如下的步骤：</p>
+<h3 id="Register"><a href="#Register" class="headerlink" title="Register"></a>Register</h3><p>每天都会有人去采购很多食材回来，有牛肉，猪肉，藕，土豆……..买回来这些食物后，需要将他们注册在一个本子上，这就是今天要处理的任务(task)了！</p>
+<h3 id="Partition-and-Map"><a href="#Partition-and-Map" class="headerlink" title="Partition and Ｍap"></a>Partition and Ｍap</h3><p>做菜的第一个过程，当然是切菜，你是主厨(Master)，你不负责做菜，只负责通知。”喂，过来把这个藕切成丁“，于是就有一个空闲的厨师过来切藕，你就把藕这个任务分发给了厨师(Worker)。切东西的过程，就是partition。之后可能还需要对食物做一些预先处理，比如抹上盐和料酒，这个过程就是mapfunc。</p>
+<p>厨师切好藕后，根据一个规则”噢，藕是要炒肉的，放到第一个盆子里面去“，规则对于每一个厨师都是一样的，这样保证了，同一个input，处理(map)完后肯定都在一起。比如藕片肯定就都放在第一个盆里。一般来说如果有R个输出对象(盆子)，一个简单的分配规则就是hash后MOD R。</p>
+<h3 id="Reduce"><a href="#Reduce" class="headerlink" title="Reduce"></a>Reduce</h3><p>在介绍这个环节之前有一点要注意：和做菜一样，炒菜之前务必要保证菜已经切好了，这样才能不至于要炒回锅肉，发现只有肉片没有蒜苗。当确认前一个环节(map)确实结束后，开始炒菜(Reduce)。在这个环节里，你还是负责通知空闲的厨师，”喂你去炒一份回锅肉“。就有一个厨师接收到这个任务，开始准备炒肉。</p>
+<p>”我需要煮熟的五花肉“说完从第一个盆子里拿了肉，”我还需要辣椒”，说完从第二个盆子里拿了辣椒。。。。“最后来一点蒜”从第R个盆子里拿了蒜。原料准备好了，就开始炒菜，这个过程就是reduce function，炒完了过后，统一输出到一个盘子里。这个环节一共要炒M盘菜(M个任务)，那么就有了M盘菜了。</p>
+<h3 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a>Merge</h3><p>这个环节最好理解，在所有菜都做好了之后，统一端出去，给客人(输入)。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>下面开始试验，<a href="https://github.com/zhuanxuhit/distributed-system" target="_blank" rel="noopener">github地址</a>，在正式开始实验室之前，先熟悉下代码的结构</p>
+<ol>
+<li>程序启动需要如下几个参数：任务名称，输入文件，map和reduce函数以及reduce任务的个数</li>
+<li>程序分为master和worker，其中master负责分发map和reduce任务给worker，worker则执行具体的任务</li>
+<li>map任务的个数由输入文件的个数决定，一个输入文件对应一个map任务，map任务会读取输入文件，然后调用map函数，接着根据<code>key</code>，将结果写入到对应的中间文件，具体写入到哪个中间文件，原则是相同的key写入到相同的中间文件中，中间文件的个数是reduce任务的个数，因此在执行完所有的map任务后，会有<code>inputFiles * reduce</code>个中间文件</li>
+<li>所有的中间文件生成完后，开始reduce任务，每个reduce任务需要去读取<code>inputFiles</code>个数的中间文件，然后做聚合，相同的<code>key</code>的<code>value</code>值放到一起，接着调用<code>reduce</code>函数，最后生成<code>reduce</code>任务个数的reduce文件</li>
+<li>master调用<code>mr.merge()</code> [master_splitmerge.go]，将前面产生的nReduce个文件合并为一个</li>
+<li>master发送一个<code>Shutdown</code>给各个workers，然后自己也结束</li>
+</ol>
+<p>具体的实验有5个部分，下面分别记录主要的难点：</p>
+<h2 id="Part-I-Map-Reduce-input-and-output"><a href="#Part-I-Map-Reduce-input-and-output" class="headerlink" title="Part I: Map/Reduce input and output"></a>Part I: Map/Reduce input and output</h2><p>doMap() function in common_map.go：doMap完成了一个map worker的工作，从输入文件inFile中读取内容，然后调用用户的mapF函数，最后将输出分为nReduce个中间文件 ，此处具体哪个key到哪个文件，采用的hash方法，这样做的目的是：可以让reduce任务处理的key都是唯一的。</p>
+<p>doReduce() function in common_reduce.go：doReduce完成reduce worker的工作，从map任务个数个中间文件读取内容，对key做聚合，再生成一个最终文件</p>
+<h2 id="Part-II-Single-worker-word-count"><a href="#Part-II-Single-worker-word-count" class="headerlink" title="Part II: Single-worker word count"></a>Part II: Single-worker word count</h2><p>没什么可讲，mapReduce界的hello world程序</p>
+<h2 id="Part-III-Distributing-MapReduce-tasks"><a href="#Part-III-Distributing-MapReduce-tasks" class="headerlink" title="Part III: Distributing MapReduce tasks"></a>Part III: Distributing MapReduce tasks</h2><p>修改schedule.go文件中的schedule()函数，将map和reduce任务分配给workers</p>
+<p>此处worker地址是通过<code>registerChannel</code>获取的，在<code>schedule()</code>中会启动n个goroutine，每个都从<code>registerChannel</code>中获取worker地址，然后进行rpc调用，成功后，再放回到<code>registerChannel</code>中，具体的代码如下：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; ntasks; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">			wg.Add(<span class="number">1</span>)</span><br><span class="line">			<span class="keyword">defer</span> wg.Done()</span><br><span class="line">			<span class="keyword">for</span> &#123;</span><br><span class="line">				<span class="comment">// 每次循环都新取出一个worker</span></span><br><span class="line">				worker := &lt;- mr.registerChannel</span><br><span class="line">				debug(<span class="string">"Master: schdule worker %s\n"</span>, worker)</span><br><span class="line">				arg := &amp;DoTaskArgs&#123;</span><br><span class="line">					JobName:mr.jobName,</span><br><span class="line">					File:mr.files[i],</span><br><span class="line">					Phase:phase,</span><br><span class="line">					TaskNumber:i,</span><br><span class="line">					NumOtherPhase:nios,</span><br><span class="line">				&#125;</span><br><span class="line">				ok := call(worker, <span class="string">"Worker.DoTask"</span>, arg, <span class="built_in">new</span>(<span class="keyword">struct</span>&#123;&#125;))</span><br><span class="line">				<span class="comment">// 如果失败，表示worker失效，不在放回</span></span><br><span class="line">				<span class="keyword">if</span> ok &#123;</span><br><span class="line">					<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">						<span class="comment">//表示空闲了，必须单独放入goroutine中</span></span><br><span class="line">						mr.registerChannel &lt;- worker</span><br><span class="line">					&#125;()</span><br><span class="line">					<span class="keyword">break</span></span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					fmt.Printf(<span class="string">"Worker: RPC %s DoTask error\n"</span>, worker)</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;(i)</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Wait()</span><br></pre></td></tr></table></figure>
+
+<h2 id="Part-IV-Handling-worker-failures"><a href="#Part-IV-Handling-worker-failures" class="headerlink" title="Part IV: Handling worker failures"></a>Part IV: Handling worker failures</h2><p>处理worker失败的情况</p>
+<p>Master来处理失败的<code>workers</code>, 当某worker上的Map/Reduce任务失败后, 需要将这个任务转移给其他worker来执行，worker的失败，我们并不需要特别关注，因为每个worker的输出都是一致的，只需要重新执行即可，可能出现两个worker分配了同样的任务，那会不会出现<strong>两个worker同时向一个文件写入内容</strong>，这样子不就导致文件错误了？</p>
+<p>在代码的实现上，一旦某一个worker失败，则不再放入<code>registerChannel</code>，不会再分配任务了。</p>
+<p>至于master的容错，这个问题比较难，因为master存储着状态信息，留在后面解决。</p>
+<h2 id="Part-V-Inverted-index-generation-optional"><a href="#Part-V-Inverted-index-generation-optional" class="headerlink" title="Part V: Inverted index generation (optional)"></a>Part V: Inverted index generation (optional)</h2><p>倒排索引的产生，因为一个word在一个文档会出现多次，因此在map阶段，注意key的去重</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://blog.csdn.net/poundssss/article/details/52666292" target="_blank" rel="noopener">MIT6.824 分布式系统 lab1</a></p>
+<p><a href="http://andrewliu.in/2016/04/16/6-824-Lab-1-MapReduce-2016/" target="_blank" rel="noopener">6.824 Lab 1: MapReduce(2016)</a></p>
+<p><a href="https://www.bittiger.io/videos/nFt6rHJiJedmuzpem/qtFZHdaf6JJQxyMCB" target="_blank" rel="noopener">硅谷之路11 深入浅出MapReduce</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/29/bittiger-72/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/09/29/bittiger-72/" class="post-title-link" itemprop="url">理解数据结构和算法</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-09-29 13:51:13" itemprop="dateCreated datePublished" datetime="2016-09-29T13:51:13+08:00">2016-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-02-22 20:29:32" itemprop="dateModified" datetime="2020-02-22T20:29:32+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/09/29/bittiger-72/" class="post-meta-item leancloud_visitors" data-flag-title="理解数据结构和算法" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>程序=数据结构+算法</p>
+<p>那是现有数据结构再有算法，还是现有算法再有数据结构呢？</p>
+<p>在我看来应该是先有数据结构，只有当有了数据，我们才会考虑算法，针对不同的数据结构会有不同的算法。</p>
+<h1 id="数据本质"><a href="#数据本质" class="headerlink" title="数据本质"></a>数据本质</h1><p>数据的本质是什么呢？</p>
+<p>数学上有人用集合论来推演整个近代数学，因此集合论是基础，有了最简单的数据，随着人们对数据的需求越来越多，就衍生出了各种结构和算法</p>
+<h1 id="算法的来源"><a href="#算法的来源" class="headerlink" title="算法的来源"></a>算法的来源</h1><h2 id="第一个需求：如何有序的保存数据"><a href="#第一个需求：如何有序的保存数据" class="headerlink" title="第一个需求：如何有序的保存数据"></a>第一个需求：如何有序的保存数据</h2><p>一个简单的想法就是将数据排成一排，一个连一个，这个有序在计算机里就叫做Array</p>
+<p>另一种方法是让数据之间指向关系，前一个指向后一个，这就叫LinkList，LinkList中用做指向关系的结构就叫做指针</p>
+<h2 id="第二个需求：如何判断某一个数据是否存在"><a href="#第二个需求：如何判断某一个数据是否存在" class="headerlink" title="第二个需求：如何判断某一个数据是否存在"></a>第二个需求：如何判断某一个数据是否存在</h2><p>对于有序的集合，我们就根据顺序一个一个找，这就叫做遍历</p>
+<h2 id="第三个需求：如何快速的判断某一个数据是否存在"><a href="#第三个需求：如何快速的判断某一个数据是否存在" class="headerlink" title="第三个需求：如何快速的判断某一个数据是否存在"></a>第三个需求：如何快速的判断某一个数据是否存在</h2><p>因为集合是有序的，我们可以先看两头，然后折中不断缩减查看的范围，这就叫二分查找</p>
+<p>另一种思路是：假设生活中我们要看下公交来没来，你可能第一次去路口看的时候，车没来，然后你回来了说车没来，但是可能车在你刚回来的时候又来了，这样子就其实是错过了车的，这种判断车来没来的方法带有很大的不确定性，对比到我们判断数是否在集合里的例子中，我们先看前面几个数据，发现没有，就认为集合里不存在我们要找的数了，这种方法就叫做贪心，而且特点也很明显就是不确定性，我们只是判断了几个数据，就认为要找的数不在集合里面了。</p>
+<p>那有什么方法能够将贪心的不确定性变为确定性贪心呢？我们可以利用集合有序这个条件，先找中间的元素，比对大了还是小了，不断缩减搜索范围，那这个和二分查找有什么区别呢？换一个角度讲，我们在搜索或者查找的时候，就是不断在减小搜索的集合，这就是贪心。</p>
+<p>现在还是原来的问题，怎么快速的判断某一个数据是否存在，这个如果改变底层的数据结构，那相应的算法就会变化，我们将数据组合成二叉搜索树，树的左边都比根小，右边都比根大，这种结构下搜索就非常直观了，这就是二叉查找树。</p>
+<h2 id="第四个需求：如何遍历一个树"><a href="#第四个需求：如何遍历一个树" class="headerlink" title="第四个需求：如何遍历一个树"></a>第四个需求：如何遍历一个树</h2><p>在遍历树的时候我们有两个想法，一个是一条路走大底，另一个就是离的近的我们先走，对应到算法上就是深度优先和广度优先</p>
+<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>什么是动态规划</p>
+<ul>
+<li>解空间转换</li>
+<li>宽度优先</li>
+<li>贪心</li>
+</ul>
+<p>为什么提到上面三点呢？我们以一个例子来说明下：</p>
+<p><img src="http://i.imgur.com/2SdHqnl.png?1" alt="有向图"></p>
+<p>我们假设有一棵树，每个节点的数值表示权重，要算出根到叶子节点的最短路径</p>
+<p>这个怎么解呢？首先我们需要做个转换，原先每个节点存在的是本节点的权重，现在每个节点新增根节点到本节点的最短路径，第二步，算出每个中间节点的最短路径，这个过程是一个宽度优先的过程，先算第K层的最短路径，然后算K+1层的，最后，我们在算K+1层节点的最短路径的时候，是一个贪心的过程，我们总是取K层过来的最短路劲的那个节点来计算。</p>
+<p>最后，我们总结下什么是动态规划呢？动态规划是一个由第K个结果计算第K+1个结果的过程。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>程序的本质是数据结构加算法，现有数据结构，再有算法</li>
+<li>一些复杂的算法（动态规划）其实是由一些基本的概念组合而来</li>
+</ol>
+<ul>
+<li>解空间转换</li>
+<li>宽度优先</li>
+<li>贪心</li>
+</ul>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.bittiger.io/classpage/ZZjjfYwveRPyffwra" target="_blank" rel="noopener">视频：硅谷之路72 理解数据结构和算法设计</a></p>
+<p><a href="https://www.bittiger.io/blog/post/uqJkA5NjkMtvSEJnB" target="_blank" rel="noopener">blog:【硅谷之路 72】理解数据结构和算法设计</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+  </div>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="颛顼"
+      src="/uploads/wechat-qcode.jpg">
+  <p class="site-author-name" itemprop="name">颛顼</p>
+  <div class="site-description" itemprop="description">从小白到大神，一路走来，你我相伴</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">54</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zhuanxuhit" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zhuanxuhit" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.jianshu.com/u/b7f94092fc21" title="简书 → https:&#x2F;&#x2F;www.jianshu.com&#x2F;u&#x2F;b7f94092fc21" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>简书</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">颛顼</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  </div>
+
+        
+
+
+
+
+
+
+  <script>
+  function leancloudSelector(url) {
+    url = encodeURI(url);
+    return document.getElementById(url).querySelector('.leancloud-visitors-count');
+  }
+  if (CONFIG.page.isPost) {
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.getAttribute('id'));
+      var title = visitors.getAttribute('data-flag-title');
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .then(response => response.json())
+              .then(() => {
+                leancloudSelector(url).innerText = counter.time + 1;
+              })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              })
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  } else {
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.getAttribute('id'));
+      });
+
+      Counter('get', `/classes/Counter?where=${JSON.stringify({ url: { '$in': entries } })}`)
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length === 0) {
+            document.querySelectorAll('.leancloud_visitors .leancloud-visitors-count').forEach(element => {
+              element.innerText = 0;
+            });
+            return;
+          }
+          for (let item of results) {
+            let { url, time } = item;
+            leancloudSelector(url).innerText = time;
+          }
+          for (let url of entries) {
+            var element = leancloudSelector(url);
+            if (element.innerText == '') {
+              element.innerText = 0;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+  }
+
+  fetch('https://app-router.leancloud.cn/2/route?appId=TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz')
+    .then(response => response.json())
+    .then(({ api_server }) => {
+      var Counter = (method, url, data) => {
+        return fetch(`https://${api_server}/1.1${url}`, {
+          method: method,
+          headers: {
+            'X-LC-Id'     : 'TrQUAQIL1sooy48Tp02GkMER-gzGzoHsz',
+            'X-LC-Key'    : '1aaerlJphDUxOYBg5DLMgzQV',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+</body>
+</html>
