@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -26,6 +26,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/01/29/How-to-Do-Linear-Regression-the-Right-Way/index.html">
 <meta property="og:site_name" content="程序猿的进击之路">
 <meta property="og:description" content="本文是YouTube上视频How to Do Linear Regression the Right Way笔记 假设我们有一堆数据，并且他们是线性相关的，那我们怎么找出最合适的那条直线呢？ 此处关键是定义什么是最合适？可以通过每个点到直线的距离来定义整个合适，如图：  在上面的过程中，直线y&#x3D;mx+b中m和b不管变化，从而找到最合适的直线，这个判断的依据就是：  上面公式的含义是：假设点是(x,">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://raw.githubusercontent.com/mattnedrich/GradientDescentExample/master/gradient_descent_example.gif">
 <meta property="og:image" content="https://spin.atomicobject.com/wp-content/uploads/linear_regression_error1.png">
 <meta property="og:image" content="https://spin.atomicobject.com/wp-content/uploads/gradient_descent_error_surface.png">
@@ -100,7 +101,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -127,12 +128,22 @@
   <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
   </ul>
@@ -160,7 +171,7 @@
       
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/How-to-Do-Linear-Regression-the-Right-Way/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -182,24 +193,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2017-01-29 09:58:16" itemprop="dateCreated datePublished" datetime="2017-01-29T09:58:16+08:00">2017-01-29</time>
+              <time title="创建时间：2017-01-29 09:58:16" itemprop="dateCreated datePublished" datetime="2017-01-29T09:58:16+08:00">2017-01-29</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 22:25:50" itemprop="dateModified" datetime="2020-02-22T22:25:50+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 22:25:50" itemprop="dateModified" datetime="2020-02-22T22:25:50+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2017/01/29/How-to-Do-Linear-Regression-the-Right-Way/" class="post-meta-item leancloud_visitors" data-flag-title="线性回归背后的数学" title="Views">
+            <span id="/2017/01/29/How-to-Do-Linear-Regression-the-Right-Way/" class="post-meta-item leancloud_visitors" data-flag-title="线性回归背后的数学" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -335,10 +346,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -359,17 +370,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">25</span>
-        <span class="site-state-item-name">tags</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -407,10 +422,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">颛顼</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
   </div>
 
         

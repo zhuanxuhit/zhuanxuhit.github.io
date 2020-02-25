@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -26,6 +26,7 @@
 <meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="程序猿的进击之路">
 <meta property="og:description" content="从小白到大神，一路走来，你我相伴">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="颛顼">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +91,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -117,12 +118,22 @@
   <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
   </ul>
@@ -150,7 +161,90 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/24/eloquent-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/24/eloquent-1/" class="post-title-link" itemprop="url">orm 系列 之 Eloquent演化历程1</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-24 16:41:46" itemprop="dateCreated datePublished" datetime="2016-11-24T16:41:46+08:00">2016-11-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/11/24/eloquent-1/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 Eloquent演化历程1" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/36061fd902bc3fc7ea60039cc53fe23b568679ef" alt=""></p>
+<p>Eloquent是laravel中的orm，采取的是active record的设计模式，里面的对象不仅包括领域逻辑，还包括了数据库操作，但是大家平时使用的时候可能没有探究eloquent是怎么设计的，active record这种模式的优缺点等问题，下面我会带领大家从头开始看看Eloquent是如何设计并实现的。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/11/24/eloquent-1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/24/databases/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -173,24 +267,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-24 10:17:16" itemprop="dateCreated datePublished" datetime="2016-11-24T10:17:16+08:00">2016-11-24</time>
+              <time title="创建时间：2016-11-24 10:17:16" itemprop="dateCreated datePublished" datetime="2016-11-24T10:17:16+08:00">2016-11-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/24/databases/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 常用设计模式" title="Views">
+            <span id="/2016/11/24/databases/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 常用设计模式" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -208,7 +302,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/24/databases/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -233,7 +327,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/The-Clean-Architecture-in-PHP-%E5%8D%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -256,24 +350,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-22 19:48:57" itemprop="dateCreated datePublished" datetime="2016-11-22T19:48:57+08:00">2016-11-22</time>
+              <time title="创建时间：2016-11-22 19:48:57" itemprop="dateCreated datePublished" datetime="2016-11-22T19:48:57+08:00">2016-11-22</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/22/The-Clean-Architecture-in-PHP-%E5%8D%81/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(十)" title="Views">
+            <span id="/2016/11/22/The-Clean-Architecture-in-PHP-%E5%8D%81/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(十)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -291,7 +385,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/22/The-Clean-Architecture-in-PHP-%E5%8D%81/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -316,7 +410,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/The-Clean-Architecture-in-PHP-%E4%B9%9D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -339,24 +433,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-22 10:38:31" itemprop="dateCreated datePublished" datetime="2016-11-22T10:38:31+08:00">2016-11-22</time>
+              <time title="创建时间：2016-11-22 10:38:31" itemprop="dateCreated datePublished" datetime="2016-11-22T10:38:31+08:00">2016-11-22</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/22/The-Clean-Architecture-in-PHP-%E4%B9%9D/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(九)" title="Views">
+            <span id="/2016/11/22/The-Clean-Architecture-in-PHP-%E4%B9%9D/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(九)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -374,7 +468,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/22/The-Clean-Architecture-in-PHP-%E4%B9%9D/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -399,7 +493,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/treadmarks/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -422,24 +516,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-22 08:50:47" itemprop="dateCreated datePublished" datetime="2016-11-22T08:50:47+08:00">2016-11-22</time>
+              <time title="创建时间：2016-11-22 08:50:47" itemprop="dateCreated datePublished" datetime="2016-11-22T08:50:47+08:00">2016-11-22</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/22/treadmarks/" class="post-meta-item leancloud_visitors" data-flag-title="Treadmarks：基于标准工作站和操作系统的分布式共享内存 读书笔记" title="Views">
+            <span id="/2016/11/22/treadmarks/" class="post-meta-item leancloud_visitors" data-flag-title="Treadmarks：基于标准工作站和操作系统的分布式共享内存 读书笔记" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -457,7 +551,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/22/treadmarks/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -482,7 +576,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/16/distributed-transactions-with-cap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -505,24 +599,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-16 18:03:55" itemprop="dateCreated datePublished" datetime="2016-11-16T18:03:55+08:00">2016-11-16</time>
+              <time title="创建时间：2016-11-16 18:03:55" itemprop="dateCreated datePublished" datetime="2016-11-16T18:03:55+08:00">2016-11-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/16/distributed-transactions-with-cap/" class="post-meta-item leancloud_visitors" data-flag-title="不妥协：分布式事务的一致性，可用性和性能" title="Views">
+            <span id="/2016/11/16/distributed-transactions-with-cap/" class="post-meta-item leancloud_visitors" data-flag-title="不妥协：分布式事务的一致性，可用性和性能" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -540,7 +634,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/16/distributed-transactions-with-cap/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -565,7 +659,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/12/The-Clean-Architecture-in-PHP-%E5%85%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -588,24 +682,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-12 23:06:23" itemprop="dateCreated datePublished" datetime="2016-11-12T23:06:23+08:00">2016-11-12</time>
+              <time title="创建时间：2016-11-12 23:06:23" itemprop="dateCreated datePublished" datetime="2016-11-12T23:06:23+08:00">2016-11-12</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/12/The-Clean-Architecture-in-PHP-%E5%85%AB/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(八)" title="Views">
+            <span id="/2016/11/12/The-Clean-Architecture-in-PHP-%E5%85%AB/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(八)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -623,7 +717,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/12/The-Clean-Architecture-in-PHP-%E5%85%AB/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -648,7 +742,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/11/The-Clean-Architecture-in-PHP-%E4%B8%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -671,24 +765,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-11 10:37:45" itemprop="dateCreated datePublished" datetime="2016-11-11T10:37:45+08:00">2016-11-11</time>
+              <time title="创建时间：2016-11-11 10:37:45" itemprop="dateCreated datePublished" datetime="2016-11-11T10:37:45+08:00">2016-11-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/11/The-Clean-Architecture-in-PHP-%E4%B8%83/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(七)" title="Views">
+            <span id="/2016/11/11/The-Clean-Architecture-in-PHP-%E4%B8%83/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(七)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -707,7 +801,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/11/The-Clean-Architecture-in-PHP-%E4%B8%83/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -732,7 +826,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/10/php-booboo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -755,24 +849,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-10 10:19:29" itemprop="dateCreated datePublished" datetime="2016-11-10T10:19:29+08:00">2016-11-10</time>
+              <time title="创建时间：2016-11-10 10:19:29" itemprop="dateCreated datePublished" datetime="2016-11-10T10:19:29+08:00">2016-11-10</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/10/php-booboo/" class="post-meta-item leancloud_visitors" data-flag-title="php异常处理 之 BooBoo库介绍" title="Views">
+            <span id="/2016/11/10/php-booboo/" class="post-meta-item leancloud_visitors" data-flag-title="php异常处理 之 BooBoo库介绍" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -790,7 +884,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/10/php-booboo/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -815,7 +909,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/08/Structuring-PHP-Exceptions/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -838,24 +932,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-08 10:19:29" itemprop="dateCreated datePublished" datetime="2016-11-08T10:19:29+08:00">2016-11-08</time>
+              <time title="创建时间：2016-11-08 10:19:29" itemprop="dateCreated datePublished" datetime="2016-11-08T10:19:29+08:00">2016-11-08</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/08/Structuring-PHP-Exceptions/" class="post-meta-item leancloud_visitors" data-flag-title="如何组织PHP中的异常" title="Views">
+            <span id="/2016/11/08/Structuring-PHP-Exceptions/" class="post-meta-item leancloud_visitors" data-flag-title="如何组织PHP中的异常" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -873,90 +967,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/08/Structuring-PHP-Exceptions/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  <div>
-  
-  </div>
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/07/The-Clean-Architecture-in-PHP-%E5%85%AD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
-      <meta itemprop="name" content="颛顼">
-      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程序猿的进击之路">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/07/The-Clean-Architecture-in-PHP-%E5%85%AD/" class="post-title-link" itemprop="url">The Clean Architecture in PHP 读书笔记(六)之你不知道的MVC</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-11-07 18:28:27" itemprop="dateCreated datePublished" datetime="2016-11-07T18:28:27+08:00">2016-11-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
-              </span>
-
-          
-            <span id="/2016/11/07/The-Clean-Architecture-in-PHP-%E5%85%AD/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(六)之你不知道的MVC" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="http://o9c0g8nik.bkt.clouddn.com/wFkuk.png" alt="MVC"></p>
-<p>前面介绍了一些基础内容，涉及到了去耦的5大工具，本章开始讲介绍本书的重点：Clean Architecture，Clean Architecture通过我们之前介绍的设计模式和设计原则来设计出更好，更内聚，更clean的代码。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/11/07/The-Clean-Architecture-in-PHP-%E5%85%AD/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -982,7 +993,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1026,10 +1037,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -1050,17 +1061,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">25</span>
-        <span class="site-state-item-name">tags</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -1098,10 +1113,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">颛顼</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
   </div>
 
         

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -26,6 +26,7 @@
 <meta property="og:url" content="http://yoursite.com/page/6/index.html">
 <meta property="og:site_name" content="程序猿的进击之路">
 <meta property="og:description" content="从小白到大神，一路走来，你我相伴">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="颛顼">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +91,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -117,12 +118,22 @@
   <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
   </ul>
@@ -150,7 +161,116 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/29/bittiger-72/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/09/29/bittiger-72/" class="post-title-link" itemprop="url">理解数据结构和算法</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-09-29 13:51:13" itemprop="dateCreated datePublished" datetime="2016-09-29T13:51:13+08:00">2016-09-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:29:32" itemprop="dateModified" datetime="2020-02-22T20:29:32+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/09/29/bittiger-72/" class="post-meta-item leancloud_visitors" data-flag-title="理解数据结构和算法" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>程序=数据结构+算法</p>
+<p>那是现有数据结构再有算法，还是现有算法再有数据结构呢？</p>
+<p>在我看来应该是先有数据结构，只有当有了数据，我们才会考虑算法，针对不同的数据结构会有不同的算法。</p>
+<h1 id="数据本质"><a href="#数据本质" class="headerlink" title="数据本质"></a>数据本质</h1><p>数据的本质是什么呢？</p>
+<p>数学上有人用集合论来推演整个近代数学，因此集合论是基础，有了最简单的数据，随着人们对数据的需求越来越多，就衍生出了各种结构和算法</p>
+<h1 id="算法的来源"><a href="#算法的来源" class="headerlink" title="算法的来源"></a>算法的来源</h1><h2 id="第一个需求：如何有序的保存数据"><a href="#第一个需求：如何有序的保存数据" class="headerlink" title="第一个需求：如何有序的保存数据"></a>第一个需求：如何有序的保存数据</h2><p>一个简单的想法就是将数据排成一排，一个连一个，这个有序在计算机里就叫做Array</p>
+<p>另一种方法是让数据之间指向关系，前一个指向后一个，这就叫LinkList，LinkList中用做指向关系的结构就叫做指针</p>
+<h2 id="第二个需求：如何判断某一个数据是否存在"><a href="#第二个需求：如何判断某一个数据是否存在" class="headerlink" title="第二个需求：如何判断某一个数据是否存在"></a>第二个需求：如何判断某一个数据是否存在</h2><p>对于有序的集合，我们就根据顺序一个一个找，这就叫做遍历</p>
+<h2 id="第三个需求：如何快速的判断某一个数据是否存在"><a href="#第三个需求：如何快速的判断某一个数据是否存在" class="headerlink" title="第三个需求：如何快速的判断某一个数据是否存在"></a>第三个需求：如何快速的判断某一个数据是否存在</h2><p>因为集合是有序的，我们可以先看两头，然后折中不断缩减查看的范围，这就叫二分查找</p>
+<p>另一种思路是：假设生活中我们要看下公交来没来，你可能第一次去路口看的时候，车没来，然后你回来了说车没来，但是可能车在你刚回来的时候又来了，这样子就其实是错过了车的，这种判断车来没来的方法带有很大的不确定性，对比到我们判断数是否在集合里的例子中，我们先看前面几个数据，发现没有，就认为集合里不存在我们要找的数了，这种方法就叫做贪心，而且特点也很明显就是不确定性，我们只是判断了几个数据，就认为要找的数不在集合里面了。</p>
+<p>那有什么方法能够将贪心的不确定性变为确定性贪心呢？我们可以利用集合有序这个条件，先找中间的元素，比对大了还是小了，不断缩减搜索范围，那这个和二分查找有什么区别呢？换一个角度讲，我们在搜索或者查找的时候，就是不断在减小搜索的集合，这就是贪心。</p>
+<p>现在还是原来的问题，怎么快速的判断某一个数据是否存在，这个如果改变底层的数据结构，那相应的算法就会变化，我们将数据组合成二叉搜索树，树的左边都比根小，右边都比根大，这种结构下搜索就非常直观了，这就是二叉查找树。</p>
+<h2 id="第四个需求：如何遍历一个树"><a href="#第四个需求：如何遍历一个树" class="headerlink" title="第四个需求：如何遍历一个树"></a>第四个需求：如何遍历一个树</h2><p>在遍历树的时候我们有两个想法，一个是一条路走大底，另一个就是离的近的我们先走，对应到算法上就是深度优先和广度优先</p>
+<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>什么是动态规划</p>
+<ul>
+<li>解空间转换</li>
+<li>宽度优先</li>
+<li>贪心</li>
+</ul>
+<p>为什么提到上面三点呢？我们以一个例子来说明下：</p>
+<p><img src="http://i.imgur.com/2SdHqnl.png?1" alt="有向图"></p>
+<p>我们假设有一棵树，每个节点的数值表示权重，要算出根到叶子节点的最短路径</p>
+<p>这个怎么解呢？首先我们需要做个转换，原先每个节点存在的是本节点的权重，现在每个节点新增根节点到本节点的最短路径，第二步，算出每个中间节点的最短路径，这个过程是一个宽度优先的过程，先算第K层的最短路径，然后算K+1层的，最后，我们在算K+1层节点的最短路径的时候，是一个贪心的过程，我们总是取K层过来的最短路劲的那个节点来计算。</p>
+<p>最后，我们总结下什么是动态规划呢？动态规划是一个由第K个结果计算第K+1个结果的过程。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>程序的本质是数据结构加算法，现有数据结构，再有算法</li>
+<li>一些复杂的算法（动态规划）其实是由一些基本的概念组合而来</li>
+</ol>
+<ul>
+<li>解空间转换</li>
+<li>宽度优先</li>
+<li>贪心</li>
+</ul>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.bittiger.io/classpage/ZZjjfYwveRPyffwra" target="_blank" rel="noopener">视频：硅谷之路72 理解数据结构和算法设计</a></p>
+<p><a href="https://www.bittiger.io/blog/post/uqJkA5NjkMtvSEJnB" target="_blank" rel="noopener">blog:【硅谷之路 72】理解数据结构和算法设计</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/07/laravel-container-practice/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -173,22 +293,22 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-07-07 18:24:12" itemprop="dateCreated datePublished" datetime="2016-07-07T18:24:12+08:00">2016-07-07</time>
+              <time title="创建时间：2016-07-07 18:24:12" itemprop="dateCreated datePublished" datetime="2016-07-07T18:24:12+08:00">2016-07-07</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:26:34" itemprop="dateModified" datetime="2020-02-22T20:26:34+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:26:34" itemprop="dateModified" datetime="2020-02-22T20:26:34+08:00">2020-02-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/laravel/" itemprop="url" rel="index">
                     <span itemprop="name">laravel</span>
@@ -197,11 +317,11 @@
             </span>
 
           
-            <span id="/2016/07/07/laravel-container-practice/" class="post-meta-item leancloud_visitors" data-flag-title="Laravel之容器（实战）" title="Views">
+            <span id="/2016/07/07/laravel-container-practice/" class="post-meta-item leancloud_visitors" data-flag-title="Laravel之容器（实战）" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -249,7 +369,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/07/laravel-log/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -272,24 +392,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-07-07 18:24:12" itemprop="dateCreated datePublished" datetime="2016-07-07T18:24:12+08:00">2016-07-07</time>
+              <time title="创建时间：2016-07-07 18:24:12" itemprop="dateCreated datePublished" datetime="2016-07-07T18:24:12+08:00">2016-07-07</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:26:13" itemprop="dateModified" datetime="2020-02-22T20:26:13+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:26:13" itemprop="dateModified" datetime="2020-02-22T20:26:13+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/07/07/laravel-log/" class="post-meta-item leancloud_visitors" data-flag-title="Laravel之日志与错误" title="Views">
+            <span id="/2016/07/07/laravel-log/" class="post-meta-item leancloud_visitors" data-flag-title="Laravel之日志与错误" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -329,7 +449,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/07/laravel-container/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -352,24 +472,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-07-07 18:24:12" itemprop="dateCreated datePublished" datetime="2016-07-07T18:24:12+08:00">2016-07-07</time>
+              <time title="创建时间：2016-07-07 18:24:12" itemprop="dateCreated datePublished" datetime="2016-07-07T18:24:12+08:00">2016-07-07</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:26:07" itemprop="dateModified" datetime="2020-02-22T20:26:07+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:26:07" itemprop="dateModified" datetime="2020-02-22T20:26:07+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/07/07/laravel-container/" class="post-meta-item leancloud_visitors" data-flag-title="Laravel之容器" title="Views">
+            <span id="/2016/07/07/laravel-container/" class="post-meta-item leancloud_visitors" data-flag-title="Laravel之容器" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -470,7 +590,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/25/laravel-pipeline/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -493,24 +613,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-06-25 22:10:08" itemprop="dateCreated datePublished" datetime="2016-06-25T22:10:08+08:00">2016-06-25</time>
+              <time title="创建时间：2016-06-25 22:10:08" itemprop="dateCreated datePublished" datetime="2016-06-25T22:10:08+08:00">2016-06-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/06/25/laravel-pipeline/" class="post-meta-item leancloud_visitors" data-flag-title="Laravel之Pipeline" title="Views">
+            <span id="/2016/06/25/laravel-pipeline/" class="post-meta-item leancloud_visitors" data-flag-title="Laravel之Pipeline" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -571,7 +691,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span>
   </nav>
 
 
@@ -615,10 +735,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -639,17 +759,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">25</span>
-        <span class="site-state-item-name">tags</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -687,10 +811,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">颛顼</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
   </div>
 
         

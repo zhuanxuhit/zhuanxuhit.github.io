@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -26,6 +26,7 @@
 <meta property="og:url" content="http://yoursite.com/page/4/index.html">
 <meta property="og:site_name" content="程序猿的进击之路">
 <meta property="og:description" content="从小白到大神，一路走来，你我相伴">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="颛顼">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +91,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -117,12 +118,22 @@
   <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
   </ul>
@@ -150,7 +161,90 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/07/The-Clean-Architecture-in-PHP-%E5%85%AD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/07/The-Clean-Architecture-in-PHP-%E5%85%AD/" class="post-title-link" itemprop="url">The Clean Architecture in PHP 读书笔记(六)之你不知道的MVC</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-07 18:28:27" itemprop="dateCreated datePublished" datetime="2016-11-07T18:28:27+08:00">2016-11-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/11/07/The-Clean-Architecture-in-PHP-%E5%85%AD/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(六)之你不知道的MVC" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://o9c0g8nik.bkt.clouddn.com/wFkuk.png" alt="MVC"></p>
+<p>前面介绍了一些基础内容，涉及到了去耦的5大工具，本章开始讲介绍本书的重点：Clean Architecture，Clean Architecture通过我们之前介绍的设计模式和设计原则来设计出更好，更内聚，更clean的代码。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2016/11/07/The-Clean-Architecture-in-PHP-%E5%85%AD/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/04/The-Clean-Architecture-in-PHP-%E4%BA%94/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -173,24 +267,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-04 11:38:48" itemprop="dateCreated datePublished" datetime="2016-11-04T11:38:48+08:00">2016-11-04</time>
+              <time title="创建时间：2016-11-04 11:38:48" itemprop="dateCreated datePublished" datetime="2016-11-04T11:38:48+08:00">2016-11-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/04/The-Clean-Architecture-in-PHP-%E4%BA%94/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(五)" title="Views">
+            <span id="/2016/11/04/The-Clean-Architecture-in-PHP-%E4%BA%94/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(五)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -208,7 +302,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/04/The-Clean-Architecture-in-PHP-%E4%BA%94/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -233,7 +327,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/03/Efficient-Optimistic-Concurrency-Control/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -256,24 +350,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-03 22:44:31" itemprop="dateCreated datePublished" datetime="2016-11-03T22:44:31+08:00">2016-11-03</time>
+              <time title="创建时间：2016-11-03 22:44:31" itemprop="dateCreated datePublished" datetime="2016-11-03T22:44:31+08:00">2016-11-03</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:28:46" itemprop="dateModified" datetime="2020-02-22T20:28:46+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:28:46" itemprop="dateModified" datetime="2020-02-22T20:28:46+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/03/Efficient-Optimistic-Concurrency-Control/" class="post-meta-item leancloud_visitors" data-flag-title="Efficient Optimistic Concurrency Control" title="Views">
+            <span id="/2016/11/03/Efficient-Optimistic-Concurrency-Control/" class="post-meta-item leancloud_visitors" data-flag-title="Efficient Optimistic Concurrency Control" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -291,7 +385,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/03/Efficient-Optimistic-Concurrency-Control/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -316,7 +410,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/02/The-Clean-Architecture-in-PHP-%E5%9B%9B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -339,24 +433,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-02 21:59:39" itemprop="dateCreated datePublished" datetime="2016-11-02T21:59:39+08:00">2016-11-02</time>
+              <time title="创建时间：2016-11-02 21:59:39" itemprop="dateCreated datePublished" datetime="2016-11-02T21:59:39+08:00">2016-11-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/02/The-Clean-Architecture-in-PHP-%E5%9B%9B/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(四)" title="Views">
+            <span id="/2016/11/02/The-Clean-Architecture-in-PHP-%E5%9B%9B/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(四)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -374,7 +468,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/02/The-Clean-Architecture-in-PHP-%E5%9B%9B/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -399,7 +493,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/01/The-Clean-Architecture-in-PHP-%E4%B8%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -422,24 +516,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-01 15:01:08" itemprop="dateCreated datePublished" datetime="2016-11-01T15:01:08+08:00">2016-11-01</time>
+              <time title="创建时间：2016-11-01 15:01:08" itemprop="dateCreated datePublished" datetime="2016-11-01T15:01:08+08:00">2016-11-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/01/The-Clean-Architecture-in-PHP-%E4%B8%89/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记（三）" title="Views">
+            <span id="/2016/11/01/The-Clean-Architecture-in-PHP-%E4%B8%89/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记（三）" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -457,7 +551,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/01/The-Clean-Architecture-in-PHP-%E4%B8%89/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -482,7 +576,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/31/The-Clean-Architecture-in-PHP-%E4%BA%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -505,24 +599,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-10-31 09:31:46" itemprop="dateCreated datePublished" datetime="2016-10-31T09:31:46+08:00">2016-10-31</time>
+              <time title="创建时间：2016-10-31 09:31:46" itemprop="dateCreated datePublished" datetime="2016-10-31T09:31:46+08:00">2016-10-31</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/10/31/The-Clean-Architecture-in-PHP-%E4%BA%8C/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(二)" title="Views">
+            <span id="/2016/10/31/The-Clean-Architecture-in-PHP-%E4%BA%8C/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(二)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -540,7 +634,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/10/31/The-Clean-Architecture-in-PHP-%E4%BA%8C/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -565,7 +659,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/The-Clean-Architecture-in-PHP-%E4%B8%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -588,24 +682,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-10-30 21:44:44" itemprop="dateCreated datePublished" datetime="2016-10-30T21:44:44+08:00">2016-10-30</time>
+              <time title="创建时间：2016-10-30 21:44:44" itemprop="dateCreated datePublished" datetime="2016-10-30T21:44:44+08:00">2016-10-30</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/10/30/The-Clean-Architecture-in-PHP-%E4%B8%80/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(一)" title="Views">
+            <span id="/2016/10/30/The-Clean-Architecture-in-PHP-%E4%B8%80/" class="post-meta-item leancloud_visitors" data-flag-title="The Clean Architecture in PHP 读书笔记(一)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -623,7 +717,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/10/30/The-Clean-Architecture-in-PHP-%E4%B8%80/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -648,7 +742,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/28/ZooKeeper-Wait-free-coordination-for-Internet-scale-systems/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -671,24 +765,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-10-28 16:13:17" itemprop="dateCreated datePublished" datetime="2016-10-28T16:13:17+08:00">2016-10-28</time>
+              <time title="创建时间：2016-10-28 16:13:17" itemprop="dateCreated datePublished" datetime="2016-10-28T16:13:17+08:00">2016-10-28</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/10/28/ZooKeeper-Wait-free-coordination-for-Internet-scale-systems/" class="post-meta-item leancloud_visitors" data-flag-title="ZooKeeper: Wait-free coordination for Internet-scale system" title="Views">
+            <span id="/2016/10/28/ZooKeeper-Wait-free-coordination-for-Internet-scale-systems/" class="post-meta-item leancloud_visitors" data-flag-title="ZooKeeper: Wait-free coordination for Internet-scale system" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -706,7 +800,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/10/28/ZooKeeper-Wait-free-coordination-for-Internet-scale-systems/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -731,7 +825,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/27/Using-Generators/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -754,24 +848,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-10-27 11:19:13" itemprop="dateCreated datePublished" datetime="2016-10-27T11:19:13+08:00">2016-10-27</time>
+              <time title="创建时间：2016-10-27 11:19:13" itemprop="dateCreated datePublished" datetime="2016-10-27T11:19:13+08:00">2016-10-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/10/27/Using-Generators/" class="post-meta-item leancloud_visitors" data-flag-title="Understanding PHP Generators(译)" title="Views">
+            <span id="/2016/10/27/Using-Generators/" class="post-meta-item leancloud_visitors" data-flag-title="Understanding PHP Generators(译)" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -789,7 +883,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/10/27/Using-Generators/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -814,7 +908,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/26/Russ-Cox-lecturer-on-Go/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -837,24 +931,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-10-26 18:53:45" itemprop="dateCreated datePublished" datetime="2016-10-26T18:53:45+08:00">2016-10-26</time>
+              <time title="创建时间：2016-10-26 18:53:45" itemprop="dateCreated datePublished" datetime="2016-10-26T18:53:45+08:00">2016-10-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/10/26/Russ-Cox-lecturer-on-Go/" class="post-meta-item leancloud_visitors" data-flag-title="Russ Cox lecturer on Go" title="Views">
+            <span id="/2016/10/26/Russ-Cox-lecturer-on-Go/" class="post-meta-item leancloud_visitors" data-flag-title="Russ Cox lecturer on Go" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -1020,155 +1114,11 @@
   
   </div>
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/24/6-824-Lab-3-Fault-tolerant-Key-Value-Service/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
-      <meta itemprop="name" content="颛顼">
-      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程序猿的进击之路">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/10/24/6-824-Lab-3-Fault-tolerant-Key-Value-Service/" class="post-title-link" itemprop="url">6.824 Lab 3: Fault-tolerant Key/Value Service Part-A</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-10-24 12:36:37" itemprop="dateCreated datePublished" datetime="2016-10-24T12:36:37+08:00">2016-10-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
-              </span>
-
-          
-            <span id="/2016/10/24/6-824-Lab-3-Fault-tolerant-Key-Value-Service/" class="post-meta-item leancloud_visitors" data-flag-title="6.824 Lab 3: Fault-tolerant Key/Value Service Part-A" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>实验分为A和B两个部分，在Part A中：我们不考虑日志的大小，在Part B中会完成快照功能</p>
-<h2 id="Part-A-Key-value-service-without-log-compaction"><a href="#Part-A-Key-value-service-without-log-compaction" class="headerlink" title="Part A: Key/value service without log compaction"></a>Part A: Key/value service without log compaction</h2><p>支持3个操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Put(key, value):改变key的值</span><br><span class="line"></span><br><span class="line">Append(key, arg)：给key的值新增value</span><br><span class="line"></span><br><span class="line">Get(key)：返回值</span><br></pre></td></tr></table></figure>
-
-<p>任务</p>
-<blockquote>
-<p>当没有丢包和servers fail的情况下进行实现，需要提供客户端<a href="http://www.parallellabs.com/2010/03/06/why-should-programmer-care-about-sequential-consistency-rather-than-cache-coherence/" target="_blank" rel="noopener">顺序一致性</a>的api，调用Put，Append和Get3个api，在所有的server以相同的顺序执行，并且具有<strong>at-most-once</strong>的语义</p>
-<p>一个建议的计划是：先完成<code>server.go</code>中的<code>Op</code>结构，然后完成<code>server.go</code>中的<code>PutAppend()</code>和<code>Get()</code>操作，在操作中，应该先调用<code>Start()</code>，当日志commit的时候，回复客户端</p>
-</blockquote>
-<p>提示</p>
-<blockquote>
-<ol>
-<li>调用<code>Start()</code>后，kvraft servers 会等待raft log达成一致，通过<code>applyCh</code>获取一致的命令，我们需要考虑怎么安排代码，才能持续读取<code>applyCh</code>，而其他命令也能执行</li>
-<li>我们需要处理case：leader调用了<code>Start()</code>，但是在log commit之前，丢失了leadership，这种情况下，代码应该将请求重新发送给新的leader。一种方式是，server需要检测出自己已经不是leader了，通过查看相同的start在index上返回一个不用的请求，另一种方式是通过调用<code>GetState()</code>，但是如果出现网络分区，可能不知道自己已经不是leader了，这种情况下client和server都处在网络分区中，因此可以无限的等待下去，直到网络恢复</li>
-<li>A kvraft server不应该完成<code>Get()</code>操作如果得不到majority，因为这样子可能会得不到最新的数据</li>
-</ol>
-</blockquote>
-<p>任务：</p>
-<blockquote>
-<p>需要处理重复请求，保证满足<strong>at-most-once</strong>的语义</p>
-</blockquote>
-<p>提示：</p>
-<blockquote>
-<ol>
-<li>需要对每个client请求编号</li>
-<li>要保证快速的释放内存，因此可以在下一个请求带上下一个请求</li>
-</ol>
-</blockquote>
-<h1 id="实际设计中出现的问题"><a href="#实际设计中出现的问题" class="headerlink" title="实际设计中出现的问题"></a>实际设计中出现的问题</h1><h2 id="频繁变化leader"><a href="#频繁变化leader" class="headerlink" title="频繁变化leader"></a>频繁变化leader</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(ck *Clerk)</span> <span class="title">Get</span><span class="params">(key <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line"></span><br><span class="line">   args := GetArgs&#123;Key:key&#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">for</span> &#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">for</span> _,c := <span class="keyword">range</span> ck.servers &#123;</span><br><span class="line"></span><br><span class="line">         time.Sleep(time.Millisecond*<span class="number">1000</span>)</span><br><span class="line"></span><br><span class="line">         reply := GetReply&#123;&#125;</span><br><span class="line"></span><br><span class="line">         ok := c.Call(<span class="string">"RaftKV.Get"</span>, &amp;args, &amp;reply)</span><br><span class="line"></span><br><span class="line">         <span class="keyword">if</span> ok &amp;&amp; !reply.WrongLeader &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> reply.Value</span><br><span class="line"></span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// You will have to modify this function.</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>此处如果没有sleep的话，相当于客户端一直不断的在START，导致的一个问题是：server不断在处理START命令，导致正常的心跳都完成不了了，就出现了频繁的变化leader了，问题很严重，那应该怎么做呢？</p>
-<p>后来做了优化，对于读操作不走 chan，这就没问题了</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">index := <span class="number">-1</span></span><br><span class="line"></span><br><span class="line">term := <span class="number">-1</span></span><br><span class="line"></span><br><span class="line">isLeader := <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> rf.state != StateLeader &#123;</span><br><span class="line"></span><br><span class="line">   isLeader = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> index, term, isLeader</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这样就有个初判断了</p>
-<h2 id="通过labrpc传递的数据不对"><a href="#通过labrpc传递的数据不对" class="headerlink" title="通过labrpc传递的数据不对"></a>通过labrpc传递的数据不对</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">StartKVServer</span><span class="params">(servers []*labrpc.ClientEnd, me <span class="keyword">int</span>, persister *raft.Persister, maxraftstate <span class="keyword">int</span>)</span> *<span class="title">RaftKV</span></span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// call gob.Register on structures you want</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// Go's RPC library to marshall/unmarshall.</span></span><br><span class="line"></span><br><span class="line">   gob.Register(Op&#123;&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>如果没有 gob.Register(Op{}) 这就错误，为什么要加上这句话呢？</p>
-<h2 id="出现阻塞"><a href="#出现阻塞" class="headerlink" title="出现阻塞"></a>出现阻塞</h2><p>分析：此处阻塞了为什么呢？因为在get上的时候，有一个没有收到apply？好奇怪</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// <span class="doctag">TODO:</span>优化超时的逻辑</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> op := &lt;-ch:</span><br><span class="line"></span><br><span class="line">   commited := op == entry</span><br><span class="line"></span><br><span class="line">   kv.logger.Debug(<span class="string">"index:%d commited:%v"</span>,index,commited)</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> commited</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> &lt;- time.After(AppendTimeOut):</span><br><span class="line"></span><br><span class="line">   kv.logger.Info(<span class="string">"index:%d %s timeout after %v"</span>,index, entry.Type,AppendTimeOut)</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>加上上面的超时逻辑后，就可以解决阻塞的问题，但是一旦超时</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2016&#x2F;10&#x2F;26 14:37:45 I index:323 Append timeout after 1s</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;26 14:37:45 0: client new get 0</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;26 14:37:45 get wrong value, key 0, wanted:</span><br></pre></td></tr></table></figure>
-
-<p>就会出现问题，会重复执行 Append操作，因为其实已经apply了这个请求了</p>
-<p>那怎么解决呢？我现在去除这个超时限制，在获取Apply的时候逻辑变为下面的：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通知结果</span></span><br><span class="line"></span><br><span class="line">ch, ok := kv.result[index]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ok &#123;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">select</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">case</span> &lt;-ch:</span><br><span class="line"></span><br><span class="line">   <span class="keyword">default</span>:</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;<span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 没人读就有了数据？</span></span><br><span class="line"></span><br><span class="line">   ch = <span class="built_in">make</span>(<span class="keyword">chan</span> Op,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">   kv.result[index] = ch</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ch &lt;- op</span><br></pre></td></tr></table></figure>
-
-<p>此时就不会有超时的问题了，为什么呢？</p>
-<p>很反人类的问题：因为当调用</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(kv *RaftKV)</span><span class="title">AppendLog</span><span class="params">(entry Op)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line"></span><br><span class="line">   index, _, isLeader := kv.rf.Start(entry)</span><br></pre></td></tr></table></figure>
-
-<p>此时可能没等到执行下面的去读chan的时候，已经apply成功了，因此我们就需要事先往chan里面存入数据</p>
-<h2 id="TestUnreliable"><a href="#TestUnreliable" class="headerlink" title="TestUnreliable"></a>TestUnreliable</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">☁  kvraft [master] ⚡ go test -run TestUnreliable</span><br><span class="line"></span><br><span class="line">Test: unreliable ...</span><br><span class="line"></span><br><span class="line">2016&#x2F;10&#x2F;26 14:59:42 get wrong value, key 3, wanted:</span><br><span class="line"></span><br><span class="line">x 3 0 yx 3 1 y</span><br><span class="line"></span><br><span class="line">, got</span><br><span class="line"></span><br><span class="line">x 3 0 yx 3 0 yx 3 1 y</span><br></pre></td></tr></table></figure>
-
-<p>很容易看出问题：一个请求重复执行了，我们需要在客户端去重</p>
-<p>对于每个客户端都给编号，然后每个请求都顺序增长</p>
-<h2 id="TestManyPartitionsManyClients"><a href="#TestManyPartitionsManyClients" class="headerlink" title="TestManyPartitionsManyClients"></a>TestManyPartitionsManyClients</h2><p>测试出现阻塞</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> op := &lt;-ch:</span><br><span class="line"></span><br><span class="line">   commited := op == entry</span><br><span class="line"></span><br><span class="line">   kv.logger.Debug(<span class="string">"index:%d commited:%v"</span>, index, commited)</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> commited</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 此处超时其实也很好理解，因为刚开始是leader，但是在log得到commit之前，丢失了leadership，此时</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 如果没有超时机制，则会一直阻塞下去</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 或者由于此时的leader是一个分区里面的leader，则只可能一直阻塞下去了</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 因此也需要超时</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> &lt;-time.After(AppendTimeOut):</span><br><span class="line"></span><br><span class="line">   <span class="comment">//kv.logger.Info("index:%d %s timeout after %v", index, entry.Type, AppendTimeOut)</span></span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  <div>
-  
-  </div>
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1212,10 +1162,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -1236,17 +1186,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">25</span>
-        <span class="site-state-item-name">tags</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -1284,10 +1238,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">颛顼</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
   </div>
 
         

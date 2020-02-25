@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -26,6 +26,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/12/16/dynamo/index.html">
 <meta property="og:site_name" content="程序猿的进击之路">
 <meta property="og:description" content="Dynamo是一个分布式键值系统，最初用于支持购物车系统，强调的是提供一个“永远在线“的用户体验。 根据CAP理论不可能同时达到一致性、可用性和分区容忍，于是Dynamo选择了AP，放弃了一致性。 Dynamo在设计时遇到的问题及解决方案（来源大规模分布式存储系统第5章）| 问题        | 采取的技术                                    || ——— |">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/fdbf9914e778a4ccb07ee21b79966be52a899d7a">
 <meta property="og:image" content="http://bos.nj.bpc.baidu.com/v1/agroup/0084b9853a1d585430c3a3bc332a2ea671fff500">
 <meta property="og:image" content="https://qph.ec.quoracdn.net/main-qimg-58adb5bde4a054436bd0298c2eef49d5?convert_to_webp=true">
@@ -99,7 +100,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -126,12 +127,22 @@
   <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
   </ul>
@@ -159,7 +170,7 @@
       
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/16/dynamo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -181,24 +192,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-12-16 10:25:19" itemprop="dateCreated datePublished" datetime="2016-12-16T10:25:19+08:00">2016-12-16</time>
+              <time title="创建时间：2016-12-16 10:25:19" itemprop="dateCreated datePublished" datetime="2016-12-16T10:25:19+08:00">2016-12-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/12/16/dynamo/" class="post-meta-item leancloud_visitors" data-flag-title="Dynamo：Amazon的高可用性的键-值存储系统" title="Views">
+            <span id="/2016/12/16/dynamo/" class="post-meta-item leancloud_visitors" data-flag-title="Dynamo：Amazon的高可用性的键-值存储系统" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -340,10 +351,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -365,17 +376,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">25</span>
-        <span class="site-state-item-name">tags</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -413,10 +428,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">颛顼</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
   </div>
 
         

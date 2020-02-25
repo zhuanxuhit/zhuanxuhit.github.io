@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -26,6 +26,7 @@
 <meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="程序猿的进击之路">
 <meta property="og:description" content="从小白到大神，一路走来，你我相伴">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="颛顼">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +91,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -117,12 +118,22 @@
   <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
   </ul>
@@ -150,7 +161,122 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/19/doctrine2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
+      <meta itemprop="name" content="颛顼">
+      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="程序猿的进击之路">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/12/19/doctrine2/" class="post-title-link" itemprop="url">doctrine 缘来 之 初次使用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-19 14:42:01" itemprop="dateCreated datePublished" datetime="2016-12-19T14:42:01+08:00">2016-12-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+              </span>
+
+          
+            <span id="/2016/12/19/doctrine2/" class="post-meta-item leancloud_visitors" data-flag-title="doctrine 缘来 之 初次使用" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/fa3266866e3cb4c02ea0481a49e044df9a557240" alt=""></p>
+<p>本系列是读<strong><em>php data persistence with doctrine2 orm</em></strong>的笔记，本文是第二篇：doctrine的使用</p>
+<p>接着上篇我们自己造了个轮子，本篇开始我们还是实现上篇的功能，不过是用Doctrine来实现一遍。</p>
+<h2 id="doctrine使用"><a href="#doctrine使用" class="headerlink" title="doctrine使用"></a>doctrine使用</h2><p>我们采用yaml的方式来配置Entity的信息，先来个User的配置，文件<code>config/yaml/App.Entity.User.dcm.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">App\Entity\User:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">entity</span></span><br><span class="line">  <span class="attr">table:</span> <span class="string">users</span></span><br><span class="line">  <span class="attr">id:</span></span><br><span class="line">    <span class="attr">id:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">integer</span></span><br><span class="line">      <span class="attr">generator:</span></span><br><span class="line">        <span class="attr">strategy:</span> <span class="string">AUTO</span></span><br><span class="line">  <span class="attr">fields:</span></span><br><span class="line">    <span class="attr">firstName:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">string</span></span><br><span class="line">      <span class="attr">column:</span> <span class="string">first_name</span></span><br><span class="line">    <span class="attr">lastName:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">string</span></span><br><span class="line">      <span class="attr">column:</span> <span class="string">last_name</span></span><br><span class="line">    <span class="attr">gender:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">smallint</span></span><br><span class="line">    <span class="attr">namePrefix:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">string</span></span><br><span class="line">      <span class="attr">column:</span> <span class="string">name_prefix</span></span><br><span class="line">  <span class="attr">oneToMany:</span></span><br><span class="line">    <span class="attr">posts:</span></span><br><span class="line">      <span class="attr">targetEntity:</span> <span class="string">App\Entity\Post</span></span><br><span class="line">      <span class="attr">mappedBy:</span> <span class="string">user</span></span><br></pre></td></tr></table></figure>
+
+<p>此处为了使用doctrine，我们要做一些配置，先来一个初始化文件config/bootstrap.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">use Doctrine\ORM\Tools\Setup;</span><br><span class="line">use Doctrine\ORM\EntityManager;</span><br><span class="line"></span><br><span class="line">require_once __DIR__ . &#39;&#x2F;..&#x2F;vendor&#x2F;autoload.php&#39;;</span><br><span class="line">$isDevMode &#x3D; true;</span><br><span class="line">$config    &#x3D; Setup::createYAMLMetadataConfiguration( [ __DIR__ . &quot;&#x2F;..&#x2F;config&#x2F;yaml&quot; ], $isDevMode );</span><br><span class="line">$dbParams &#x3D; [</span><br><span class="line">    &#39;driver&#39; &#x3D;&gt; &#39;pdo_mysql&#39;,</span><br><span class="line">    &#39;user&#39; &#x3D;&gt; &#39;root&#39;,</span><br><span class="line">    &#39;password&#39; &#x3D;&gt; &#39;root&#39;,</span><br><span class="line">    &#39;dbname&#39; &#x3D;&gt; &#39;app&#39;,</span><br><span class="line">    &#39;port&#39; &#x3D;&gt; 33060,</span><br><span class="line">    &#39;host&#39; &#x3D;&gt; &#39;127.0.0.1&#39;,</span><br><span class="line">];</span><br><span class="line">$em &#x3D; EntityManager::create($dbParams, $config);</span><br></pre></td></tr></table></figure>
+
+<p>然后再是一个使用命令行的配置文件cli-config.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">require_once &quot;.&#x2F;scripts&#x2F;bootstrap.php&quot;;</span><br><span class="line"></span><br><span class="line">return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($em);</span><br></pre></td></tr></table></figure>
+
+<p>到这我们就可以通过命令行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;vendor&#x2F;bin&#x2F;doctrine orm:create</span><br></pre></td></tr></table></figure>
+
+<p>来创建我们的数据库了，而Entity的文件还是上一篇的，此处不再写了，到这，我们就可以创建一些脚本来完成我们的基本操作了。</p>
+<h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><p>我们先来完成user的创建工作，脚本如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F; create_user.php</span><br><span class="line">require_once __DIR__ . &#39;&#x2F;bootstrap.php&#39;;</span><br><span class="line"></span><br><span class="line">if ($argc !&#x3D; 4)&#123;</span><br><span class="line">    echo &quot;php &quot; . $argv[0] . &#39; firstName lastName gender&#39; . PHP_EOL;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$firstName &#x3D; $argv[1];</span><br><span class="line">$lastName  &#x3D; $argv[2];</span><br><span class="line">$gender &#x3D; $argv[3];</span><br><span class="line"></span><br><span class="line">$newUser &#x3D; new \App\Entity\User();</span><br><span class="line">$newUser-&gt;setFirstName($firstName);</span><br><span class="line">$newUser-&gt;setLastName($lastName);</span><br><span class="line">$newUser-&gt;setGender($gender);</span><br><span class="line"></span><br><span class="line">$em-&gt;persist($newUser);</span><br><span class="line">$em-&gt;flush();</span><br><span class="line">echo &quot;Created User with ID &quot; . $newUser-&gt;getId() . &quot;\n&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>通过命令行<code>php scripts/create_user.php zhuan xu 1</code>来完成用户的创建。</p>
+<h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F; list_users.php</span><br><span class="line">use Illuminate\Support\Collection;</span><br><span class="line"></span><br><span class="line">require_once __DIR__ . &#39;&#x2F;bootstrap.php&#39;;</span><br><span class="line"></span><br><span class="line">$userRepository &#x3D; $em-&gt;getRepository(\App\Entity\User::class);</span><br><span class="line">$users &#x3D; $userRepository-&gt;findAll();</span><br><span class="line"></span><br><span class="line">$users &#x3D; new Collection($users);</span><br><span class="line">$users-&gt;each(function( \App\Entity\User $user)&#123;</span><br><span class="line">    echo sprintf(&quot;- %s\n&quot;,$user-&gt;assembleDisplayName());</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>上面的操作完成用户的list</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; show_user.php &lt;id&gt;</span><br><span class="line">require_once __DIR__ . &#39;&#x2F;bootstrap.php&#39;;</span><br><span class="line"></span><br><span class="line">if ($argc !&#x3D; 2)&#123;</span><br><span class="line">    echo &quot;php &quot; . $argv[0] . &#39; id&#39; . PHP_EOL;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$id &#x3D; $argv[1];</span><br><span class="line">$userRepository &#x3D; $em-&gt;getRepository(\App\Entity\User::class);</span><br><span class="line"></span><br><span class="line">&#x2F;** @var \App\Entity\User $user *&#x2F;</span><br><span class="line">$user &#x3D; $userRepository-&gt;find($id);</span><br><span class="line"></span><br><span class="line">if ($user &#x3D;&#x3D;&#x3D; null) &#123;</span><br><span class="line">    echo &quot;No user found.\n&quot;;</span><br><span class="line">    exit(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">echo sprintf(&quot;- %s\n&quot;, $user-&gt;assembleDisplayName());</span><br></pre></td></tr></table></figure>
+
+<p>上面完成用户的查询</p>
+<h3 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F; update_user.php &lt;id&gt; &lt;firstName&gt;</span><br><span class="line">require_once __DIR__ . &#39;&#x2F;bootstrap.php&#39;;</span><br><span class="line"></span><br><span class="line">if ($argc !&#x3D; 3)&#123;</span><br><span class="line">    echo &quot;php &quot; . $argv[0] . &#39; id firstName&#39; . PHP_EOL;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$id &#x3D; $argv[1];</span><br><span class="line">$firstName &#x3D; $argv[2];</span><br><span class="line">$userRepository &#x3D; $em-&gt;getRepository(\App\Entity\User::class);</span><br><span class="line"></span><br><span class="line">&#x2F;** @var \App\Entity\User $user *&#x2F;</span><br><span class="line">$user &#x3D; $userRepository-&gt;find($id);</span><br><span class="line"></span><br><span class="line">if ($user &#x3D;&#x3D;&#x3D; null) &#123;</span><br><span class="line">    echo &quot;No user found.\n&quot;;</span><br><span class="line">    exit(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$user-&gt;setFirstName($firstName);</span><br><span class="line">$em-&gt;flush();</span><br></pre></td></tr></table></figure>
+
+<p>通过上面的脚本完成更新操作</p>
+<h3 id="关联"><a href="#关联" class="headerlink" title="关联"></a>关联</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">App\Entity\Post:</span><br><span class="line">  type: entity</span><br><span class="line">  table: posts</span><br><span class="line">  id:</span><br><span class="line">      id:</span><br><span class="line">        type: integer</span><br><span class="line">        generator:</span><br><span class="line">          strategy: AUTO</span><br><span class="line">  fields:</span><br><span class="line">    title:</span><br><span class="line">      type: string</span><br><span class="line">    content:</span><br><span class="line">      type: string</span><br><span class="line">  manyToOne:</span><br><span class="line">    user:</span><br><span class="line">      targetEntity: App\Entity\User</span><br><span class="line">      inversedBy: posts</span><br><span class="line">      joinColumn:</span><br><span class="line">        name: user_id</span><br><span class="line">        referencedColumnName: id</span><br></pre></td></tr></table></figure>
+
+<p>上面定义了User和Post的关联关系，此时通过命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;vendor&#x2F;bin&#x2F;doctrine  orm:validate-schema</span><br></pre></td></tr></table></figure>
+
+<p>可以检查我们定义的yaml文件是否正确</p>
+<p>通过上面的定义，我们来看下怎么创建一个Post</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">&#x2F;&#x2F; create_post.php &lt;user_id&gt;</span><br><span class="line">require_once __DIR__ . &#39;&#x2F;bootstrap.php&#39;;</span><br><span class="line"></span><br><span class="line">if ($argc !&#x3D; 2)&#123;</span><br><span class="line">    echo &quot;php &quot; . $argv[0] . &#39; &lt;user_id&gt;&#39; . PHP_EOL;</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$user_id &#x3D; $argv[1];</span><br><span class="line">$userRepository &#x3D; $em-&gt;getRepository(\App\Entity\User::class);</span><br><span class="line"></span><br><span class="line">&#x2F;** @var \App\Entity\User $user *&#x2F;</span><br><span class="line">$user &#x3D; $userRepository-&gt;find($user_id);</span><br><span class="line"></span><br><span class="line">if ($user &#x3D;&#x3D;&#x3D; null) &#123;</span><br><span class="line">    echo &quot;No user found.\n&quot;;</span><br><span class="line">    exit(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$post &#x3D; new \App\Entity\Post();</span><br><span class="line">$post-&gt;setContent(&quot;some thing good&quot;);</span><br><span class="line">$post-&gt;setTitle(&quot;good post&quot;);</span><br><span class="line">$post-&gt;setUser($user);</span><br><span class="line"></span><br><span class="line">$em-&gt;persist($post);</span><br><span class="line">$em-&gt;flush();</span><br><span class="line"></span><br><span class="line">echo &quot;Your new Post Id: &quot;.$post-&gt;getId().&quot;\n&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>至此我们就完成了上一篇介绍的功能。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>在深入Doctrine之前，我们先来看下目前为止我们所了解的。Doctrine通过entity manager管理着Entity，所有的查询，更新操作都是通过entity manager完成的，通过entity manager我们获取到某一特定Entity的Repository，通过Repository提供的各种finders来查询Entity。</p>
+<p>DBAL（Doctrine’s database access layer）是Doctrine ORM的基础，DBAL通过封装PDO来提供一个更方便的操作接口，而Doctrine ORM则是基于DBAL提供了一个比DBAL更方便的接口，具体Doctrine的实现由机会再深入讲解的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+  <div>
+  
+  </div>
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/19/doctrine1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -173,24 +299,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-12-19 09:55:43" itemprop="dateCreated datePublished" datetime="2016-12-19T09:55:43+08:00">2016-12-19</time>
+              <time title="创建时间：2016-12-19 09:55:43" itemprop="dateCreated datePublished" datetime="2016-12-19T09:55:43+08:00">2016-12-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/12/19/doctrine1/" class="post-meta-item leancloud_visitors" data-flag-title="doctrine缘来 之 造轮子" title="Views">
+            <span id="/2016/12/19/doctrine1/" class="post-meta-item leancloud_visitors" data-flag-title="doctrine缘来 之 造轮子" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -285,7 +411,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/16/Wormhole/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -308,24 +434,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-12-16 18:46:40" itemprop="dateCreated datePublished" datetime="2016-12-16T18:46:40+08:00">2016-12-16</time>
+              <time title="创建时间：2016-12-16 18:46:40" itemprop="dateCreated datePublished" datetime="2016-12-16T18:46:40+08:00">2016-12-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/12/16/Wormhole/" class="post-meta-item leancloud_visitors" data-flag-title="Wormhole:可靠的发布-订阅系统" title="Views">
+            <span id="/2016/12/16/Wormhole/" class="post-meta-item leancloud_visitors" data-flag-title="Wormhole:可靠的发布-订阅系统" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -385,7 +511,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/16/dynamo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -408,24 +534,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-12-16 10:25:19" itemprop="dateCreated datePublished" datetime="2016-12-16T10:25:19+08:00">2016-12-16</time>
+              <time title="创建时间：2016-12-16 10:25:19" itemprop="dateCreated datePublished" datetime="2016-12-16T10:25:19+08:00">2016-12-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/12/16/dynamo/" class="post-meta-item leancloud_visitors" data-flag-title="Dynamo：Amazon的高可用性的键-值存储系统" title="Views">
+            <span id="/2016/12/16/dynamo/" class="post-meta-item leancloud_visitors" data-flag-title="Dynamo：Amazon的高可用性的键-值存储系统" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -497,7 +623,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/06/eloquent-6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -520,24 +646,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-12-06 15:24:37" itemprop="dateCreated datePublished" datetime="2016-12-06T15:24:37+08:00">2016-12-06</time>
+              <time title="创建时间：2016-12-06 15:24:37" itemprop="dateCreated datePublished" datetime="2016-12-06T15:24:37+08:00">2016-12-06</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/12/06/eloquent-6/" class="post-meta-item leancloud_visitors" data-flag-title="repository实作" title="Views">
+            <span id="/2016/12/06/eloquent-6/" class="post-meta-item leancloud_visitors" data-flag-title="repository实作" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -657,7 +783,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/04/eloquent-5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -680,24 +806,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-12-04 12:56:03" itemprop="dateCreated datePublished" datetime="2016-12-04T12:56:03+08:00">2016-12-04</time>
+              <time title="创建时间：2016-12-04 12:56:03" itemprop="dateCreated datePublished" datetime="2016-12-04T12:56:03+08:00">2016-12-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/12/04/eloquent-5/" class="post-meta-item leancloud_visitors" data-flag-title="通过Eloquent实现Repository模式" title="Views">
+            <span id="/2016/12/04/eloquent-5/" class="post-meta-item leancloud_visitors" data-flag-title="通过Eloquent实现Repository模式" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -714,7 +840,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/12/04/eloquent-5/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -739,7 +865,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/collections-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -762,24 +888,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-12-02 14:06:12" itemprop="dateCreated datePublished" datetime="2016-12-02T14:06:12+08:00">2016-12-02</time>
+              <time title="创建时间：2016-12-02 14:06:12" itemprop="dateCreated datePublished" datetime="2016-12-02T14:06:12+08:00">2016-12-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/12/02/collections-1/" class="post-meta-item leancloud_visitors" data-flag-title="Say No to Loop!" title="Views">
+            <span id="/2016/12/02/collections-1/" class="post-meta-item leancloud_visitors" data-flag-title="Say No to Loop!" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -868,7 +994,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/01/eloquent-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -891,24 +1017,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-12-01 14:10:50" itemprop="dateCreated datePublished" datetime="2016-12-01T14:10:50+08:00">2016-12-01</time>
+              <time title="创建时间：2016-12-01 14:10:50" itemprop="dateCreated datePublished" datetime="2016-12-01T14:10:50+08:00">2016-12-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/12/01/eloquent-4/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 Eloquent使用2" title="Views">
+            <span id="/2016/12/01/eloquent-4/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 Eloquent使用2" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -926,7 +1052,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/12/01/eloquent-4/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -951,7 +1077,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/28/eloquent-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -974,24 +1100,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-28 19:26:00" itemprop="dateCreated datePublished" datetime="2016-11-28T19:26:00+08:00">2016-11-28</time>
+              <time title="创建时间：2016-11-28 19:26:00" itemprop="dateCreated datePublished" datetime="2016-11-28T19:26:00+08:00">2016-11-28</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/28/eloquent-3/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 Eloquent使用1" title="Views">
+            <span id="/2016/11/28/eloquent-3/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 Eloquent使用1" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -1009,7 +1135,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/28/eloquent-3/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -1034,7 +1160,7 @@
         
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/27/eloquent-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1057,24 +1183,24 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2016-11-27 16:50:28" itemprop="dateCreated datePublished" datetime="2016-11-27T16:50:28+08:00">2016-11-27</time>
+              <time title="创建时间：2016-11-27 16:50:28" itemprop="dateCreated datePublished" datetime="2016-11-27T16:50:28+08:00">2016-11-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
               </span>
 
           
-            <span id="/2016/11/27/eloquent-2/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 Eloquent演化历程2" title="Views">
+            <span id="/2016/11/27/eloquent-2/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 Eloquent演化历程2" title="阅读次数">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span class="leancloud-visitors-count"></span>
             </span>
 
@@ -1092,90 +1218,7 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016/11/27/eloquent-2/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-  <div>
-  
-  </div>
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/24/eloquent-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/wechat-qcode.jpg">
-      <meta itemprop="name" content="颛顼">
-      <meta itemprop="description" content="从小白到大神，一路走来，你我相伴">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="程序猿的进击之路">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/24/eloquent-1/" class="post-title-link" itemprop="url">orm 系列 之 Eloquent演化历程1</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2016-11-24 16:41:46" itemprop="dateCreated datePublished" datetime="2016-11-24T16:41:46+08:00">2016-11-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 20:18:44" itemprop="dateModified" datetime="2020-02-22T20:18:44+08:00">2020-02-22</time>
-              </span>
-
-          
-            <span id="/2016/11/24/eloquent-1/" class="post-meta-item leancloud_visitors" data-flag-title="orm 系列 之 Eloquent演化历程1" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="http://bos.nj.bpc.baidu.com/v1/agroup/36061fd902bc3fc7ea60039cc53fe23b568679ef" alt=""></p>
-<p>Eloquent是laravel中的orm，采取的是active record的设计模式，里面的对象不仅包括领域逻辑，还包括了数据库操作，但是大家平时使用的时候可能没有探究eloquent是怎么设计的，active record这种模式的优缺点等问题，下面我会带领大家从头开始看看Eloquent是如何设计并实现的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2016/11/24/eloquent-1/#more" rel="contents">
-                Read more &raquo;
+                阅读全文 &raquo;
               </a>
             </div>
           <!--/noindex-->
@@ -1201,7 +1244,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1245,10 +1288,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -1269,17 +1312,21 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">54</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">25</span>
-        <span class="site-state-item-name">tags</span>
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -1317,10 +1364,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">颛顼</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.2.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.1
   </div>
 
         
